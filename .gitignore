@@ -1,0 +1,19 @@
+# Python Virtual Environments & Bytecode
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment & Local Configurations
+.env
+.env.local
+
+# Database files
+*.db
+*.sqlite3
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
