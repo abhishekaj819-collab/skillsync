@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillSync LMI | Labour-Market Intelligence & Curriculum Alignment Platform</title>
+  <meta name="description" content="SkillSync bridges the gap between NCS industry demand and Mahaswayam/SWAYAM workforce supply using NLP curriculum alignment and glassmorphism analytics.">
+
+  <!-- Google Fonts: Inter (UI) & JetBrains Mono (Data/Metrics) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Lenis Smooth Scroll via CDN -->
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. CSS CUSTOM PROPERTIES & DESIGN TOKENS (Design.md Aligned)
+       ========================================================================== */
+    :root {
+      --bg-base: #050a18;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-blue-glow: rgba(59, 130, 246, 0.25);
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-red: #ef4444;
+      --accent-red-glow: rgba(239, 68, 68, 0.25);
+      --accent-purple: #8b5cf6;
+      --accent-yellow: #f59e0b;
+
+      --glass-panel: rgba(15, 23, 42, 0.65);
+      --glass-panel-elevated: rgba(30, 41, 59, 0.70);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+      --glass-border-hover: 1px solid rgba(255, 255, 255, 0.22);
+      --glass-blur: blur(12px);
+      --glass-highlight: rgba(255, 255, 255, 0.04);
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --shadow-glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE SETUP
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      max-width: 100vw;
+      overflow-x: hidden;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      scroll-behavior: auto; /* Handled smoothly by Lenis */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      max-width: 100vw;
+      overflow-x: hidden;
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 85% 85%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* ==========================================================================
+       3. BACKGROUND CANVAS (Phase 4 WebGL Slot)
+       ========================================================================== */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       4. DASHBOARD WRAPPER & GRID LAYOUT
+       ========================================================================== */
+    .dashboard-wrapper {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.75rem;
+      padding: 1.75rem;
+      max-width: 1720px;
+      margin: 0 auto;
+    }
+
+    /* Glassmorphism Panel Base */
+    .glass-card {
+      background: var(--glass-panel);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-glass);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .glass-card:hover {
+      border: var(--glass-border-hover);
+    }
+
+    /* ==========================================================================
+       5. LEFT SIDEBAR COMPONENT
+       ========================================================================== */
+    .sidebar {
+      position: sticky;
+      top: 1.75rem;
+      height: calc(100vh - 3.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem 1.25rem;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand-logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px var(--accent-blue-glow);
+    }
+
+    .brand-logo-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #ffffff;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    .brand-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    /* Navigation Links */
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-item a svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      transition: stroke 0.2s ease;
+    }
+
+    .nav-item a:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item.active a {
+      color: var(--text-main);
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.15);
+    }
+
+    .nav-item.active a svg {
+      stroke: var(--accent-blue);
+    }
+
+    /* Sidebar Footer Status */
+    .sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .system-status-badge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      color: var(--accent-green);
+    }
+
+    .system-status-badge .status-ping {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+    }
+
+    /* ==========================================================================
+       6. MAIN CONTENT AREA
+       ========================================================================== */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      min-width: 0; /* Prevent flex blowout */
+    }
+
+    /* Top Bar: Search, Filters & Regional Selector */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .search-filter-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+      max-width: 640px;
+    }
+
+    .search-input-box {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-box svg {
+      position: absolute;
+      left: 1rem;
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-muted);
+      fill: none;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 12px var(--accent-blue-glow);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .search-input::placeholder {
+      color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-filter {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-filter:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(59, 130, 246, 0.15));
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 16px var(--accent-blue-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-filter svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .top-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.775rem;
+      color: var(--text-muted);
+    }
+
+    .region-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+
+    .region-chip .chip-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent-blue);
+      border-radius: 50%;
+    }
+
+    /* ==========================================================================
+       7. TOP KPI METRICS STRIP (3 Glass Cards)
+       ========================================================================== */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .kpi-card {
+      padding: 1.35rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    }
+
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-badge {
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .kpi-badge.blue {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .kpi-badge.green {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .kpi-badge.yellow {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .kpi-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-delta {
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .kpi-delta.up {
+      color: var(--accent-green);
+    }
+
+    .kpi-delta.deficit {
+      color: var(--accent-red);
+    }
+
+    .kpi-subtext {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       8. TWO-COLUMN ANALYTICS GRID
+       ========================================================================== */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.875rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .panel-title svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--accent-blue);
+      fill: none;
+    }
+
+    /* ==========================================================================
+       9. LEFT PANEL: SKILL GAP DELTA (Comparison Bars)
+       ========================================================================== */
+    .gap-panel {
+      padding: 1.5rem;
+    }
+
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.775rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .legend-box {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    .legend-box.demand {
+      background-color: var(--accent-blue);
+      box-shadow: 0 0 6px var(--accent-blue);
+    }
+
+    .legend-box.supply {
+      background-color: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+    }
+
+    .skill-bars-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .skill-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .skill-row-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .skill-name {
+      font-weight: 500;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-esco-tag {
+      font-family: var(--font-mono);
+      font-size: 0.675rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .skill-delta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.775rem;
+      font-weight: 600;
+    }
+
+    .skill-delta-tag.shortage {
+      color: var(--accent-red);
+    }
+
+    .skill-delta-tag.surplus {
+      color: var(--accent-blue);
+    }
+
+    /* Dual Horizontal Progress Bar */
+    .progress-bar-container {
+      position: relative;
+      width: 100%;
+      height: 22px;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 8px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bar-fill.demand {
+      background: linear-gradient(90deg, #2563eb, var(--accent-blue));
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+    }
+
+    .bar-fill.supply {
+      background: linear-gradient(90deg, #059669, var(--accent-green));
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+
+    .bar-numeric-overlay {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      padding: 0 0.25rem;
+    }
+
+    /* ==========================================================================
+       10. RIGHT PANEL: CURRICULUM ALIGNMENT & OBSOLESCENCE ALERTS
+       ========================================================================== */
+    .curriculum-panel {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Obsolescence Warning Card */
+    .obsolescence-alert-box {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.12);
+    }
+
+    .alert-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .alert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--accent-red);
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.675rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .alert-badge svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+
+    .alert-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fca5a5;
+    }
+
+    .alert-desc {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #cbd5e1;
+    }
+
+    .replacement-box {
+      margin-top: 0.25rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.6rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--accent-green);
+      font-size: 0.775rem;
+      color: var(--text-main);
+    }
+
+    .replacement-label {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--accent-green);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    /* Recommended Courses Card Deck */
+    .recommendations-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ncrf-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .course-card {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      transition: all 0.2s ease;
+    }
+
+    .course-card:hover {
+      background: rgba(30, 41, 59, 0.75);
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .course-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .course-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .match-pill {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+    }
+
+    .course-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .course-provider {
+      color: var(--accent-blue);
+      font-weight: 500;
+    }
+
+    .skills-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .skill-chip {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      color: #e2e8f0;
+    }
+
+    .alignment-uplift {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.08);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    /* ==========================================================================
+       11. KEYFRAME ANIMATIONS & RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @keyframes pulseGlow {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(0.9);
+      }
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes slideUpFade {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered UI entrance animations using cubic-bezier easing */
+    .sidebar {
+      animation: slideUpFade 0.75s cubic-bezier(0.2, 0, 0, 1) 0ms backwards;
+    }
+
+    .top-bar {
+      animation: slideUpFade 0.75s cubic-bezier(0.2, 0, 0, 1) 150ms backwards;
+    }
+
+    .kpi-card:nth-child(1) {
+      animation: slideUpFade 0.75s cubic-bezier(0.2, 0, 0, 1) 250ms backwards;
+    }
+
+    .kpi-card:nth-child(2) {
+      animation: slideUpFade 0.75s cubic-bezier(0.2, 0, 0, 1) 350ms backwards;
+    }
+
+    .kpi-card:nth-child(3) {
+      animation: slideUpFade 0.75s cubic-bezier(0.2, 0, 0, 1) 450ms backwards;
+    }
+
+    .gap-panel {
+      animation: slideUpFade 0.85s cubic-bezier(0.2, 0, 0, 1) 600ms backwards;
+    }
+
+    .curriculum-panel {
+      animation: slideUpFade 0.85s cubic-bezier(0.2, 0, 0, 1) 750ms backwards;
+    }
+
+    /* Button disabled & loading state */
+    .btn-filter:disabled,
+    .btn-filter.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(0.3);
+      box-shadow: none;
+    }
+
+    /* Analytics Grid Loading Overlay & Spinner */
+    .analytics-grid {
+      position: relative;
+    }
+
+    .grid-loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 10, 24, 0.72);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .analytics-grid.is-loading .grid-loading-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .spinner-pulse {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(59, 130, 246, 0.2);
+      border-top-color: var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-status-text {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-main);
+      letter-spacing: 0.04em;
+    }
+
+    /* Toast Notification Container */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.15rem;
+      color: var(--text-main);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      max-width: 400px;
+      animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .toast.warning {
+      border-left: 4px solid var(--accent-yellow);
+    }
+
+    .toast.error {
+      border-left: 4px solid var(--accent-red);
+    }
+
+    .toast.success {
+      border-left: 4px solid var(--accent-green);
+    }
+
+    .toast-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .toast.error .toast-icon {
+      color: var(--accent-red);
+    }
+
+    .toast.warning .toast-icon {
+      color: var(--accent-yellow);
+    }
+
+    .toast.success .toast-icon {
+      color: var(--accent-green);
+    }
+
+    .toast-text {
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    @keyframes toastSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes toastFadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.95);
+      }
+    }
+
+    /* Production Hardened Responsive Grid Breakpoints */
+    @media (max-width: 1200px) {
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-wrapper {
+        grid-template-columns: 1fr;
+        padding: 1.25rem;
+        gap: 1.25rem;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+      }
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+      .kpi-strip {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .kpi-strip {
+        grid-template-columns: 1fr;
+      }
+      .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .dashboard-wrapper {
+        padding: 0.75rem;
+        gap: 1rem;
+      }
+      .top-bar {
+        padding: 1rem;
+      }
+      .search-filter-wrap {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn-filter {
+        width: 100%;
+        justify-content: center;
+      }
+      .kpi-card {
+        padding: 1rem;
+      }
+      .gap-panel, .curriculum-panel {
+        padding: 1.15rem;
+      }
+      .top-meta-strip {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed WebGL Background Canvas (Mounted for Phase 4 Engine) -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Main Dashboard Wrapper -->
+  <div class="dashboard-wrapper">
+
+    <!-- ====================================================================
+         LEFT SIDEBAR: Brand, Navigation, Telemetry Status
+         ==================================================================== -->
+    <aside class="sidebar glass-card">
+      <div class="sidebar-top">
+        <div class="brand-container">
+          <div class="brand-logo-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="brand-title-wrap">
+            <div class="brand-title">
+              SkillSync LMI
+              <span class="brand-pulse-dot" title="Real-time Feed Active"></span>
+            </div>
+            <span class="brand-sub">Labour Market Intelligence</span>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <ul class="nav-menu">
+          <li class="nav-item active">
+            <a href="#demand" id="nav-demand">
+              <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-6 6"/></svg>
+              Market Demand
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#curriculum" id="nav-curriculum">
+              <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Curriculum Alignment
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#mahaswayam" id="nav-mahaswayam">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Mahaswayam Supply
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#swayam" id="nav-swayam">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              SWAYAM Integration
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#district-plans" id="nav-districts">
+              <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+              District Plans
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Sidebar Footer Badge -->
+      <div class="sidebar-footer">
+        <div class="system-status-badge" id="system-status-badge">
+          <span id="system-status-text">API: CONNECTED (LOCAL)</span>
+          <span class="status-ping" id="system-status-ping"></span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN CONTENT AREA
+         ==================================================================== -->
+    <main class="main-content">
+
+      <!-- Top Bar: Search & Regional Quick Filters -->
+      <header class="top-bar glass-card">
+        <div class="search-filter-wrap">
+          <div class="search-input-box">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input 
+              type="text" 
+              class="search-input" 
+              id="lmi-search-input" 
+              placeholder="Search by role or district (e.g., 'Pune — Data Analytics', 'Generative AI')"
+              value="Pune — Data Analytics"
+            >
+          </div>
+          <button class="btn-filter" id="btn-run-query">
+            <svg viewBox="0 0 24 24">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+            </svg>
+            Run Filter
+          </button>
+        </div>
+
+        <div class="top-meta-strip">
+          <div class="region-chip">
+            <span class="chip-dot"></span>
+            <span id="region-chip-text">Region: Maharashtra State (NCS Integrated)</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- KPI Metrics Strip: 3 Key Metric Cards -->
+      <section class="kpi-strip">
+        <!-- Card 1: Active Industry Demand -->
+        <article class="kpi-card glass-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Active Industry Demand (NCS)</span>
+            <span class="kpi-badge blue">Real-Time</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="metric-demand">482,910</span>
+            <span class="kpi-delta up" id="metric-demand-delta">↑ +18.4%</span>
+          </div>
+          <p class="kpi-subtext">Verified job postings across National Career Service & state portals</p>
+        </article>
+
+        <!-- Card 2: Registered Trainees -->
+        <article class="kpi-card glass-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Registered Trainees (Mahaswayam)</span>
+            <span class="kpi-badge green">Supply Base</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="metric-trainees">319,450</span>
+            <span class="kpi-delta up" id="metric-trainees-delta">↑ +9.2%</span>
+          </div>
+          <p class="kpi-subtext">Active vocational & degree candidate pool across 36 districts</p>
+        </article>
+
+        <!-- Card 3: Alignment Index Score -->
+        <article class="kpi-card glass-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Alignment Index Score (%)</span>
+            <span class="kpi-badge yellow">Deficit Alert</span>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="metric-alignment">73.0%</span>
+            <span class="kpi-delta deficit" id="metric-alignment-delta">Net Deficit: -22.5%</span>
+          </div>
+          <p class="kpi-subtext">Curriculum-to-demand concordance across high-priority clusters</p>
+        </article>
+      </section>
+
+      <!-- Two-Column Analytics Grid -->
+      <div class="analytics-grid" id="analytics-grid">
+        <!-- NLP Calculation Skeleton/Spinner Overlay -->
+        <div class="grid-loading-overlay" id="grid-loading-overlay">
+          <div class="spinner-pulse"></div>
+          <span class="loading-status-text">NLP Alignment Engine Calculating...</span>
+        </div>
+
+        <!-- ================================================================
+             LEFT PANEL: SKILL GAP DELTA (NCS Demand vs Mahaswayam Supply)
+             ================================================================ -->
+        <section class="gap-panel glass-card">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Skill Gap Delta Analysis
+            </h2>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <span class="legend-box demand"></span>
+                <span>Demand (NCS)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-box supply"></span>
+                <span>Supply (Mahaswayam)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="skill-bars-list" id="skill-bars-container">
+
+            <!-- Skill 1: Generative AI -->
+            <div class="skill-row">
+              <div class="skill-row-meta">
+                <span class="skill-name">
+                  Generative AI & LLM Fine-Tuning
+                  <span class="skill-esco-tag">ESCO: 2512.1.14</span>
+                </span>
+                <span class="skill-delta-tag shortage">-58% Shortage</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="bar-track">
+                  <div class="bar-fill demand" style="width: 96%;" title="Industry Demand: 96%"></div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill supply" style="width: 38%;" title="Workforce Supply: 38%"></div>
+                </div>
+              </div>
+              <div class="bar-numeric-overlay">
+                <span>Demand: 96/100</span>
+                <span>Supply: 38/100</span>
+              </div>
+            </div>
+
+            <!-- Skill 2: Cloud & Kubernetes -->
+            <div class="skill-row">
+              <div class="skill-row-meta">
+                <span class="skill-name">
+                  Kubernetes & Cloud-Native Microservices
+                  <span class="skill-esco-tag">ESCO: 2511.2.3</span>
+                </span>
+                <span class="skill-delta-tag shortage">-48% Shortage</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="bar-track">
+                  <div class="bar-fill demand" style="width: 94%;" title="Industry Demand: 94%"></div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill supply" style="width: 46%;" title="Workforce Supply: 46%"></div>
+                </div>
+              </div>
+              <div class="bar-numeric-overlay">
+                <span>Demand: 94/100</span>
+                <span>Supply: 46/100</span>
+              </div>
+            </div>
+
+            <!-- Skill 3: EV Battery Management -->
+            <div class="skill-row">
+              <div class="skill-row-meta">
+                <span class="skill-name">
+                  EV Battery Management Systems (BMS)
+                  <span class="skill-esco-tag">ESCO: 2144.2.7</span>
+                </span>
+                <span class="skill-delta-tag shortage">-64% Shortage</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="bar-track">
+                  <div class="bar-fill demand" style="width: 92%;" title="Industry Demand: 92%"></div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill supply" style="width: 28%;" title="Workforce Supply: 28%"></div>
+                </div>
+              </div>
+              <div class="bar-numeric-overlay">
+                <span>Demand: 92/100</span>
+                <span>Supply: 28/100</span>
+              </div>
+            </div>
+
+            <!-- Skill 4: Cybersecurity & Zero Trust -->
+            <div class="skill-row">
+              <div class="skill-row-meta">
+                <span class="skill-name">
+                  Cloud Security Architecture & Zero Trust
+                  <span class="skill-esco-tag">ESCO: 2529.1.5</span>
+                </span>
+                <span class="skill-delta-tag shortage">-61% Shortage</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="bar-track">
+                  <div class="bar-fill demand" style="width: 95%;" title="Industry Demand: 95%"></div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill supply" style="width: 34%;" title="Workforce Supply: 34%"></div>
+                </div>
+              </div>
+              <div class="bar-numeric-overlay">
+                <span>Demand: 95/100</span>
+                <span>Supply: 34/100</span>
+              </div>
+            </div>
+
+            <!-- Skill 5: Distributed Data Engineering -->
+            <div class="skill-row">
+              <div class="skill-row-meta">
+                <span class="skill-name">
+                  Distributed Data Engineering (Spark/Flink)
+                  <span class="skill-esco-tag">ESCO: 2521.1.2</span>
+                </span>
+                <span class="skill-delta-tag shortage">-36% Shortage</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="bar-track">
+                  <div class="bar-fill demand" style="width: 88%;" title="Industry Demand: 88%"></div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill supply" style="width: 52%;" title="Workforce Supply: 52%"></div>
+                </div>
+              </div>
+              <div class="bar-numeric-overlay">
+                <span>Demand: 88/100</span>
+                <span>Supply: 52/100</span>
+              </div>
+            </div>
+
+            <!-- Skill 6: Legacy Tally ERP (Surplus / Deprecated) -->
+            <div class="skill-row">
+              <div class="skill-row-meta">
+                <span class="skill-name">
+                  Legacy Tally ERP 9 / NSQF Level 4
+                  <span class="skill-esco-tag">ESCO: 2512.9.1</span>
+                </span>
+                <span class="skill-delta-tag surplus">+56% Surplus (Low Demand)</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="bar-track">
+                  <div class="bar-fill demand" style="width: 18%;" title="Industry Demand: 18%"></div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill supply" style="width: 74%;" title="Workforce Supply: 74%"></div>
+                </div>
+              </div>
+              <div class="bar-numeric-overlay">
+                <span>Demand: 18/100</span>
+                <span>Supply: 74/100</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================================================================
+             RIGHT PANEL: CURRICULUM ALIGNMENT & ALERTS
+             ================================================================ -->
+        <section class="curriculum-panel glass-card">
+          
+          <!-- Obsolescence Warning Container -->
+          <div id="obsolescence-container">
+            <div class="obsolescence-alert-box">
+              <div class="alert-header">
+                <span class="alert-badge">
+                  <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  CRITICAL OBSOLESCENCE ALERT
+                </span>
+                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-red);">NCS Flag #DEPR-2026</span>
+              </div>
+              <h3 class="alert-title">Legacy Tally ERP 9 & Desktop Win32 Bookkeeping</h3>
+              <p class="alert-desc">
+                Market demand has collapsed by 64% YoY. Manual desktop accounting without GST e-invoicing API integration fails to meet current state commerce mandates.
+              </p>
+              <div class="replacement-box">
+                <div class="replacement-label">Recommended Syllabus Migration</div>
+                <div>Cloud ERP, Automated GSTN APIs & Python Financial Data Analytics (NCrF Level 5.5)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SWAYAM / NPTEL Course Recommendations Card Deck -->
+          <div class="recommendations-section">
+            <div class="section-subtitle">
+              <span>SWAYAM / NPTEL Curricula Alignment</span>
+              <span class="ncrf-tag">NCrF Credit Aligned</span>
+            </div>
+            <div id="recommendations-container" style="display: flex; flex-direction: column; gap: 1rem;">
+              <!-- Dynamically populated via API -->
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Initialize Lenis Smooth Scroll & Particle Network Simulation -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize Lenis Smooth Scroll
+      if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true
+        });
+
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+      }
+
+      // 2. Native Canvas Node-Link Particle Network Simulation
+      const canvas = document.getElementById('bg-canvas');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      let width = 0;
+      let height = 0;
+
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // Mouse tracking for interactive repulsion/attraction
+      const mouse = {
+        x: -9999,
+        y: -9999,
+        radius: 175,
+        active: false
+      };
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
+      });
+
+      window.addEventListener('mouseleave', () => {
+        mouse.active = false;
+        mouse.x = -9999;
+        mouse.y = -9999;
+      });
+
+      // Particle definition
+      const PARTICLE_COUNT = 100;
+      const CONNECT_DISTANCE = 140;
+
+      class Particle {
+        constructor() {
+          this.reset(true);
+        }
+
+        reset(initial = false) {
+          this.x = initial ? Math.random() * width : (Math.random() < 0.5 ? 0 : width);
+          this.y = initial ? Math.random() * height : Math.random() * height;
+          const speed = 0.25 + Math.random() * 0.45;
+          const angle = Math.random() * Math.PI * 2;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+          this.baseVx = this.vx;
+          this.baseVy = this.vy;
+          this.radius = 1.6 + Math.random() * 1.5;
+
+          const r = Math.random();
+          if (r < 0.65) {
+            this.color = 'rgba(59, 130, 246, '; // accent-blue
+          } else if (r < 0.90) {
+            this.color = 'rgba(16, 185, 129, '; // accent-green
+          } else {
+            this.color = 'rgba(139, 92, 246, '; // accent-purple
+          }
+          this.alpha = 0.35 + Math.random() * 0.45;
+        }
+
+        update() {
+          // Interactive cursor repulsion
+          if (mouse.active) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < mouse.radius && dist > 0.1) {
+              const force = (1 - dist / mouse.radius) * 1.2;
+              const angle = Math.atan2(dy, dx);
+              this.vx += Math.cos(angle) * force;
+              this.vy += Math.sin(angle) * force;
+            }
+          }
+
+          // Gentle velocity damping to restore natural ambient drift
+          this.vx = this.vx * 0.96 + this.baseVx * 0.04;
+          this.vy = this.vy * 0.96 + this.baseVy * 0.04;
+
+          this.x += this.vx;
+          this.y += this.vy;
+
+          // Viewport boundary bounce
+          if (this.x < 0) {
+            this.x = 0;
+            this.vx *= -1;
+            this.baseVx *= -1;
+          } else if (this.x > width) {
+            this.x = width;
+            this.vx *= -1;
+            this.baseVx *= -1;
+          }
+
+          if (this.y < 0) {
+            this.y = 0;
+            this.vy *= -1;
+            this.baseVy *= -1;
+          } else if (this.y > height) {
+            this.y = height;
+            this.vy *= -1;
+            this.baseVy *= -1;
+          }
+        }
+
+        draw(ctx) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = this.color + this.alpha + ')';
+          ctx.fill();
+        }
+      }
+
+      const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+
+      // Render loop
+      function renderNetwork() {
+        ctx.clearRect(0, 0, width, height);
+
+        // 1. Draw node-link connecting lines
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const p1 = particles[i];
+
+          for (let j = i + 1; j < PARTICLE_COUNT; j++) {
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < CONNECT_DISTANCE) {
+              const opacity = (1 - dist / CONNECT_DISTANCE) * 0.22;
+              ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+
+          // Line to active cursor
+          if (mouse.active) {
+            const mdx = p1.x - mouse.x;
+            const mdy = p1.y - mouse.y;
+            const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+            if (mDist < mouse.radius) {
+              const mOpacity = (1 - mDist / mouse.radius) * 0.35;
+              ctx.strokeStyle = `rgba(16, 185, 129, ${mOpacity})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // 2. Draw particle nodes
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles[i].update();
+          particles[i].draw(ctx);
+        }
+
+        requestAnimationFrame(renderNetwork);
+      }
+
+      requestAnimationFrame(renderNetwork);
+
+      // ====================================================================
+      // 3. PHASE 5: DYNAMIC FASTAPI INTEGRATION & STATE MANAGEMENT
+      // ====================================================================
+      // Dynamic Environment Routing: Localhost uses local port 8000, cloud deployment uses production endpoint
+      const isLocal = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' || 
+                      window.location.hostname === '';
+      const BASE_URL = isLocal ? 'http://127.0.0.1:8000' : 'https://skillsync-api.onrender.com';
+
+      // Global Toast Notification Manager
+      function showToast(message, type = 'warning', duration = 4500) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const iconSvg = type === 'error'
+          ? `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
+          : type === 'warning'
+          ? `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+          : `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+
+        toast.innerHTML = `
+          ${iconSvg}
+          <div class="toast-text">${message}</div>
+        `;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.animation = 'toastFadeOut 0.3s forwards';
+          setTimeout(() => toast.remove(), 300);
+        }, duration);
+      }
+
+      const State = {
+        metrics: {
+          demand: 482910,
+          trainees: 319450,
+          alignment: '73.0%',
+          netDeficit: '-22.5%'
+        },
+        skillGaps: [],
+        recommendations: [],
+        obsoleteCourses: [],
+        apiConnected: false,
+        loading: false
+      };
+
+      // Mock Fallback Data (Guarantees zero-failure demo during hackathon)
+      const MOCK_DATA = {
+        gapAnalysis: {
+          summary: {
+            average_industry_demand: 73.2,
+            average_workforce_supply: 50.7,
+            net_deficit: 22.5,
+            alignment_index: '73.0%',
+            critical_shortages_count: 10,
+            obsolete_skills_flagged: 3
+          },
+          skills: [
+            {
+              name: 'Generative AI & LLM Fine-Tuning',
+              esco_code: '2512.1.14',
+              demand_score: 96,
+              supply_score: 38,
+              deficit_score: 58,
+              status: 'Critical Deficit'
+            },
+            {
+              name: 'Kubernetes & Cloud-Native Microservices',
+              esco_code: '2511.2.3',
+              demand_score: 94,
+              supply_score: 46,
+              deficit_score: 48,
+              status: 'Critical Deficit'
+            },
+            {
+              name: 'EV Battery Management Systems (BMS)',
+              esco_code: '2144.2.7',
+              demand_score: 92,
+              supply_score: 28,
+              deficit_score: 64,
+              status: 'Critical Deficit'
+            },
+            {
+              name: 'Cloud Security Architecture & Zero Trust',
+              esco_code: '2529.1.5',
+              demand_score: 95,
+              supply_score: 34,
+              deficit_score: 61,
+              status: 'Critical Deficit'
+            },
+            {
+              name: 'Distributed Data Engineering (Spark/Flink)',
+              esco_code: '2521.1.2',
+              demand_score: 88,
+              supply_score: 52,
+              deficit_score: 36,
+              status: 'Critical Deficit'
+            },
+            {
+              name: 'Rust Systems Programming & WebAssembly',
+              esco_code: '2512.1.22',
+              demand_score: 86,
+              supply_score: 25,
+              deficit_score: 61,
+              status: 'Critical Deficit'
+            },
+            {
+              name: 'Legacy Tally ERP 9 / NSQF Level 4',
+              esco_code: '2512.9.1',
+              demand_score: 18,
+              supply_score: 74,
+              deficit_score: -56,
+              status: 'Obsolete / Deprecated'
+            }
+          ]
+        },
+        recommendations: [
+          {
+            course_id: 'SW-AI-101',
+            title: 'Deep Learning & Generative AI Architectures',
+            provider: 'NPTEL / IIT Madras',
+            duration_weeks: 12,
+            credits: 4,
+            level: 'Postgraduate',
+            match_score: 96.4,
+            matched_skills: ['Generative AI & LLM Fine-Tuning', 'Transformer Models', 'RAG Pipelines', 'PyTorch'],
+            gap_closure_potential: '+58% Alignment Uplift'
+          },
+          {
+            course_id: 'SW-CS-204',
+            title: 'Cloud Native DevOps & Container Orchestration',
+            provider: 'AICTE / Mahaswayam',
+            duration_weeks: 8,
+            credits: 3,
+            level: 'Undergraduate',
+            match_score: 91.8,
+            matched_skills: ['Kubernetes', 'Docker', 'Terraform IaC', 'GitOps'],
+            gap_closure_potential: '+48% Alignment Uplift'
+          },
+          {
+            course_id: 'SW-SEC-305',
+            title: 'Cloud Security, Zero Trust Architecture & Forensics',
+            provider: 'NPTEL / IIT Kanpur',
+            duration_weeks: 12,
+            credits: 4,
+            level: 'Postgraduate',
+            match_score: 89.5,
+            matched_skills: ['Cloud Security Architecture & Zero Trust', 'SOC Incident Response', 'IAM Federation'],
+            gap_closure_potential: '+61% Alignment Uplift'
+          }
+        ],
+        obsoleteCourses: [
+          {
+            course_id: 'SW-OBS-001',
+            title: 'Desktop Application Development in Visual Basic 6.0',
+            deprecation_reason: 'Market demand has collapsed by 64% YoY. Desktop Win32 accounting without GST e-invoicing API integration fails modern state commerce mandates.',
+            recommended_replacement: {
+              title: 'Systems Programming with Rust & WebAssembly (NCrF Level 6)'
+            }
+          },
+          {
+            course_id: 'SW-OBS-002',
+            title: 'Interactive Web Media with Adobe Flash & ActionScript 2',
+            deprecation_reason: 'Flash was permanently sunsetted. Course provides zero current labor market value.',
+            recommended_replacement: {
+              title: 'Cloud Native DevOps & Modern Full-Stack (NCrF Level 5.5)'
+            }
+          }
+        ]
+      };
+
+      // Telemetry Badge Updater
+      function updateTelemetry(isConnected) {
+        const badge = document.getElementById('system-status-badge');
+        const text = document.getElementById('system-status-text');
+        const ping = document.getElementById('system-status-ping');
+        if (!badge || !text || !ping) return;
+
+        if (isConnected) {
+          text.textContent = 'API: CONNECTED (LOCAL)';
+          badge.style.borderColor = 'rgba(16, 185, 129, 0.25)';
+          badge.style.background = 'rgba(16, 185, 129, 0.1)';
+          badge.style.color = 'var(--accent-green)';
+          ping.style.backgroundColor = 'var(--accent-green)';
+          ping.style.boxShadow = '0 0 6px var(--accent-green)';
+        } else {
+          text.textContent = 'API: DISCONNECTED (MOCK MODE)';
+          badge.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+          badge.style.background = 'rgba(239, 68, 68, 0.12)';
+          badge.style.color = 'var(--accent-red)';
+          ping.style.backgroundColor = 'var(--accent-red)';
+          ping.style.boxShadow = '0 0 6px var(--accent-red)';
+        }
+      }
+
+      // 1. Fetch Gap Analysis
+      async function fetchGapAnalysis(sector, region) {
+        try {
+          const url = new URL(`${BASE_URL}/api/gap-analysis`);
+          if (sector) url.searchParams.append('sector', sector);
+          if (region) url.searchParams.append('region', region);
+
+          const res = await fetch(url.toString(), { signal: AbortSignal.timeout(3500) });
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          const data = await res.json();
+          return { success: true, data };
+        } catch (err) {
+          showToast(`LMI API unreachable (${err.message}). Engaging offline telemetry cache.`, 'warning');
+          return { success: false, data: MOCK_DATA.gapAnalysis };
+        }
+      }
+
+      // 2. Fetch Curriculum Recommendations
+      async function fetchRecommendations(query, targetRole) {
+        try {
+          const res = await fetch(`${BASE_URL}/api/recommend-curriculum`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              query: query || 'Data Analytics and AI',
+              target_role: targetRole || '',
+              top_k: 5
+            }),
+            signal: AbortSignal.timeout(3500)
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          const data = await res.json();
+          return { success: true, data };
+        } catch (err) {
+          showToast(`Curriculum engine unreachable (${err.message}). Using fallback SWAYAM catalog.`, 'warning');
+          return { success: false, data: { recommendations: MOCK_DATA.recommendations } };
+        }
+      }
+
+      // 3. Fetch Obsolete Courses
+      async function fetchObsoleteCourses() {
+        try {
+          const res = await fetch(`${BASE_URL}/api/obsolete-courses`, { signal: AbortSignal.timeout(3500) });
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          const data = await res.json();
+          return { success: true, data };
+        } catch (err) {
+          return { success: false, data: { obsolete_courses: MOCK_DATA.obsoleteCourses } };
+        }
+      }
+
+      // Render Functions
+      function renderKPIs(gapData, queryStr) {
+        const demandEl = document.getElementById('metric-demand');
+        const traineesEl = document.getElementById('metric-trainees');
+        const alignEl = document.getElementById('metric-alignment');
+        const alignDeltaEl = document.getElementById('metric-alignment-delta');
+        const chipText = document.getElementById('region-chip-text');
+
+        if (chipText && queryStr) {
+          chipText.textContent = `Query: ${queryStr} | NCS & Mahaswayam Integrated`;
+        }
+
+        const summary = gapData.summary || {};
+        if (demandEl) {
+          const baseDemand = 482910;
+          const mult = summary.average_industry_demand ? (summary.average_industry_demand / 73.2) : 1;
+          demandEl.textContent = Math.round(baseDemand * mult).toLocaleString();
+        }
+
+        if (traineesEl) {
+          const baseSupply = 319450;
+          const mult = summary.average_workforce_supply ? (summary.average_workforce_supply / 50.7) : 1;
+          traineesEl.textContent = Math.round(baseSupply * mult).toLocaleString();
+        }
+
+        if (alignEl) {
+          alignEl.textContent = summary.alignment_index || '73.0%';
+        }
+
+        if (alignDeltaEl) {
+          const net = summary.net_deficit !== undefined ? summary.net_deficit : 22.5;
+          alignDeltaEl.textContent = `Net Deficit: -${Math.abs(net)}%`;
+          alignDeltaEl.className = net > 0 ? 'kpi-delta deficit' : 'kpi-delta up';
+        }
+      }
+
+      function renderSkillBars(skills) {
+        const container = document.getElementById('skill-bars-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (!skills || skills.length === 0) {
+          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No matching skill telemetry found.</div>';
+          return;
+        }
+
+        skills.forEach(skill => {
+          const isShortage = skill.deficit_score > 0;
+          const deltaText = isShortage 
+            ? `-${skill.deficit_score}% Shortage` 
+            : `+${Math.abs(skill.deficit_score)}% Surplus`;
+          const deltaClass = isShortage ? 'shortage' : 'surplus';
+
+          const row = document.createElement('div');
+          row.className = 'skill-row';
+          row.innerHTML = `
+            <div class="skill-row-meta">
+              <span class="skill-name">
+                ${skill.name}
+                <span class="skill-esco-tag">ESCO: ${skill.esco_code || '2512.1'}</span>
+              </span>
+              <span class="skill-delta-tag ${deltaClass}">${deltaText}</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="bar-track">
+                <div class="bar-fill demand" style="width: ${skill.demand_score}%;" title="Industry Demand: ${skill.demand_score}%"></div>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill supply" style="width: ${skill.supply_score}%;" title="Workforce Supply: ${skill.supply_score}%"></div>
+              </div>
+            </div>
+            <div class="bar-numeric-overlay">
+              <span>Demand: ${skill.demand_score}/100</span>
+              <span>Supply: ${skill.supply_score}/100</span>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+      }
+
+      function renderObsoleteCourses(courses) {
+        const container = document.getElementById('obsolescence-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (!courses || courses.length === 0) {
+          container.style.display = 'none';
+          return;
+        }
+        container.style.display = 'block';
+
+        courses.slice(0, 1).forEach(course => {
+          const card = document.createElement('div');
+          card.className = 'obsolescence-alert-box';
+          card.innerHTML = `
+            <div class="alert-header">
+              <span class="alert-badge">
+                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                CRITICAL OBSOLESCENCE ALERT
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-red);">${course.course_id || 'NCS Flag'}</span>
+            </div>
+            <h3 class="alert-title">${course.title}</h3>
+            <p class="alert-desc">${course.deprecation_reason || 'Course provides negligible current labour market value and is flagged for syllabus modernization.'}</p>
+            <div class="replacement-box">
+              <div class="replacement-label">Recommended Syllabus Migration</div>
+              <div>${course.recommended_replacement?.title || 'Modern Automated Industry Curriculum Track'}</div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      function renderRecommendations(recommendations) {
+        const container = document.getElementById('recommendations-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (!recommendations || recommendations.length === 0) {
+          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No aligned SWAYAM courses found.</div>';
+          return;
+        }
+
+        recommendations.slice(0, 3).forEach(rec => {
+          const card = document.createElement('article');
+          card.className = 'course-card';
+
+          const chipsHtml = (rec.matched_skills || rec.skills_covered || [])
+            .slice(0, 4)
+            .map(s => `<span class="skill-chip">${s}</span>`)
+            .join('');
+
+          card.innerHTML = `
+            <div class="course-card-top">
+              <h4 class="course-title">${rec.title}</h4>
+              <span class="match-pill">${rec.match_score}% Match</span>
+            </div>
+            <div class="course-meta-row">
+              <span class="course-provider">${rec.provider}</span>
+              <span>•</span>
+              <span>${rec.duration_weeks || 12} Weeks</span>
+              <span>•</span>
+              <span>${rec.credits || 4} Credits (NCrF L${rec.level?.includes('PG') || rec.level?.includes('Postgraduate') ? '6' : '5.5'})</span>
+            </div>
+            <div class="skills-chips-row">
+              ${chipsHtml}
+            </div>
+            <div class="alignment-uplift">
+              <span>↑ ${rec.gap_closure_potential || '+48% Deficit Closure Potential'}</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      // Master Orchestrator: Fetch & Bind
+      async function executeLMIQuery(queryText) {
+        const btn = document.getElementById('btn-run-query');
+        const grid = document.getElementById('analytics-grid') || document.querySelector('.analytics-grid');
+
+        // Show loading state & disable button to prevent duplicate concurrent requests
+        if (btn) {
+          btn.disabled = true;
+          btn.classList.add('disabled');
+          btn.innerHTML = `<svg style="width:16px;height:16px;animation:spin 0.8s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg> Calculating...`;
+        }
+        if (grid) {
+          grid.classList.add('is-loading');
+        }
+
+        try {
+          // Parse query for district or sector
+          let sector = null;
+          let region = 'Maharashtra';
+          const lower = (queryText || '').toLowerCase();
+          if (lower.includes('pune')) region = 'Pune District';
+          else if (lower.includes('mumbai')) region = 'Mumbai Metro';
+          else if (lower.includes('nagpur')) region = 'Nagpur Industrial';
+
+          if (lower.includes('energy') || lower.includes('ev') || lower.includes('battery')) {
+            sector = 'Automotive & Clean Energy';
+          } else if (lower.includes('it') || lower.includes('cloud') || lower.includes('ai') || lower.includes('data')) {
+            sector = 'Information Technology';
+          }
+
+          const [gapRes, recRes, obsRes] = await Promise.all([
+            fetchGapAnalysis(sector, region),
+            fetchRecommendations(queryText, ''),
+            fetchObsoleteCourses()
+          ]);
+
+          const isConnected = gapRes.success || recRes.success || obsRes.success;
+          State.apiConnected = isConnected;
+          updateTelemetry(isConnected);
+
+          // Update State
+          State.skillGaps = gapRes.data.skills || [];
+          State.recommendations = recRes.data.recommendations || [];
+          State.obsoleteCourses = obsRes.data.obsolete_courses || [];
+
+          // Render DOM
+          renderKPIs(gapRes.data, queryText);
+          renderSkillBars(State.skillGaps);
+          renderObsoleteCourses(State.obsoleteCourses);
+          renderRecommendations(State.recommendations);
+        } catch (err) {
+          showToast(`Critical pipeline error: ${err.message}`, 'error');
+        } finally {
+          // Restore button & remove loading overlay
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('disabled');
+            btn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Run Filter`;
+          }
+          if (grid) {
+            grid.classList.remove('is-loading');
+          }
+        }
+      }
+
+      // Event Listeners
+      const filterBtn = document.getElementById('btn-run-query');
+      const searchInput = document.getElementById('lmi-search-input');
+
+      if (filterBtn) {
+        filterBtn.addEventListener('click', () => {
+          const val = searchInput ? searchInput.value.trim() : '';
+          executeLMIQuery(val);
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            executeLMIQuery(searchInput.value.trim());
+          }
+        });
+      }
+
+      // Initial Data Fetch on load
+      const initialQuery = searchInput ? searchInput.value.trim() : 'Pune — Data Analytics';
+      executeLMIQuery(initialQuery);
+    });
+  </script>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+</body>
+</html>
