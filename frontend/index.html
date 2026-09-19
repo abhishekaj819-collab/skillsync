@@ -242,6 +242,16 @@
       stroke: var(--accent-blue);
     }
 
+    /* Active View Sections & Highlights */
+    .view-section {
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .view-section.view-active {
+      border: 1px solid rgba(59, 130, 246, 0.45) !important;
+      box-shadow: 0 0 24px rgba(59, 130, 246, 0.25) !important;
+    }
+
     /* Sidebar Footer Status */
     .sidebar-footer {
       display: flex;
@@ -1205,7 +1215,7 @@
     <main class="main-content">
 
       <!-- Top Bar: Search & Regional Quick Filters -->
-      <header class="top-bar glass-card">
+      <header class="top-bar glass-card view-section" id="district-plans">
         <div class="search-filter-wrap">
           <div class="search-input-box">
             <svg viewBox="0 0 24 24">
@@ -1289,7 +1299,7 @@
         <!-- ================================================================
              LEFT PANEL: SKILL GAP DELTA (NCS Demand vs Mahaswayam Supply)
              ================================================================ -->
-        <section class="gap-panel glass-card">
+        <section class="gap-panel glass-card view-section active" id="demand">
           <div class="panel-header">
             <h2 class="panel-title">
               <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -1453,7 +1463,7 @@
         <!-- ================================================================
              RIGHT PANEL: CURRICULUM ALIGNMENT & ALERTS
              ================================================================ -->
-        <section class="curriculum-panel glass-card">
+        <section class="curriculum-panel glass-card view-section active" id="curriculum">
           
           <!-- Obsolescence Warning Container -->
           <div id="obsolescence-container">
@@ -1477,7 +1487,7 @@
           </div>
 
           <!-- SWAYAM / NPTEL Course Recommendations Card Deck -->
-          <div class="recommendations-section">
+          <div class="recommendations-section view-section" id="swayam">
             <div class="section-subtitle">
               <span>SWAYAM / NPTEL Curricula Alignment</span>
               <span class="ncrf-tag">NCrF Credit Aligned</span>
@@ -1516,19 +1526,19 @@
 
       // 2. Native Canvas Node-Link Particle Network Simulation
       const canvas = document.getElementById('bg-canvas');
-      if (!canvas) return;
+      if (canvas) {
+        try {
+          const ctx = canvas.getContext('2d');
+          let width = 0;
+          let height = 0;
 
-      const ctx = canvas.getContext('2d');
-      let width = 0;
-      let height = 0;
+          function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+          }
 
-      function resizeCanvas() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      }
-
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
+          window.addEventListener('resize', resizeCanvas);
+          resizeCanvas();
 
       // Mouse tracking for interactive repulsion/attraction
       const mouse = {
@@ -1688,6 +1698,10 @@
       }
 
       requestAnimationFrame(renderNetwork);
+        } catch (canvasErr) {
+          console.warn('Canvas simulation error:', canvasErr);
+        }
+      }
 
       // ====================================================================
       // 3. PHASE 5: DYNAMIC FASTAPI INTEGRATION & STATE MANAGEMENT
@@ -2156,12 +2170,85 @@
         }
       }
 
-      // Event Listeners
+      // ====================================================================
+      // 4. EVENT LISTENERS & NAVIGATION TAB WIRING
+      // ====================================================================
+
+      // Navigation Tabs: Prevent default anchor jump, toggle active class, and toggle views
+      const navLinks = document.querySelectorAll('.nav-menu .nav-item a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          // 1. Toggle active class on navigation menu items
+          document.querySelectorAll('.nav-menu .nav-item').forEach(item => item.classList.remove('active'));
+          const parentItem = link.closest('.nav-item');
+          if (parentItem) parentItem.classList.add('active');
+
+          // 2. Handle view switching & highlight
+          const href = link.getAttribute('href') || '';
+          const targetId = href.replace('#', '');
+          handleNavViewSwitch(link.id, targetId);
+        });
+      });
+
+      function handleNavViewSwitch(navId, targetId) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
+
+        if (navId === 'nav-demand' || targetId === 'demand') {
+          const target = document.getElementById('demand') || document.querySelector('.gap-panel');
+          if (target) {
+            target.classList.add('view-active');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else if (navId === 'nav-curriculum' || targetId === 'curriculum') {
+          const target = document.getElementById('curriculum') || document.querySelector('.curriculum-panel');
+          if (target) {
+            target.classList.add('view-active');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else if (navId === 'nav-mahaswayam' || targetId === 'mahaswayam') {
+          const target = document.getElementById('demand') || document.querySelector('.gap-panel');
+          if (target) {
+            target.classList.add('view-active');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          // Highlight Mahaswayam supply bars
+          document.querySelectorAll('.bar-fill.supply').forEach(bar => {
+            bar.style.boxShadow = '0 0 16px var(--accent-green)';
+            setTimeout(() => { bar.style.boxShadow = ''; }, 2500);
+          });
+          showToast('Viewing Mahaswayam vocational candidate supply telemetry.', 'info');
+        } else if (navId === 'nav-swayam' || targetId === 'swayam') {
+          const target = document.getElementById('swayam') || document.querySelector('.recommendations-section');
+          if (target) {
+            target.classList.add('view-active');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          showToast('Viewing SWAYAM / NPTEL accredited curriculum recommendations.', 'info');
+        } else if (navId === 'nav-districts' || targetId === 'district-plans') {
+          const searchInput = document.getElementById('lmi-search-input');
+          if (searchInput) {
+            searchInput.value = 'Pune District — High-Growth Skills';
+            searchInput.focus();
+          }
+          executeLMIQuery('Pune District — High-Growth Skills');
+          const topBar = document.getElementById('district-plans') || document.querySelector('.top-bar');
+          if (topBar) {
+            topBar.classList.add('view-active');
+            topBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          showToast('Loaded district-level skill development plan for Pune.', 'info');
+        }
+      }
+
+      // Filter Button & Search Input
       const filterBtn = document.getElementById('btn-run-query');
       const searchInput = document.getElementById('lmi-search-input');
 
       if (filterBtn) {
-        filterBtn.addEventListener('click', () => {
+        filterBtn.addEventListener('click', (e) => {
+          e.preventDefault();
           const val = searchInput ? searchInput.value.trim() : '';
           executeLMIQuery(val);
         });
