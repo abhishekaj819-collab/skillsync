@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SkillSync LMI | Labour-Market Intelligence & Curriculum Alignment Platform</title>
-  <meta name="description" content="SkillSync bridges the gap between NCS industry demand and Mahaswayam/SWAYAM workforce supply using NLP curriculum alignment and glassmorphism analytics.">
+  <title>SkillSetu LMI | Labour-Market Intelligence & Curriculum Alignment Platform</title>
+  <meta name="description" content="SkillSetu bridges the gap between NCS industry demand and Mahaswayam/SWAYAM workforce supply using NLP curriculum alignment and glassmorphism analytics.">
 
   <!-- Google Fonts: Inter (UI) & JetBrains Mono (Data/Metrics) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1148,7 +1148,7 @@
           </div>
           <div class="brand-title-wrap">
             <div class="brand-title">
-              SkillSync LMI
+              SkillSetu LMI
               <span class="brand-pulse-dot" title="Real-time Feed Active"></span>
             </div>
             <span class="brand-sub">Labour Market Intelligence</span>
@@ -1692,11 +1692,7 @@
       // ====================================================================
       // 3. PHASE 5: DYNAMIC FASTAPI INTEGRATION & STATE MANAGEMENT
       // ====================================================================
-      // Dynamic Environment Routing: Localhost uses local port 8000, cloud deployment uses production endpoint
-      const isLocal = window.location.hostname === 'localhost' || 
-                      window.location.hostname === '127.0.0.1' || 
-                      window.location.hostname === '';
-      const BASE_URL = isLocal ? 'http://127.0.0.1:8000' : 'https://skillsetu-api.onrender.com';
+      const BASE_URL = "https://skillsetu-api.onrender.com";
 
 
       // Global Toast Notification Manager
