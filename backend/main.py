@@ -1,7 +1,8 @@
 """
-SkillSync FastAPI Backend Service
+SkillSync / SkillSetu FastAPI Backend Service
 Production-Grade Multi-Agent Architecture with SQLAlchemy Database Integration.
 Orchestrates IngestionAgent, AnalyticsAgent, and CurriculumAgent.
+Provides PyTorch vector search against live SQLite database for job roles and SWAYAM courses.
 """
 
 from contextlib import asynccontextmanager
@@ -13,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from database import init_db, get_db
 from agents import SkillSyncOrchestrator
+from engine import search_job_roles
 
 
 @asynccontextmanager
@@ -23,7 +25,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="SkillSync Multi-Agent LMI & Curriculum Alignment API",
+    title="SkillSetu Multi-Agent LMI & Curriculum Alignment API",
     description="Production Multi-Agent Labour-Market Intelligence & SWAYAM Curriculum Matching Engine",
     version="2.0.0",
     lifespan=lifespan
@@ -42,6 +44,11 @@ app.add_middleware(
 # ============================================================================
 # Request Models
 # ============================================================================
+
+class SearchRequest(BaseModel):
+    query: str = Field(..., example="Data Analyst", description="Target job title or skill requisition")
+    top_k: Optional[int] = Field(5, ge=1, le=20, description="Maximum number of matched roles to return")
+
 
 class CurriculumRecommendationRequest(BaseModel):
     query: str = Field(..., example="Generative AI LLM RAG pipelines", description="Target skills or job description keywords")
@@ -74,14 +81,14 @@ class CandidateGapAnalysisRequest(BaseModel):
 
 
 # ============================================================================
-# API Routes (Delegating to Multi-Agent Orchestrator)
+# API Routes
 # ============================================================================
 
 @app.get("/", tags=["Health"])
 def root_status(db: Session = Depends(get_db)):
     orchestrator = SkillSyncOrchestrator(db)
     return {
-        "service": "SkillSync Multi-Agent LMI & Curriculum Engine",
+        "service": "SkillSetu Multi-Agent LMI & Curriculum Engine",
         "status": "online",
         "version": "2.0.0",
         "architecture": "Multi-Agent System (IngestionAgent, AnalyticsAgent, CurriculumAgent)",
@@ -103,6 +110,59 @@ def health_check(db: Session = Depends(get_db)):
         "standards": ["Lightcast", "ESCO v1.1", "NCS India", "SWAYAM", "Mahaswayam"]
     }
 
+
+# ============================================================================
+# Vector Search Endpoint (PyTorch Tensor Cosine Similarity against SQLite)
+# ============================================================================
+
+@app.post("/api/search", tags=["Semantic Search & Alignment"])
+def search_job_roles_endpoint(
+    payload: SearchRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Performs real vector similarity search against the seeded SQLite database
+    using PyTorch tensors.
+
+    Returns strict JSON:
+    {
+        "status": "success",
+        "query": "...",
+        "results": [
+            {
+                "role": "...",
+                "match_score": 0.95,
+                "gap_analysis": "...",
+                "recommended_courses": [ {"title": "...", "url": "..."} ],
+                "mahaswayam_action_url": "..."
+            }
+        ]
+    }
+    """
+    try:
+        return search_job_roles(db=db, query=payload.query, top_k=payload.top_k or 5)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
+
+
+@app.get("/api/search", tags=["Semantic Search & Alignment"])
+def search_job_roles_get_endpoint(
+    query: str = Query(..., description="Target job title or skill requisition"),
+    top_k: Optional[int] = Query(5, ge=1, le=20, description="Max results"),
+    db: Session = Depends(get_db)
+):
+    """
+    GET variant of vector similarity search against the seeded SQLite database.
+    """
+    try:
+        return search_job_roles(db=db, query=query, top_k=top_k or 5)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
+
+
+# ============================================================================
+# Multi-Agent LMI & Candidate Gap Analysis Endpoints
+# ============================================================================
 
 @app.get("/api/gap-analysis", tags=["Labour Market Intelligence"])
 def gap_analysis_endpoint(
@@ -146,7 +206,6 @@ def candidate_gap_analysis_endpoint(
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Candidate gap analysis failed: {str(e)}")
-
 
 
 @app.post("/api/recommend-curriculum", tags=["Curriculum Recommendations"])

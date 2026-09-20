@@ -874,6 +874,72 @@
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
+    .swayam-courses-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .swayam-course-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-sm);
+      color: #93c5fd;
+      text-decoration: none;
+      font-size: 0.825rem;
+      transition: all 0.2s ease;
+    }
+
+    .swayam-course-link:hover {
+      background: rgba(59, 130, 246, 0.18);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .btn-mahaswayam-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1rem;
+      margin-top: 0.6rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: var(--radius-sm);
+      color: var(--accent-green);
+      font-size: 0.825rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-mahaswayam-action:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(16, 185, 129, 0.15));
+      border-color: var(--accent-green);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .role-gap-text {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin: 0.5rem 0;
+    }
+
+    .no-courses-tag {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
     /* ==========================================================================
        11. KEYFRAME ANIMATIONS & RESPONSIVE BREAKPOINTS
        ========================================================================== */
@@ -1916,27 +1982,77 @@
         }
       }
 
-      // 2. Fetch Curriculum Recommendations
-      async function fetchRecommendations(query, targetRole) {
+      // 2. Fetch Job Roles & SWAYAM Recommendations (Live PyTorch Vector Search)
+      async function fetchSearchResults(query) {
         try {
-          const res = await fetch(`${BASE_URL}/api/recommend-curriculum`, {
+          const res = await fetch(`${BASE_URL}/api/search`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              query: query || 'Data Analytics and AI',
-              target_role: targetRole || '',
+              query: query || 'Data Analyst',
               top_k: 5
             }),
-            signal: AbortSignal.timeout(3500)
+            signal: AbortSignal.timeout(6000)
           });
           if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           const data = await res.json();
           return { success: true, data };
         } catch (err) {
-          showToast(`Curriculum engine unreachable (${err.message}). Using fallback SWAYAM catalog.`, 'warning');
-          return { success: false, data: { recommendations: MOCK_DATA.recommendations } };
+          showToast(`Search engine offline (${err.message}). Displaying local benchmark telemetry.`, 'warning');
+          return {
+            success: false,
+            data: {
+              status: "fallback",
+              query: query,
+              results: SEED_JOB_ROLES_FALLBACK
+            }
+          };
         }
       }
+
+      // Fallback realistic job roles aligned with SQLite database seeding
+      const SEED_JOB_ROLES_FALLBACK = [
+        {
+          role: "Data Analyst",
+          match_score: 0.95,
+          gap_analysis: "Acute shortage in advanced statistical modeling, SQL pipelining, and automated PowerBI/Tableau dashboarding across Maharashtra's IT corridors.",
+          recommended_courses: [
+            {
+              title: "Data Analytics with Python - NPTEL (IIT Roorkee)",
+              url: "https://swayam.gov.in/explorer?searchText=data+analytics"
+            },
+            {
+              title: "Business Analytics & Data Mining - NPTEL (IIT Kharagpur)",
+              url: "https://swayam.gov.in/explorer?searchText=business+analytics"
+            }
+          ],
+          mahaswayam_action_url: "https://rojgar.mahaswayam.gov.in/"
+        },
+        {
+          role: "Solar Technician",
+          match_score: 0.89,
+          gap_analysis: "High demand for certified technicians skilled in rooftop solar mounting, MPPT inverter troubleshooting, and net-metering synchronization.",
+          recommended_courses: [
+            {
+              title: "Non-Conventional Energy Resources - NPTEL (IIT Madras)",
+              url: "https://swayam.gov.in/explorer?searchText=solar+energy"
+            }
+          ],
+          mahaswayam_action_url: "https://rojgar.mahaswayam.gov.in/"
+        },
+        {
+          role: "CNC Operator & Machining Specialist",
+          match_score: 0.86,
+          gap_analysis: "Critical shortage of G-code/M-code programmers and multi-axis CNC machinists in Pune-Chakan and Aurangabad automotive manufacturing hubs.",
+          recommended_courses: [
+            {
+              title: "Automation in Manufacturing - NPTEL (IIT Guwahati)",
+              url: "https://swayam.gov.in/explorer?searchText=cnc+machining"
+            }
+          ],
+          mahaswayam_action_url: "https://rojgar.mahaswayam.gov.in/"
+        }
+      ];
 
       // 3. Fetch Obsolete Courses
       async function fetchObsoleteCourses() {
@@ -2063,42 +2179,60 @@
         });
       }
 
-      function renderRecommendations(recommendations) {
+      // UI Governance: Render Vector Search Results & SWAYAM Recommendations
+      function renderRecommendations(results) {
         const container = document.getElementById('recommendations-container');
         if (!container) return;
+
+        // Clear results container completely before injecting new search results
         container.innerHTML = '';
 
-        if (!recommendations || recommendations.length === 0) {
-          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No aligned SWAYAM courses found.</div>';
+        if (!results || results.length === 0) {
+          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No matching job roles found.</div>';
           return;
         }
 
-        recommendations.slice(0, 3).forEach(rec => {
+        results.slice(0, 5).forEach(item => {
           const card = document.createElement('article');
           card.className = 'course-card';
 
-          const chipsHtml = (rec.matched_skills || rec.skills_covered || [])
-            .slice(0, 4)
-            .map(s => `<span class="skill-chip">${s}</span>`)
-            .join('');
+          const matchScoreVal = typeof item.match_score === 'number' ? item.match_score : parseFloat(item.match_score || 0);
+          const matchScorePercent = Math.round(matchScoreVal > 1 ? matchScoreVal : matchScoreVal * 100);
+
+          // Format SWAYAM / NPTEL course links with strict target="_blank" and rel="noopener noreferrer"
+          let coursesHtml = '';
+          if (Array.isArray(item.recommended_courses) && item.recommended_courses.length > 0) {
+            coursesHtml = `
+              <div class="swayam-courses-list">
+                ${item.recommended_courses.map(course => `
+                  <a href="${course.url || 'https://swayam.gov.in/'}" target="_blank" rel="noopener noreferrer" class="swayam-course-link">
+                    <span>${course.title}</span>
+                    <svg style="width:14px;height:14px;margin-left:6px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </a>
+                `).join('')}
+              </div>
+            `;
+          } else {
+            coursesHtml = `<span class="no-courses-tag" style="color: var(--text-muted); font-size: 0.85rem; display: block; margin: 0.4rem 0;">No active courses found on SWAYAM</span>`;
+          }
+
+          const actionUrl = item.mahaswayam_action_url || 'https://rojgar.mahaswayam.gov.in/';
 
           card.innerHTML = `
             <div class="course-card-top">
-              <h4 class="course-title">${rec.title}</h4>
-              <span class="match-pill">${rec.match_score}% Match</span>
+              <h4 class="course-title">${item.role || 'Job Role'}</h4>
+              <span class="match-pill">${matchScorePercent}% Match</span>
             </div>
-            <div class="course-meta-row">
-              <span class="course-provider">${rec.provider}</span>
-              <span>•</span>
-              <span>${rec.duration_weeks || 12} Weeks</span>
-              <span>•</span>
-              <span>${rec.credits || 4} Credits (NCrF L${rec.level?.includes('PG') || rec.level?.includes('Postgraduate') ? '6' : '5.5'})</span>
+            <p class="role-gap-text">${item.gap_analysis || 'No critical gaps identified.'}</p>
+            <div style="margin-top: 0.4rem;">
+              <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.05em;">Curriculum Recommendation</span>
+              ${coursesHtml}
             </div>
-            <div class="skills-chips-row">
-              ${chipsHtml}
-            </div>
-            <div class="alignment-uplift">
-              <span>↑ ${rec.gap_closure_potential || '+48% Deficit Closure Potential'}</span>
+            <div style="margin-top: 0.6rem; display: flex; justify-content: flex-end;">
+              <a href="${actionUrl}" target="_blank" rel="noopener noreferrer" class="btn-mahaswayam-action">
+                <span>Mahaswayam Rojgar Portal</span>
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+              </a>
             </div>
           `;
           container.appendChild(card);
@@ -2129,32 +2263,34 @@
           else if (lower.includes('mumbai')) region = 'Mumbai Metro';
           else if (lower.includes('nagpur')) region = 'Nagpur Industrial';
 
-          if (lower.includes('energy') || lower.includes('ev') || lower.includes('battery')) {
-            sector = 'Automotive & Clean Energy';
-          } else if (lower.includes('it') || lower.includes('cloud') || lower.includes('ai') || lower.includes('data')) {
-            sector = 'Information Technology';
+          if (lower.includes('energy') || lower.includes('ev') || lower.includes('battery') || lower.includes('solar')) {
+            sector = 'Renewable Energy & Utilities';
+          } else if (lower.includes('cnc') || lower.includes('machin') || lower.includes('manufacturing')) {
+            sector = 'Advanced Manufacturing & Automotive';
+          } else if (lower.includes('it') || lower.includes('cloud') || lower.includes('ai') || lower.includes('data') || lower.includes('cyber')) {
+            sector = 'Information Technology & Analytics';
           }
 
-          const [gapRes, recRes, obsRes] = await Promise.all([
+          const [gapRes, searchRes, obsRes] = await Promise.all([
             fetchGapAnalysis(sector, region),
-            fetchRecommendations(queryText, ''),
+            fetchSearchResults(queryText),
             fetchObsoleteCourses()
           ]);
 
-          const isConnected = gapRes.success || recRes.success || obsRes.success;
+          const isConnected = gapRes.success || searchRes.success || obsRes.success;
           State.apiConnected = isConnected;
           updateTelemetry(isConnected);
 
           // Update State
           State.skillGaps = gapRes.data.skills || [];
-          State.recommendations = recRes.data.recommendations || [];
+          State.searchResults = (searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : (searchRes.data?.results || []);
           State.obsoleteCourses = obsRes.data.obsolete_courses || [];
 
           // Render DOM
           renderKPIs(gapRes.data, queryText);
           renderSkillBars(State.skillGaps);
           renderObsoleteCourses(State.obsoleteCourses);
-          renderRecommendations(State.recommendations);
+          renderRecommendations(State.searchResults);
         } catch (err) {
           showToast(`Critical pipeline error: ${err.message}`, 'error');
         } finally {
