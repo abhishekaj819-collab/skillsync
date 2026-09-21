@@ -195,14 +195,60 @@ class CourseCatalog(Base):
 
 SEED_JOB_ROLES: List[Dict[str, Any]] = [
     {
+        "role": "Software Engineer / IT Analyst",
+        "sector": "Information Technology & Software Services",
+        "description": "Develops, tests, and maintains enterprise software applications, cloud services, and RESTful APIs using modern programming languages and frameworks.",
+        "ncs_code": "2512.0101",
+        "esco_code": "2512.1.1",
+        "ncs_demand_score": 95,
+        "mahaswayam_supply_score": 52,
+        "deficit_score": 43,
+        "growth_rate_yoy": "+42%",
+        "gap_analysis": "High industry demand for full-stack engineering, microservices architecture, and cloud deployment pipelines across Pune and Mumbai IT hubs.",
+        "recommended_courses": [
+            {
+                "title": "Programming, Data Structures And Algorithms Using Python - NPTEL (IIT Madras)",
+                "url": "https://swayam.gov.in/explorer?searchText=python+programming"
+            },
+            {
+                "title": "Cloud Computing - NPTEL (IIT Kharagpur)",
+                "url": "https://swayam.gov.in/explorer?searchText=cloud+computing"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "Government School Teacher / Educator",
+        "sector": "Education & Public Instruction",
+        "description": "Delivers curriculum-aligned foundational literacy, numeracy, and STEM education in government and aided schools following NEP 2020 standards.",
+        "ncs_code": "2341.0101",
+        "esco_code": "2341.1.2",
+        "ncs_demand_score": 88,
+        "mahaswayam_supply_score": 64,
+        "deficit_score": 24,
+        "growth_rate_yoy": "+18%",
+        "gap_analysis": "Need for teachers proficient in digital pedagogy, ICT-enabled smart classrooms, inclusive teaching methods, and foundational numeracy.",
+        "recommended_courses": [
+            {
+                "title": "Pedagogy of Teaching - SWAYAM (IGNOU)",
+                "url": "https://swayam.gov.in/explorer?searchText=pedagogy"
+            },
+            {
+                "title": "ICT in Teaching and Learning - SWAYAM (NCERT)",
+                "url": "https://swayam.gov.in/explorer?searchText=ict+teaching"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
         "role": "Data Analyst",
         "sector": "Information Technology & Analytics",
         "description": "Analyzes complex datasets, designs automated SQL pipelines, and constructs executive dashboards for enterprise decision-making.",
         "ncs_code": "2512.0201",
         "esco_code": "2512.1.14",
         "ncs_demand_score": 92,
-        "mahaswayam_supply_score": 48,
-        "deficit_score": 44,
+        "mahaswayam_supply_score": 46,
+        "deficit_score": 46,
         "growth_rate_yoy": "+38%",
         "gap_analysis": "Acute shortage in advanced statistical modeling, SQL pipelining, and automated PowerBI/Tableau dashboarding across Maharashtra's IT corridors.",
         "recommended_courses": [
@@ -218,254 +264,70 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
     },
     {
-        "role": "Solar Technician",
-        "sector": "Renewable Energy & Utilities",
-        "description": "Installs, operates, and maintains rooftop and utility-scale photovoltaic panels, inverters, and grid-synchronization gear.",
-        "ncs_code": "2151.0103",
-        "esco_code": "2151.1.4",
-        "ncs_demand_score": 89,
-        "mahaswayam_supply_score": 35,
-        "deficit_score": 54,
-        "growth_rate_yoy": "+52%",
-        "gap_analysis": "High demand for certified technicians skilled in rooftop solar mounting, MPPT inverter troubleshooting, and net-metering synchronization.",
+        "role": "Administrative Clerk / Data Entry Operator",
+        "sector": "Public Administration & Office Support",
+        "description": "Manages digital document processing, record maintenance, data entry operations, and office automation across public and private sector offices.",
+        "ncs_code": "4112.0101",
+        "esco_code": "4112.1.3",
+        "ncs_demand_score": 84,
+        "mahaswayam_supply_score": 70,
+        "deficit_score": 14,
+        "growth_rate_yoy": "+12%",
+        "gap_analysis": "Demand has shifted from basic typing to digital records management, ERP database entry, advanced spreadsheet automation, and e-governance portal handling.",
+        "recommended_courses": [
+            {
+                "title": "Office Automation & Digital Skills - SWAYAM (AICTE)",
+                "url": "https://swayam.gov.in/explorer?searchText=office+automation"
+            },
+            {
+                "title": "Computer Concepts and Applications - SWAYAM (NITTTR)",
+                "url": "https://swayam.gov.in/explorer?searchText=computer+applications"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "Healthcare Nurse / Ward Attendant",
+        "sector": "Healthcare & Allied Medical Services",
+        "description": "Provides bedside patient care, monitors vital signs, assists physicians in clinical procedures, and manages healthcare hygiene standards.",
+        "ncs_code": "3221.0101",
+        "esco_code": "3221.1.1",
+        "ncs_demand_score": 94,
+        "mahaswayam_supply_score": 42,
+        "deficit_score": 52,
+        "growth_rate_yoy": "+48%",
+        "gap_analysis": "Severe deficit in emergency triage care, ICU monitoring, infection control protocols, and digital health records handling across district hospitals.",
+        "recommended_courses": [
+            {
+                "title": "Nursing Care & Clinical Practices - SWAYAM (AIIMS)",
+                "url": "https://swayam.gov.in/explorer?searchText=nursing"
+            },
+            {
+                "title": "Infection Prevention & Hospital Safety - SWAYAM (NPTEL)",
+                "url": "https://swayam.gov.in/explorer?searchText=healthcare"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "Vocational Electrician / Solar Technician",
+        "sector": "Renewable Energy & Electrical Engineering",
+        "description": "Installs, tests, and repairs residential and commercial electrical wiring, rooftop solar PV systems, inverters, and switchgear.",
+        "ncs_code": "7411.0101",
+        "esco_code": "7411.1.2",
+        "ncs_demand_score": 90,
+        "mahaswayam_supply_score": 44,
+        "deficit_score": 46,
+        "growth_rate_yoy": "+55%",
+        "gap_analysis": "Rapid expansion of rooftop solar installations and EV charging infrastructure requires certified electricians skilled in DC wiring, MPPT inverters, and net-metering.",
         "recommended_courses": [
             {
                 "title": "Non-Conventional Energy Resources - NPTEL (IIT Madras)",
                 "url": "https://swayam.gov.in/explorer?searchText=solar+energy"
             },
             {
-                "title": "Solar Photovoltaics: Fundamentals, Technology & Applications",
-                "url": "https://swayam.gov.in/explorer?searchText=photovoltaics"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "CNC Operator & Machining Specialist",
-        "sector": "Advanced Manufacturing & Automotive",
-        "description": "Sets up, programs, and operates multi-axis computer numerical control (CNC) milling and turning centers to produce precision components.",
-        "ncs_code": "7223.0101",
-        "esco_code": "7223.1.2",
-        "ncs_demand_score": 86,
-        "mahaswayam_supply_score": 52,
-        "deficit_score": 34,
-        "growth_rate_yoy": "+24%",
-        "gap_analysis": "Industry transition to multi-axis CNC machines and G-code CAD/CAM programming leaves traditional manual lathe machinists in significant deficit.",
-        "recommended_courses": [
-            {
-                "title": "CNC Machining & Technology - NPTEL (IIT Guwahati)",
-                "url": "https://swayam.gov.in/explorer?searchText=cnc+machining"
-            },
-            {
-                "title": "Computer Numerical Control (CNC) Programming - AICTE",
-                "url": "https://swayam.gov.in/explorer?searchText=computer+numerical+control"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Electric Vehicle (EV) Service Engineer",
-        "sector": "Automotive & Clean Mobility",
-        "description": "Performs diagnostics, maintenance, and repairs on electric vehicle powertrains, high-voltage battery packs, and regenerative braking systems.",
-        "ncs_code": "2144.0201",
-        "esco_code": "2144.2.7",
-        "ncs_demand_score": 94,
-        "mahaswayam_supply_score": 26,
-        "deficit_score": 68,
-        "growth_rate_yoy": "+130%",
-        "gap_analysis": "Critical talent shortage in lithium-ion battery management systems (BMS), thermal runaway prevention, and high-voltage CAN bus telemetry.",
-        "recommended_courses": [
-            {
-                "title": "Electric Vehicles - Part 1 - NPTEL (IIT Madras)",
-                "url": "https://swayam.gov.in/explorer?searchText=electric+vehicles"
-            },
-            {
-                "title": "Fundamentals of Electric Vehicles: Technology & Economics",
-                "url": "https://swayam.gov.in/explorer?searchText=battery+management"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Cloud & DevOps Engineer",
-        "sector": "Information Technology & Infrastructure",
-        "description": "Designs cloud-native microservice architectures, automates CI/CD deployment pipelines, and manages container orchestration.",
-        "ncs_code": "2511.0302",
-        "esco_code": "2511.2.3",
-        "ncs_demand_score": 95,
-        "mahaswayam_supply_score": 42,
-        "deficit_score": 53,
-        "growth_rate_yoy": "+76%",
-        "gap_analysis": "Substantial deficit in Kubernetes container orchestration, HashiCorp Terraform Infrastructure-as-Code (IaC), and GitOps deployment automation.",
-        "recommended_courses": [
-            {
-                "title": "Cloud Computing - NPTEL (IIT Kharagpur)",
-                "url": "https://swayam.gov.in/explorer?searchText=cloud+computing"
-            },
-            {
-                "title": "Software Engineering & DevOps - AICTE",
-                "url": "https://swayam.gov.in/explorer?searchText=devops"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Precision Agriculture Specialist",
-        "sector": "Agriculture & Agritech",
-        "description": "Deploys IoT soil sensors, drone multispectral imaging, and automated drip irrigation systems to optimize crop yields and water conservation.",
-        "ncs_code": "2132.0104",
-        "esco_code": "2132.1.3",
-        "ncs_demand_score": 81,
-        "mahaswayam_supply_score": 29,
-        "deficit_score": 52,
-        "growth_rate_yoy": "+45%",
-        "gap_analysis": "Accelerated adoption of agritech drones, GIS field mapping, and variable-rate nutrient application requires specialized vocational upskilling.",
-        "recommended_courses": [
-            {
-                "title": "Precision Agriculture - NPTEL (IIT Kharagpur)",
-                "url": "https://swayam.gov.in/explorer?searchText=precision+agriculture"
-            },
-            {
-                "title": "Drone Applications in Agriculture - NPTEL",
-                "url": "https://swayam.gov.in/explorer?searchText=drone+technology"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Cybersecurity Analyst",
-        "sector": "Information Security & BFSI",
-        "description": "Monitors security incident and event management (SIEM) systems, mitigates network intrusions, and validates Zero Trust architectures.",
-        "ncs_code": "2529.0103",
-        "esco_code": "2529.1.5",
-        "ncs_demand_score": 96,
-        "mahaswayam_supply_score": 31,
-        "deficit_score": 65,
-        "growth_rate_yoy": "+95%",
-        "gap_analysis": "Rapid digitization across BFSI and state registries demands certified SOC tier-1/tier-2 analysts, threat hunters, and cloud compliance auditors.",
-        "recommended_courses": [
-            {
-                "title": "Cyber Security and Privacy - NPTEL (IIT Madras)",
-                "url": "https://swayam.gov.in/explorer?searchText=cyber+security"
-            },
-            {
-                "title": "Information Security & Digital Forensics - NPTEL",
-                "url": "https://swayam.gov.in/explorer?searchText=digital+forensics"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Healthcare IT Technician",
-        "sector": "Healthcare & MedTech",
-        "description": "Maintains hospital information systems (HIS), Ayushman Bharat Digital Mission (ABDM) integration, and medical diagnostic IoT devices.",
-        "ncs_code": "2131.0203",
-        "esco_code": "2131.2.1",
-        "ncs_demand_score": 84,
-        "mahaswayam_supply_score": 40,
-        "deficit_score": 44,
-        "growth_rate_yoy": "+40%",
-        "gap_analysis": "Deployment of electronic health records (EHR) and ABDM health repository standards requires healthcare staff trained in medical data interoperability.",
-        "recommended_courses": [
-            {
-                "title": "Introduction to Healthcare IT & Telemedicine - NPTEL",
-                "url": "https://swayam.gov.in/explorer?searchText=healthcare+technology"
-            },
-            {
-                "title": "Biomedical Signal Processing - NPTEL",
-                "url": "https://swayam.gov.in/explorer?searchText=biomedical"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "AI & Generative LLM Engineer",
-        "sector": "Artificial Intelligence & Machine Learning",
-        "description": "Builds and fine-tunes large language models, retrieval-augmented generation (RAG) pipelines, and multimodal enterprise AI agents.",
-        "ncs_code": "2512.0305",
-        "esco_code": "2512.1.18",
-        "ncs_demand_score": 98,
-        "mahaswayam_supply_score": 22,
-        "deficit_score": 76,
-        "growth_rate_yoy": "+185%",
-        "gap_analysis": "Extreme talent scarcity in PyTorch deep learning, vector databases, LangChain/LlamaIndex frameworks, and parameter-efficient fine-tuning (LoRA/QLoRA).",
-        "recommended_courses": [
-            {
-                "title": "Deep Learning - NPTEL (IIT Ropar)",
-                "url": "https://swayam.gov.in/explorer?searchText=machine+learning"
-            },
-            {
-                "title": "Natural Language Processing - NPTEL (IIT Kharagpur)",
-                "url": "https://swayam.gov.in/explorer?searchText=natural+language+processing"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Logistics Automation Specialist",
-        "sector": "Supply Chain & Warehousing",
-        "description": "Implements automated guided vehicles (AGVs), warehouse management system (WMS) integrations, and RFID inventory telemetry for logistics hubs.",
-        "ncs_code": "4321.0102",
-        "esco_code": "4321.1.4",
-        "ncs_demand_score": 88,
-        "mahaswayam_supply_score": 36,
-        "deficit_score": 52,
-        "growth_rate_yoy": "+58%",
-        "gap_analysis": "Rapid expansion of multi-modal logistics parks across Maharashtra creates massive demand for warehouse robotics integration and real-time inventory automation.",
-        "recommended_courses": [
-            {
-                "title": "Operations and Supply Chain Management - NPTEL (IIT Madras)",
-                "url": "https://swayam.gov.in/explorer?searchText=logistics"
-            },
-            {
-                "title": "Supply Chain Analytics - NPTEL (IIT Roorkee)",
-                "url": "https://swayam.gov.in/explorer?searchText=supply+chain"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Industrial Robotics & Mechatronics Engineer",
-        "sector": "Automation & Heavy Engineering",
-        "description": "Programs and maintains robotic arms, PLC controllers, SCADA industrial interfaces, and pneumatic actuators on assembly lines.",
-        "ncs_code": "2144.0304",
-        "esco_code": "2144.3.2",
-        "ncs_demand_score": 90,
-        "mahaswayam_supply_score": 33,
-        "deficit_score": 57,
-        "growth_rate_yoy": "+65%",
-        "gap_analysis": "Shortage of engineers proficient in Fanuc/KUKA robot kinematics, PLC ladder logic programming, and machine vision inspection systems.",
-        "recommended_courses": [
-            {
-                "title": "Robotics and Control - NPTEL (IIT Roorkee)",
-                "url": "https://swayam.gov.in/explorer?searchText=robotics"
-            },
-            {
-                "title": "Industrial Automation and Control - NPTEL (IIT Kharagpur)",
-                "url": "https://swayam.gov.in/explorer?searchText=industrial+automation"
-            }
-        ],
-        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
-    },
-    {
-        "role": "Smart Grid & Renewable Energy Specialist",
-        "sector": "Energy & Power Systems",
-        "description": "Supervises smart microgrid networks, energy storage systems (BESS), AMI smart meter rollouts, and renewable power quality stabilization.",
-        "ncs_code": "2151.0202",
-        "esco_code": "2151.2.1",
-        "ncs_demand_score": 87,
-        "mahaswayam_supply_score": 30,
-        "deficit_score": 57,
-        "growth_rate_yoy": "+60%",
-        "gap_analysis": "State modernization of electrical sub-stations requires grid engineers trained in SCADA protocols, IEEE 1547 interconnection standards, and power inverter harmonics.",
-        "recommended_courses": [
-            {
-                "title": "Smart Grid: Basics to Advanced Technologies - NPTEL (IIT Roorkee)",
-                "url": "https://swayam.gov.in/explorer?searchText=smart+grid"
-            },
-            {
-                "title": "Power System Protection and Switchgear - NPTEL",
-                "url": "https://swayam.gov.in/explorer?searchText=power+systems"
+                "title": "Basic Electrical Circuits - NPTEL (IIT Madras)",
+                "url": "https://swayam.gov.in/explorer?searchText=electrical+circuits"
             }
         ],
         "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
@@ -479,7 +341,14 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
 
 def seed_database(db: Session) -> None:
     """Seeds and updates benchmark job roles and telemetry into the live SQLite database."""
-    # 1. Upsert Job Roles
+    # 1. Clear generic seed data and replace with high-volume benchmark roles
+    valid_roles = [r["role"] for r in SEED_JOB_ROLES]
+    db.query(JobRole).filter(~JobRole.role.in_(valid_roles)).delete(synchronize_session=False)
+    db.query(JobDemand).filter(~JobDemand.skill_name.in_(valid_roles)).delete(synchronize_session=False)
+    db.query(CandidateSupply).filter(~CandidateSupply.skill_name.in_(valid_roles)).delete(synchronize_session=False)
+    db.commit()
+
+    # Upsert Job Roles
     for r_data in SEED_JOB_ROLES:
         existing = db.query(JobRole).filter(JobRole.role == r_data["role"]).first()
         if existing:
@@ -513,12 +382,16 @@ def seed_database(db: Session) -> None:
     db.commit()
 
     # 2. Seed Job Demands and Candidate Supplies for LMI dashboard
-    existing_demands = db.query(JobDemand).count()
-    if existing_demands == 0:
-        districts = ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad", "National"]
+    districts = ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad", "Thane", "National"]
 
-        for r_data in SEED_JOB_ROLES:
-            # National baseline
+    for r_data in SEED_JOB_ROLES:
+        # Check if National baseline exists
+        existing_nat = db.query(JobDemand).filter(
+            JobDemand.skill_name == r_data["role"],
+            JobDemand.region == "National"
+        ).first()
+
+        if not existing_nat:
             demand_nat = JobDemand(
                 skill_id=f"SK-{r_data.get('ncs_code', 'GEN')}",
                 skill_name=r_data["role"],
@@ -545,11 +418,19 @@ def seed_database(db: Session) -> None:
             db.add(demand_nat)
             db.add(supply_nat)
 
-            # District variations for LMI drill-downs
-            for idx, dist in enumerate(districts):
+        # District variations for LMI drill-downs
+        for idx, dist in enumerate(districts):
+            if dist == "National":
+                continue
+            existing_dist = db.query(JobDemand).filter(
+                JobDemand.skill_name == r_data["role"],
+                JobDemand.district == dist
+            ).first()
+
+            if not existing_dist:
                 delta_d = ((idx * 7 + len(r_data["role"])) % 11) - 5
                 delta_s = ((idx * 5 + len(r_data["sector"])) % 9) - 4
-                
+
                 d_score = max(5, min(100, r_data["ncs_demand_score"] + delta_d))
                 s_score = max(5, min(100, r_data["mahaswayam_supply_score"] + delta_s))
 
@@ -562,7 +443,7 @@ def seed_database(db: Session) -> None:
                     growth_rate_yoy=r_data["growth_rate_yoy"],
                     ncs_code=r_data.get("ncs_code"),
                     esco_code=r_data.get("esco_code"),
-                    region="Maharashtra" if dist != "National" else "National",
+                    region="Maharashtra",
                     district=dist,
                     description=r_data["description"]
                 ))
@@ -572,36 +453,37 @@ def seed_database(db: Session) -> None:
                     category=r_data["sector"],
                     sector=r_data["sector"],
                     supply_score=s_score,
-                    region="Maharashtra" if dist != "National" else "National",
+                    region="Maharashtra",
                     district=dist,
                     talent_pool_count=max(200, int((s_score / 100) * 8500))
                 ))
-        db.commit()
+    db.commit()
 
     # 3. Seed Course Catalog
-    existing_courses = db.query(CourseCatalog).count()
-    if existing_courses == 0:
-        for idx, r_data in enumerate(SEED_JOB_ROLES):
-            for c_idx, course in enumerate(r_data.get("recommended_courses", [])):
+    for idx, r_data in enumerate(SEED_JOB_ROLES):
+        for c_idx, course in enumerate(r_data.get("recommended_courses", [])):
+            course_id = f"SW-CR-{idx+1}0{c_idx+1}"
+            existing_c = db.query(CourseCatalog).filter(CourseCatalog.course_id == course_id).first()
+            if not existing_c:
                 catalog_item = CourseCatalog(
-                    course_id=f"SW-CR-{idx+1}0{c_idx+1}",
+                    course_id=course_id,
                     title=course["title"],
                     provider="SWAYAM / NPTEL / AICTE",
                     platform="SWAYAM",
                     instructor="Faculty Panel",
                     duration_weeks=12,
                     credits=4,
-                    level="Undergraduate / Postgraduate",
+                    level="Undergraduate / Vocational",
                     status="Active",
                     enrolled_count=15000 + (idx * 1200),
-                    rating=4.82,
+                    rating=4.85,
                     skills_covered=[r_data["role"], r_data["sector"]],
                     syllabus_highlights=[f"Core curriculum for {r_data['role']}", r_data["gap_analysis"]],
                     alignment_status="High Alignment",
                     recommendation_reason=f"Addresses key Maharashtra market deficit in {r_data['role']}."
                 )
                 db.add(catalog_item)
-        db.commit()
+    db.commit()
 
 
 def init_db() -> None:

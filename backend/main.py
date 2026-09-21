@@ -6,9 +6,10 @@ Provides PyTorch vector search against live SQLite database for job roles and SW
 """
 
 import sys
+import re
 import traceback
 from contextlib import asynccontextmanager
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 from fastapi import FastAPI, Query, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -44,11 +45,61 @@ app.add_middleware(
 
 
 # ============================================================================
+# Maharashtra Districts Taxonomy & Query Parser
+# ============================================================================
+
+MAHARASHTRA_DISTRICTS = {
+    "pune", "mumbai", "nagpur", "nashik", "aurangabad", "chhatrapati sambhajinagar",
+    "sambhajinagar", "thane", "kolhapur", "solapur", "amravati", "nanded", "jalgaon",
+    "akola", "latur", "dhule", "ahmednagar", "ahilyanagar", "chandrapur", "parbhani",
+    "jalna", "satara", "beed", "yavatmal", "gondia", "wardha", "bhandara",
+    "gadchiroli", "washim", "hingoli", "ratnagiri", "sindhudurg", "raigad",
+    "palghar", "nandurbar", "osmanabad", "dharashiv"
+}
+
+
+def parse_location_query(raw_query: str) -> tuple[Optional[str], str]:
+    """
+    When a query contains a hyphen (e.g., 'Pune - Software Engineer'),
+    splits the string, extracts the geographic district to filter district-level
+    metrics, and returns ONLY the occupation string for the PyTorch embedding model
+    so semantic similarity math is not distorted by the city name.
+    """
+    if not raw_query:
+        return None, ""
+
+    clean_str = raw_query.strip()
+    # Check for hyphens, en-dashes, or em-dashes
+    if any(h in clean_str for h in ["-", "—", "–"]):
+        parts = [p.strip() for p in re.split(r'[-—–]', clean_str) if p.strip()]
+        if len(parts) >= 2:
+            first_lower = parts[0].lower()
+            last_lower = parts[-1].lower()
+
+            if first_lower in MAHARASHTRA_DISTRICTS:
+                district = parts[0]
+                occupation = " - ".join(parts[1:]).strip()
+                return district, occupation
+            elif last_lower in MAHARASHTRA_DISTRICTS:
+                district = parts[-1]
+                occupation = " - ".join(parts[:-1]).strip()
+                return district, occupation
+            else:
+                # Default: first part is district, remainder is occupation
+                district = parts[0]
+                occupation = " - ".join(parts[1:]).strip()
+                return district, occupation
+
+    return None, clean_str
+
+
+# ============================================================================
 # Request Models
 # ============================================================================
 
 class SearchRequest(BaseModel):
-    query: str = Field(..., example="Data Analyst", description="Target job title or skill requisition")
+    query: str = Field(..., example="Pune - Software Engineer", description="Target job title or location - role query")
+    district: Optional[str] = Field(None, example="Pune", description="Optional explicit geographic district filter")
     top_k: Optional[int] = Field(5, ge=1, le=20, description="Maximum number of matched roles to return")
 
 
@@ -124,31 +175,20 @@ def search_job_roles_endpoint(
 ):
     """
     Performs real vector similarity search against the seeded SQLite database
-    using PyTorch tensors.
-
-    Returns strict JSON:
-    {
-        "status": "success",
-        "query": "...",
-        "aggregate": {
-            "total_demand": 482910,
-            "total_supply": 319450,
-            "alignment_score": 66.2,
-            "deficit_rate": -33.8
-        },
-        "results": [
-            {
-                "role": "...",
-                "match_score": 0.95,
-                "gap_analysis": "...",
-                "recommended_courses": [ {"title": "...", "url": "..."} ],
-                "mahaswayam_action_url": "..."
-            }
-        ]
-    }
+    using PyTorch sentence-transformer cosine similarity.
+    Parses hyphenated location queries (e.g., 'Pune - Software Engineer')
+    to filter district metrics and vectorizes only the occupation.
     """
     try:
-        return search_job_roles(db=db, query=payload.query, top_k=payload.top_k or 5)
+        district_parsed, occupation = parse_location_query(payload.query)
+        effective_district = payload.district or district_parsed
+        search_term = occupation if occupation else payload.query
+        return search_job_roles(
+            db=db,
+            query=search_term,
+            top_k=payload.top_k or 5,
+            district=effective_district
+        )
     except Exception as e:
         traceback.print_exc(file=sys.stderr)
         raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
@@ -156,15 +196,26 @@ def search_job_roles_endpoint(
 
 @app.get("/api/search", tags=["Semantic Search & Alignment"])
 def search_job_roles_get_endpoint(
-    query: str = Query(..., description="Target job title or skill requisition"),
+    query: str = Query(..., description="Target job title or location - role query"),
+    district: Optional[str] = Query(None, description="Optional geographic district filter"),
     top_k: Optional[int] = Query(5, ge=1, le=20, description="Max results"),
     db: Session = Depends(get_db)
 ):
     """
     GET variant of vector similarity search against the seeded SQLite database.
+    Parses hyphenated location queries (e.g., 'Pune - Software Engineer')
+    to filter district metrics and vectorizes only the occupation.
     """
     try:
-        return search_job_roles(db=db, query=query, top_k=top_k or 5)
+        district_parsed, occupation = parse_location_query(query)
+        effective_district = district or district_parsed
+        search_term = occupation if occupation else query
+        return search_job_roles(
+            db=db,
+            query=search_term,
+            top_k=top_k or 5,
+            district=effective_district
+        )
     except Exception as e:
         traceback.print_exc(file=sys.stderr)
         raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")

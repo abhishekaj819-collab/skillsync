@@ -14,6 +14,29 @@ import torch
 import torch.nn.functional as F
 from sqlalchemy.orm import Session
 
+try:
+    from sentence_transformers import SentenceTransformer, util
+except Exception:
+    SentenceTransformer = None
+    util = None
+
+if util is None:
+    class UtilFallback:
+        @staticmethod
+        def cos_sim(a, b):
+            if not isinstance(a, torch.Tensor):
+                a = torch.tensor(a, dtype=torch.float32)
+            if not isinstance(b, torch.Tensor):
+                b = torch.tensor(b, dtype=torch.float32)
+            if len(a.shape) == 1:
+                a = a.unsqueeze(0)
+            if len(b.shape) == 1:
+                b = b.unsqueeze(0)
+            a_norm = F.normalize(a, p=2, dim=1)
+            b_norm = F.normalize(b, p=2, dim=1)
+            return torch.mm(a_norm, b_norm.transpose(0, 1))
+    util = UtilFallback()
+
 from database import JobRole, JobDemand, CandidateSupply
 
 
@@ -37,32 +60,41 @@ class NLPSimilarityEngine:
             return
         self._initialized = True
         try:
-            from sentence_transformers import SentenceTransformer
-            self.encoder = SentenceTransformer("all-MiniLM-L6-v2")
-            self.model_type = "sentence-transformers (all-MiniLM-L6-v2)"
+            if SentenceTransformer is not None:
+                self.encoder = SentenceTransformer("all-MiniLM-L6-v2")
+                self.model_type = "sentence-transformers (all-MiniLM-L6-v2)"
+            else:
+                self.encoder = None
+                self.model_type = "HashingVectorizer Cosine Fallback"
         except Exception:
             self.encoder = None
-            self.model_type = "TF-IDF / N-gram Cosine Fallback"
+            self.model_type = "HashingVectorizer Cosine Fallback"
 
     def get_embeddings(self, texts: List[str]) -> torch.Tensor:
         """
-        Encodes a batch of texts into PyTorch tensor embeddings in a single forward pass.
+        Encodes a batch of texts into dense PyTorch tensor embeddings in a single forward pass.
         Returns a 2D torch.FloatTensor of shape (len(texts), embedding_dim).
+        Ensures both query and documents are encoded into dense vectors with consistent dimensions.
         """
         self._initialize_model()
         if self.encoder is not None:
-            return self.encoder.encode(texts, convert_to_tensor=True)
+            embs = self.encoder.encode(texts, convert_to_tensor=True)
+            if not isinstance(embs, torch.Tensor):
+                embs = torch.tensor(embs, dtype=torch.float32)
+            return embs
         else:
-            from sklearn.feature_extraction.text import TfidfVectorizer
-            vec = TfidfVectorizer().fit_transform(texts)
-            return torch.tensor(vec.toarray(), dtype=torch.float32)
+            from sklearn.feature_extraction.text import HashingVectorizer
+            # Guarantees a fixed dense vector dimension (384) across any input size
+            vec = HashingVectorizer(n_features=384, alternate_sign=False)
+            arr = vec.fit_transform(texts).toarray()
+            return torch.tensor(arr, dtype=torch.float32)
 
     def calculate_similarity(self, query: str, document: str) -> float:
         """Calculates normalized cosine similarity between query and document."""
-        embs = self.get_embeddings([query, document])
-        norm_embs = F.normalize(embs, p=2, dim=1)
-        sim = float(torch.mm(norm_embs[0:1], norm_embs[1:2].T).item())
-        return max(0.0, min(1.0, sim))
+        q_emb = self.get_embeddings([query])
+        d_emb = self.get_embeddings([document])
+        score = util.cos_sim(q_emb, d_emb)[0][0]
+        return float(max(0.0, min(1.0, float(score.item()))))
 
 
 # Singleton instance
@@ -73,10 +105,15 @@ nlp_engine = NLPSimilarityEngine()
 # 2. LIVE SQLITE VECTOR SEARCH (Job Roles & Curriculum Alignment)
 # ============================================================================
 
-def search_job_roles(db: Session, query: str, top_k: int = 5) -> Dict[str, Any]:
+def search_job_roles(
+    db: Session,
+    query: str,
+    top_k: int = 5,
+    district: Optional[str] = None
+) -> Dict[str, Any]:
     """
     Performs real vector similarity search against the seeded SQLite database
-    using PyTorch tensor cosine similarity.
+    using PyTorch sentence-transformer cosine similarity.
 
     Returns strict JSON response:
     {
@@ -103,32 +140,46 @@ def search_job_roles(db: Session, query: str, top_k: int = 5) -> Dict[str, Any]:
         # 1. Safely sanitize incoming query string (hyphens, em-dashes, punctuation)
         raw_query = query if query is not None else ""
         clean_query = raw_query.replace("—", " ").replace("–", " ").strip()
-        sanitized_query = re.sub(r'[^\w\s\+\#\.\-]', ' ', clean_query)
+        sanitized_query = re.sub(r'[^\w\s\+\#\.\/]', ' ', clean_query)
         sanitized_query = re.sub(r'\s+', ' ', sanitized_query).strip()
 
         # Determine district-specific or statewide aggregate metrics
-        lower_q = sanitized_query.lower()
-        if "pune" in lower_q:
+        dist_check = (district or "").lower()
+        if not dist_check:
+            dist_check = sanitized_query.lower()
+
+        if "pune" in dist_check:
             total_demand = 174600
             total_supply = 102300
-        elif "mumbai" in lower_q:
+        elif "mumbai" in dist_check:
             total_demand = 149400
             total_supply = 88200
-        elif "nagpur" in lower_q:
+        elif "nagpur" in dist_check:
             total_demand = 72900
             total_supply = 36300
-        elif "nashik" in lower_q:
+        elif "nashik" in dist_check:
             total_demand = 55800
             total_supply = 29400
-        elif "sambhajinagar" in lower_q or "aurangabad" in lower_q:
+        elif "sambhajinagar" in dist_check or "aurangabad" in dist_check:
             total_demand = 52500
             total_supply = 26100
-        elif "thane" in lower_q:
+        elif "thane" in dist_check:
             total_demand = 57600
             total_supply = 32400
         else:
             total_demand = 482910
             total_supply = 319450
+
+        # Optional live DB refinement for district aggregates if telemetry exists
+        if district:
+            d_recs = db.query(JobDemand).filter(JobDemand.district.ilike(f"%{district}%")).all()
+            s_recs = db.query(CandidateSupply).filter(CandidateSupply.district.ilike(f"%{district}%")).all()
+            if d_recs and s_recs:
+                db_demand = sum(r.demand_score * 1800 for r in d_recs)
+                db_supply = sum(r.talent_pool_count for r in s_recs)
+                if db_demand > 0:
+                    total_demand = db_demand
+                    total_supply = db_supply
 
         alignment_score = round((total_supply / total_demand * 100), 1) if total_demand > 0 else 0.0
         deficit_rate = round(((total_supply - total_demand) / total_demand * 100), 1) if total_demand > 0 else 0.0
@@ -169,22 +220,17 @@ def search_job_roles(db: Session, query: str, top_k: int = 5) -> Dict[str, Any]:
             for r in roles
         ]
 
-        # 4. Batch encode query and role texts in single PyTorch forward passes
-        query_emb = nlp_engine.get_embeddings([sanitized_query])  # Shape: (1, D)
-        role_embs = nlp_engine.get_embeddings(role_texts)         # Shape: (N, D)
+        # 4. Dense vector encoding for query and documents
+        query_embedding = nlp_engine.get_embeddings([sanitized_query])  # Shape: (1, D)
+        corpus_embeddings = nlp_engine.get_embeddings(role_texts)        # Shape: (N, D)
 
-        # 5. Normalize vectors for cosine similarity
-        query_norm = F.normalize(query_emb, p=2, dim=1)
-        role_norms = F.normalize(role_embs, p=2, dim=1)
+        # 5. Compute standard sentence-transformer cosine similarity (1D tensor of scores)
+        scores = util.cos_sim(query_embedding, corpus_embeddings)[0]    # Shape: (N,)
 
-        # 6. Compute cosine similarities via matrix multiplication: (1, D) x (D, N) -> (1, N)
-        sim_matrix = torch.mm(query_norm, role_norms.T)  # Shape: (1, N)
-        sim_scores = sim_matrix[0]                       # Shape: (N,)
-
-        # 7. Pair each role with its computed similarity score (convert to pure Python float)
+        # 6. Pair each role with its computed similarity score (converted to native Python float)
         scored_roles = []
         for idx, r in enumerate(roles):
-            score_tensor = sim_scores[idx]
+            score_tensor = scores[idx]
             score_val = float(score_tensor.item()) if hasattr(score_tensor, 'item') else float(score_tensor)
 
             # Apply slight keyword bonus if query terms appear directly in the role title or sector
@@ -311,16 +357,12 @@ def evaluate_skill_gap(
     cand_names = [c["name"] for c in cand_list]
     req_names = [r["name"] for r in req_list]
 
-    # Batch encode in 1 forward pass each without redundant per-item passes
+    # Batch encode in 1 forward pass each into dense vectors
     cand_embs = nlp_engine.get_embeddings(cand_names)
     req_embs = nlp_engine.get_embeddings(req_names)
 
-    # Normalize vectors
-    cand_norm = F.normalize(cand_embs, p=2, dim=1)
-    req_norm = F.normalize(req_embs, p=2, dim=1)
-
-    # Compute full cosine similarity matrix in single tensor multiplication (N x M)
-    sim_matrix = torch.mm(req_norm, cand_norm.T)
+    # Compute full cosine similarity matrix using sentence-transformer util (N x M)
+    sim_matrix = util.cos_sim(req_embs, cand_embs)
 
     # For each requirement, find the top matching candidate skill
     max_sims, best_indices = torch.max(sim_matrix, dim=1)
