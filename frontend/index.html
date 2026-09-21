@@ -3003,8 +3003,11 @@
         }
       }
 
-      // 2. Fetch Job Roles & SWAYAM Recommendations (Live PyTorch Vector Search)
+      // 2. Fetch Job Roles & SWAYAM Recommendations (Live PyTorch Vector Search with 65s Cold-Start Timeout)
       async function fetchSearchResults(query) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 65000);
+
         try {
           const res = await fetch(`${BASE_URL}/api/search`, {
             method: 'POST',
@@ -3013,31 +3016,74 @@
               query: query || 'Data Analyst',
               top_k: 5
             }),
-            signal: AbortSignal.timeout(6000)
+            signal: controller.signal
           });
+          clearTimeout(timeoutId);
+
           if (!res.ok) {
             const errDetail = await res.text();
-            throw new Error(`HTTP ${res.status}: ${errDetail}`);
+            throw new Error(`HTTP ${res.status}: ${errDetail || res.statusText}`);
           }
           const data = await res.json();
           return { success: true, data };
         } catch (err) {
-          // Clean error message instead of silently injecting repetitive fallback bars
-          showToast(`Search service error: ${err.message}`, 'error');
+          clearTimeout(timeoutId);
+          const isTimeout = err.name === 'AbortError' || err.message.includes('timeout') || err.message.includes('aborted');
+          const is500 = err.message.includes('500');
+          showToast(isTimeout ? 'Backend timeout: server may be waking up.' : `Search error: ${err.message}`, 'warning');
           return {
             success: false,
-            data: {
-              status: "error",
-              query: query,
-              aggregate: {
-                total_demand: 482910,
-                total_supply: 319450,
-                alignment_score: 66.2,
-                deficit_rate: -33.8
-              },
-              results: []
-            }
+            isTimeout,
+            is500,
+            error: err.message,
+            data: null
           };
+        }
+      }
+
+      // Render Clean User-Friendly Error & Retry Button upon Failure / Timeout / 500
+      function renderSearchError(container, queryText, isTimeoutOr500 = false) {
+        if (!container) return;
+        container.innerHTML = '';
+
+        const errorCard = document.createElement('div');
+        errorCard.className = 'search-error-box glass-card';
+        errorCard.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; text-align: center; gap: 1rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-md);';
+
+        errorCard.innerHTML = `
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center;">
+            <svg style="width: 24px; height: 24px; color: var(--accent-red);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div>
+            <h4 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.35rem; font-weight: 600;">
+              Network timeout or server is asleep.
+            </h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 460px; line-height: 1.5; margin: 0 auto;">
+              The backend service on Render may be waking up from inactivity (which takes up to 50 seconds on the free tier), or the request encountered a timeout. Click below to retry.
+            </p>
+          </div>
+          <button id="btn-retry-search" class="btn-filter" style="background: var(--accent-blue); border-color: var(--accent-blue); padding: 0.65rem 1.5rem; font-size: 0.875rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; color: #fff; font-weight: 500; border-radius: var(--radius-sm); margin-top: 0.25rem;">
+            <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            Retry Search
+          </button>
+        `;
+
+        container.appendChild(errorCard);
+
+        const retryBtn = errorCard.querySelector('#btn-retry-search');
+        if (retryBtn) {
+          retryBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            executeLMIQuery(queryText, false);
+          });
         }
       }
 
@@ -3243,16 +3289,51 @@
         // On initial load: Ensure recommendation container is strictly EMPTY
         if (isInitialLoad && recContainer) {
           recContainer.innerHTML = '';
+        } else if (!isInitialLoad && recContainer) {
+          // Show initial loading spinner with "Searching LMI Database..."
+          recContainer.innerHTML = `
+            <div id="search-loading-box" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; text-align: center; gap: 1rem; background: var(--glass-panel); border: var(--glass-border); border-radius: var(--radius-md);">
+              <div class="spinner-pulse" style="width: 36px; height: 36px; border: 3px solid rgba(59,130,246,0.2); border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+              <div>
+                <div id="search-loading-text" style="font-size: 0.95rem; color: var(--text-main); font-weight: 500;">Searching LMI Database...</div>
+                <div id="search-loading-subtext" style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 0.35rem;">Connecting to PyTorch NLP Vector Engine</div>
+              </div>
+            </div>
+          `;
         }
 
         // Show loading state & disable button to prevent duplicate concurrent requests
         if (btn) {
           btn.disabled = true;
           btn.classList.add('disabled');
-          btn.innerHTML = `<svg style="width:16px;height:16px;animation:spin 0.8s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg> Calculating...`;
+          btn.innerHTML = `<svg style="width:16px;height:16px;animation:spin 0.8s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg> Searching...`;
         }
         if (grid) {
           grid.classList.add('is-loading');
+          const overlayText = grid.querySelector('.loading-status-text');
+          if (overlayText) overlayText.textContent = "Searching LMI Database...";
+        }
+
+        // Set 4000ms timer to detect Render server cold starts and update message
+        let wakeUpTimer = null;
+        if (!isInitialLoad) {
+          wakeUpTimer = setTimeout(() => {
+            const loadingTextEl = document.getElementById('search-loading-text');
+            if (loadingTextEl) {
+              loadingTextEl.textContent = "Waking up the backend server (this may take up to 50 seconds on the free tier)...";
+            }
+            const loadingSubtextEl = document.getElementById('search-loading-subtext');
+            if (loadingSubtextEl) {
+              loadingSubtextEl.textContent = "Render free tier instance is spinning up. Please wait...";
+            }
+            if (btn) {
+              btn.innerHTML = `<svg style="width:16px;height:16px;animation:spin 0.8s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="3" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg> Waking server...`;
+            }
+            const overlayText = grid ? grid.querySelector('.loading-status-text') : null;
+            if (overlayText) {
+              overlayText.textContent = "Waking up the backend server (this may take up to 50 seconds on the free tier)...";
+            }
+          }, 4000);
         }
 
         try {
@@ -3287,11 +3368,11 @@
 
           // Update State
           State.skillGaps = gapRes.data.skills || [];
-          State.searchResults = (searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : [];
+          State.searchResults = (searchRes && searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : [];
           State.obsoleteCourses = obsRes.data.obsolete_courses || [];
 
           // Render Dynamic KPIs using data.aggregate from searchRes if available, else gapRes
-          if (searchRes.success && searchRes.data && searchRes.data.aggregate) {
+          if (searchRes && searchRes.success && searchRes.data && searchRes.data.aggregate) {
             renderKPIs(searchRes.data, queryText);
           } else {
             renderKPIs(gapRes.data, queryText);
@@ -3302,13 +3383,24 @@
 
           // On initial load: container must be EMPTY. Populate ONLY after user runs a filter query.
           if (!isInitialLoad) {
-            renderRecommendations(State.searchResults);
+            if (searchRes && searchRes.success && searchRes.data && Array.isArray(searchRes.data.results)) {
+              renderRecommendations(searchRes.data.results);
+            } else {
+              // If fetch fails, is aborted, or returns 500: render user-friendly error with Retry button
+              renderSearchError(recContainer, queryText, searchRes ? (searchRes.isTimeout || searchRes.is500) : false);
+            }
           } else if (recContainer) {
             recContainer.innerHTML = '';
           }
         } catch (err) {
           showToast(`Critical pipeline error: ${err.message}`, 'error');
+          if (!isInitialLoad && recContainer) {
+            renderSearchError(recContainer, queryText, false);
+          }
         } finally {
+          if (wakeUpTimer) {
+            clearTimeout(wakeUpTimer);
+          }
           // Restore button & remove loading overlay
           if (btn) {
             btn.disabled = false;
