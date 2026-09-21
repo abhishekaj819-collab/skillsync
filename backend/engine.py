@@ -37,7 +37,10 @@ if util is None:
             return torch.mm(a_norm, b_norm.transpose(0, 1))
     util = UtilFallback()
 
-from database import JobRole, JobDemand, CandidateSupply
+try:
+    from backend.database import JobRole, JobDemand, CandidateSupply
+except ImportError:
+    from database import JobRole, JobDemand, CandidateSupply
 
 
 # ============================================================================
@@ -261,10 +264,26 @@ def search_job_roles(
             elif raw_courses is None:
                 courses = []
 
+            # Safe JSON parsing on skills (defaults to empty list [] if null)
+            raw_skills = getattr(r, "skills", None)
+            skills = []
+            if isinstance(raw_skills, list):
+                skills = raw_skills
+            elif isinstance(raw_skills, str):
+                try:
+                    parsed = json.loads(raw_skills)
+                    if isinstance(parsed, list):
+                        skills = parsed
+                except Exception:
+                    skills = []
+            elif raw_skills is None:
+                skills = []
+
             results.append({
                 "role": str(r.role),
                 "match_score": round(max(0.0, min(1.0, float(score))), 2),
                 "gap_analysis": str(r.gap_analysis or "No critical gaps identified."),
+                "skills": skills,
                 "recommended_courses": courses,
                 "mahaswayam_action_url": str(r.mahaswayam_action_url or "https://rojgar.mahaswayam.gov.in/")
             })

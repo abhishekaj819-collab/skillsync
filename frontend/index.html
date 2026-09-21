@@ -14,6 +14,9 @@
   <!-- Lenis Smooth Scroll via CDN -->
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
 
+  <!-- html2pdf.js via CDN for District Training Plan Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <style>
     /* ==========================================================================
        1. CSS CUSTOM PROPERTIES & DESIGN TOKENS (Design.md Aligned)
@@ -3158,10 +3161,17 @@
         }
       }
 
-      function renderSkillBars(skills) {
+      function renderSkillBars(skillsOrRole) {
         const container = document.getElementById('skill-bars-container');
         if (!container) return;
         container.innerHTML = '';
+
+        let skills = [];
+        if (Array.isArray(skillsOrRole)) {
+          skills = skillsOrRole;
+        } else if (skillsOrRole && Array.isArray(skillsOrRole.skills)) {
+          skills = skillsOrRole.skills;
+        }
 
         if (!skills || skills.length === 0) {
           container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No matching skill telemetry found.</div>';
@@ -3169,10 +3179,13 @@
         }
 
         skills.forEach(skill => {
-          const isShortage = skill.deficit_score > 0;
+          const demand = typeof skill.demand === 'number' ? skill.demand : (typeof skill.demand_score === 'number' ? skill.demand_score : 80);
+          const supply = typeof skill.supply === 'number' ? skill.supply : (typeof skill.supply_score === 'number' ? skill.supply_score : 50);
+          const deficit = typeof skill.deficit_score === 'number' ? skill.deficit_score : (demand - supply);
+          const isShortage = deficit > 0;
           const deltaText = isShortage 
-            ? `-${skill.deficit_score}% Shortage` 
-            : `+${Math.abs(skill.deficit_score)}% Surplus`;
+            ? `-${deficit}% Shortage` 
+            : `+${Math.abs(deficit)}% Surplus`;
           const deltaClass = isShortage ? 'shortage' : 'surplus';
 
           const row = document.createElement('div');
@@ -3187,15 +3200,15 @@
             </div>
             <div class="progress-bar-container">
               <div class="bar-track">
-                <div class="bar-fill demand" style="width: ${skill.demand_score}%;" title="Industry Demand: ${skill.demand_score}%"></div>
+                <div class="bar-fill demand" style="width: ${demand}%;" title="Industry Demand (NCS): ${demand}%"></div>
               </div>
               <div class="bar-track">
-                <div class="bar-fill supply" style="width: ${skill.supply_score}%;" title="Workforce Supply: ${skill.supply_score}%"></div>
+                <div class="bar-fill supply" style="width: ${supply}%;" title="Workforce Supply (Mahaswayam): ${supply}%"></div>
               </div>
             </div>
             <div class="bar-numeric-overlay">
-              <span>Demand: ${skill.demand_score}/100</span>
-              <span>Supply: ${skill.supply_score}/100</span>
+              <span>Demand (NCS): ${demand}/100</span>
+              <span>Supply (Mahaswayam): ${supply}/100</span>
             </div>
           `;
           container.appendChild(row);
@@ -3382,7 +3395,14 @@
           updateTelemetry(isConnected);
 
           // Update State
-          State.skillGaps = gapRes.data.skills || [];
+          const topRole = (searchRes && searchRes.success && searchRes.data && Array.isArray(searchRes.data.results) && searchRes.data.results[0]) ? searchRes.data.results[0] : null;
+          if (topRole && Array.isArray(topRole.skills) && topRole.skills.length > 0) {
+            State.skillGaps = topRole.skills;
+          } else if (gapRes && gapRes.data && Array.isArray(gapRes.data.skills) && gapRes.data.skills.length > 0) {
+            State.skillGaps = gapRes.data.skills;
+          } else {
+            State.skillGaps = [];
+          }
           State.searchResults = (searchRes && searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : [];
           State.obsoleteCourses = obsRes.data.obsolete_courses || [];
 
@@ -3513,11 +3533,56 @@
         });
       };
 
-      // District Plans Helper: Export District Plan (PDF) Stub
+      // District Plans Helper: Export District Plan (PDF) via html2pdf.js
       window.exportDistrictPlanPDF = function() {
-        const districtSelect = document.getElementById('district-filter-select');
-        const distName = districtSelect ? districtSelect.options[districtSelect.selectedIndex].text : 'Maharashtra';
-        showToast(`Exporting District Skill Plan (PDF) for ${distName}... Download starting.`, 'success');
+        const btn = document.getElementById('btn-export-district-pdf');
+        const originalText = btn ? btn.innerHTML : 'Export District Plan (PDF)';
+        if (btn) {
+          btn.disabled = true;
+          btn.innerText = 'Exporting...';
+        }
+
+        const targetEl = document.getElementById('view-district-plans');
+        if (!targetEl) {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+          return;
+        }
+
+        if (typeof html2pdf !== 'undefined') {
+          html2pdf()
+            .set({
+              margin: 1,
+              filename: 'District_Training_Plan.pdf',
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2 },
+              jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            })
+            .from(targetEl)
+            .save()
+            .then(() => {
+              showToast('District Training Plan PDF exported successfully!', 'success');
+            })
+            .catch((err) => {
+              console.error('PDF export error:', err);
+              showToast('PDF export failed. Please try again.', 'error');
+            })
+            .finally(() => {
+              if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+              }
+            });
+        } else {
+          console.warn('html2pdf library not loaded.');
+          showToast('html2pdf library not loaded yet.', 'warning');
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+        }
       };
 
       // Employer Review Workflow Helpers
@@ -3617,6 +3682,9 @@
       executeLMIQuery(initialQuery, true);
     });
   </script>
+
+  <!-- Modular Frontend Companion Script -->
+  <script src="script.js"></script>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>

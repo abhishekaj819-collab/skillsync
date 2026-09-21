@@ -1,9 +1,8 @@
 /**
- * SkillSetu / SkillSync Frontend Search & Cold-Start Resilience Module
- * Gracefully handles Render's 50-second cold starts with:
- * - 65-second AbortController timeout
- * - 4000ms dynamic loading state transition ("Waking up the backend server...")
- * - Error state rendering with interactive "Retry Search" button
+ * SkillSetu / SkillSync Frontend Search, Telemetry & Export Module
+ * - Live PyTorch NLP Vector Search with 65s cold-start timeout
+ * - Dynamic skill telemetry progress bar rendering (NCS Demand vs Mahaswayam Supply)
+ * - PDF export for District Training Plans using html2pdf.js
  */
 
 const BASE_URL = "https://pessimist-skier-left.ngrok-free.dev";
@@ -98,3 +97,143 @@ function renderSearchError(container, queryText, isTimeoutOr500 = false) {
     });
   }
 }
+
+// 3. Render Granular Skill Bars (NCS Demand vs Mahaswayam Supply)
+function renderSkillBars(skillsOrRole) {
+  const container = document.getElementById('skill-bars-container') || 
+                    document.querySelector('#view-market-demand .skill-bars-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  let skills = [];
+  if (Array.isArray(skillsOrRole)) {
+    skills = skillsOrRole;
+  } else if (skillsOrRole && Array.isArray(skillsOrRole.skills)) {
+    skills = skillsOrRole.skills;
+  }
+
+  if (!skills || skills.length === 0) {
+    container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No matching skill telemetry found.</div>';
+    return;
+  }
+
+  skills.forEach(skill => {
+    const demand = typeof skill.demand === 'number' ? skill.demand : (typeof skill.demand_score === 'number' ? skill.demand_score : 80);
+    const supply = typeof skill.supply === 'number' ? skill.supply : (typeof skill.supply_score === 'number' ? skill.supply_score : 50);
+    const deficit = typeof skill.deficit_score === 'number' ? skill.deficit_score : (demand - supply);
+    const isShortage = deficit > 0;
+    const deltaText = isShortage 
+      ? `-${deficit}% Shortage` 
+      : `+${Math.abs(deficit)}% Surplus`;
+    const deltaClass = isShortage ? 'shortage' : 'surplus';
+
+    const row = document.createElement('div');
+    row.className = 'skill-row';
+    row.innerHTML = `
+      <div class="skill-row-meta">
+        <span class="skill-name">
+          ${skill.name}
+          <span class="skill-esco-tag">ESCO: ${skill.esco_code || '2512.1'}</span>
+        </span>
+        <span class="skill-delta-tag ${deltaClass}">${deltaText}</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="bar-track">
+          <div class="bar-fill demand" style="width: ${demand}%;" title="Demand (NCS): ${demand}%"></div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill supply" style="width: ${supply}%;" title="Supply (Mahaswayam): ${supply}%"></div>
+        </div>
+      </div>
+      <div class="bar-numeric-overlay">
+        <span>Demand (NCS): ${demand}/100</span>
+        <span>Supply (Mahaswayam): ${supply}/100</span>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// 4. District Plans Real PDF Exporting using html2pdf.js
+function exportDistrictPlanPDF() {
+  const btn = document.getElementById('btn-export-district-pdf');
+  const originalText = btn ? btn.innerHTML : 'Export District Plan (PDF)';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = 'Exporting...';
+  }
+
+  const targetEl = document.getElementById('view-district-plans');
+  if (!targetEl) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+    return;
+  }
+
+  if (typeof html2pdf !== 'undefined') {
+    const opt = {
+      margin: 1,
+      filename: 'District_Training_Plan.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    const pdfPromise = html2pdf().set(opt).from(targetEl).save();
+    if (pdfPromise && typeof pdfPromise.then === 'function') {
+      pdfPromise
+        .then(() => {
+          if (typeof showToast === 'function') {
+            showToast('District Training Plan PDF exported successfully!', 'success');
+          }
+        })
+        .catch((err) => {
+          console.error('PDF export error:', err);
+          if (typeof showToast === 'function') {
+            showToast('PDF export failed. Please try again.', 'error');
+          }
+        })
+        .finally(() => {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+          }
+        });
+    } else {
+      setTimeout(() => {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }, 1200);
+    }
+  } else {
+    console.warn('html2pdf library not loaded.');
+    if (typeof showToast === 'function') {
+      showToast('html2pdf library not loaded yet.', 'warning');
+    }
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
+}
+
+// Wire up event listeners on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  const exportBtn = document.getElementById('btn-export-district-pdf');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      exportDistrictPlanPDF();
+    });
+  }
+});
+
+// Expose functions on window
+window.fetchSearchResults = fetchSearchResults;
+window.renderSearchError = renderSearchError;
+window.renderSkillBars = renderSkillBars;
+window.exportDistrictPlanPDF = exportDistrictPlanPDF;

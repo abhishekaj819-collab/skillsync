@@ -7,7 +7,7 @@ Defines JobRole, JobDemand, CandidateSupply, and CourseCatalog schemas with auto
 import os
 from datetime import datetime
 from typing import List, Dict, Any, Generator
-from sqlalchemy import create_engine, Column, Integer, String, Float, Text, DateTime, JSON
+from sqlalchemy import create_engine, Column, Integer, String, Float, Text, DateTime, JSON, text
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
 # ============================================================================
@@ -57,6 +57,7 @@ class JobRole(Base):
     deficit_score = Column(Integer, nullable=False)
     growth_rate_yoy = Column(String(20), default="+15%")
     gap_analysis = Column(Text, nullable=False)
+    skills = Column(JSON, default=list)  # list of {"name": "...", "demand": int, "supply": int}
     recommended_courses = Column(JSON, default=list)  # list of {"title": "...", "url": "..."}
     mahaswayam_action_url = Column(String(255), default="https://rojgar.mahaswayam.gov.in/")
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -74,6 +75,7 @@ class JobRole(Base):
             "deficit_score": self.deficit_score,
             "growth_rate_yoy": self.growth_rate_yoy,
             "gap_analysis": self.gap_analysis,
+            "skills": self.skills or [],
             "recommended_courses": self.recommended_courses or [],
             "mahaswayam_action_url": self.mahaswayam_action_url
         }
@@ -205,6 +207,12 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "deficit_score": 43,
         "growth_rate_yoy": "+42%",
         "gap_analysis": "High industry demand for full-stack engineering, microservices architecture, and cloud deployment pipelines across Pune and Mumbai IT hubs.",
+        "skills": [
+            {"name": "Full-Stack Web & RESTful APIs", "demand": 94, "supply": 48},
+            {"name": "Cloud Microservices & Docker", "demand": 92, "supply": 42},
+            {"name": "Python & Data Structures", "demand": 96, "supply": 55},
+            {"name": "CI/CD & DevOps Automation", "demand": 88, "supply": 38}
+        ],
         "recommended_courses": [
             {
                 "title": "Programming, Data Structures And Algorithms Using Python - NPTEL (IIT Madras)",
@@ -228,6 +236,12 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "deficit_score": 24,
         "growth_rate_yoy": "+18%",
         "gap_analysis": "Need for teachers proficient in digital pedagogy, ICT-enabled smart classrooms, inclusive teaching methods, and foundational numeracy.",
+        "skills": [
+            {"name": "Digital Pedagogy & ICT Classrooms", "demand": 89, "supply": 58},
+            {"name": "Foundational Literacy & Numeracy (FLN)", "demand": 92, "supply": 64},
+            {"name": "NEP 2020 Curriculum Standards", "demand": 86, "supply": 50},
+            {"name": "Inclusive Classroom Instruction", "demand": 84, "supply": 60}
+        ],
         "recommended_courses": [
             {
                 "title": "Pedagogy of Teaching - SWAYAM (IGNOU)",
@@ -251,6 +265,11 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "deficit_score": 46,
         "growth_rate_yoy": "+38%",
         "gap_analysis": "Acute shortage in advanced statistical modeling, SQL pipelining, and automated PowerBI/Tableau dashboarding across Maharashtra's IT corridors.",
+        "skills": [
+            {"name": "Advanced SQL Pipelining", "demand": 95, "supply": 40},
+            {"name": "PowerBI / Tableau", "demand": 88, "supply": 45},
+            {"name": "Python Data Ecosystem (Pandas)", "demand": 92, "supply": 38}
+        ],
         "recommended_courses": [
             {
                 "title": "Data Analytics with Python - NPTEL (IIT Roorkee)",
@@ -274,6 +293,12 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "deficit_score": 14,
         "growth_rate_yoy": "+12%",
         "gap_analysis": "Demand has shifted from basic typing to digital records management, ERP database entry, advanced spreadsheet automation, and e-governance portal handling.",
+        "skills": [
+            {"name": "Advanced Spreadsheet & Excel Modeling", "demand": 86, "supply": 68},
+            {"name": "Digital Records & ERP Data Entry", "demand": 84, "supply": 72},
+            {"name": "e-Governance Portals & Document Handling", "demand": 82, "supply": 65},
+            {"name": "Office Automation & Typing Accuracy", "demand": 78, "supply": 80}
+        ],
         "recommended_courses": [
             {
                 "title": "Office Automation & Digital Skills - SWAYAM (AICTE)",
@@ -297,6 +322,12 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "deficit_score": 52,
         "growth_rate_yoy": "+48%",
         "gap_analysis": "Severe deficit in emergency triage care, ICU monitoring, infection control protocols, and digital health records handling across district hospitals.",
+        "skills": [
+            {"name": "Emergency Triage & Vital Signs Monitoring", "demand": 95, "supply": 38},
+            {"name": "Infection Control & Clinical Protocols", "demand": 92, "supply": 44},
+            {"name": "ICU & Patient Bedside Nursing", "demand": 94, "supply": 36},
+            {"name": "Digital Health Records (ABDM / EHR)", "demand": 85, "supply": 40}
+        ],
         "recommended_courses": [
             {
                 "title": "Nursing Care & Clinical Practices - SWAYAM (AIIMS)",
@@ -320,6 +351,12 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
         "deficit_score": 46,
         "growth_rate_yoy": "+55%",
         "gap_analysis": "Rapid expansion of rooftop solar installations and EV charging infrastructure requires certified electricians skilled in DC wiring, MPPT inverters, and net-metering.",
+        "skills": [
+            {"name": "Rooftop Solar PV Installation", "demand": 92, "supply": 42},
+            {"name": "MPPT Inverters & Net-Metering Setup", "demand": 88, "supply": 38},
+            {"name": "Industrial & Domestic Wiring (AC/DC)", "demand": 90, "supply": 52},
+            {"name": "EV Charging Station Maintenance", "demand": 86, "supply": 34}
+        ],
         "recommended_courses": [
             {
                 "title": "Non-Conventional Energy Resources - NPTEL (IIT Madras)",
@@ -341,6 +378,13 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
 
 def seed_database(db: Session) -> None:
     """Seeds and updates benchmark job roles and telemetry into the live SQLite database."""
+    # 0. Migrate SQLite schema if skills column is missing
+    try:
+        db.execute(text("ALTER TABLE job_roles ADD COLUMN skills JSON DEFAULT '[]'"))
+        db.commit()
+    except Exception:
+        db.rollback()
+
     # 1. Clear generic seed data and replace with high-volume benchmark roles
     valid_roles = [r["role"] for r in SEED_JOB_ROLES]
     db.query(JobRole).filter(~JobRole.role.in_(valid_roles)).delete(synchronize_session=False)
@@ -361,6 +405,7 @@ def seed_database(db: Session) -> None:
             existing.deficit_score = r_data["deficit_score"]
             existing.growth_rate_yoy = r_data.get("growth_rate_yoy", "+15%")
             existing.gap_analysis = r_data["gap_analysis"]
+            existing.skills = r_data.get("skills", [])
             existing.recommended_courses = r_data.get("recommended_courses", [])
             existing.mahaswayam_action_url = r_data.get("mahaswayam_action_url", "https://rojgar.mahaswayam.gov.in/")
         else:
@@ -375,6 +420,7 @@ def seed_database(db: Session) -> None:
                 deficit_score=r_data["deficit_score"],
                 growth_rate_yoy=r_data.get("growth_rate_yoy", "+15%"),
                 gap_analysis=r_data["gap_analysis"],
+                skills=r_data.get("skills", []),
                 recommended_courses=r_data.get("recommended_courses", []),
                 mahaswayam_action_url=r_data.get("mahaswayam_action_url", "https://rojgar.mahaswayam.gov.in/")
             )
