@@ -377,6 +377,98 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
             }
         ],
         "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "AI & Generative LLM Engineer",
+        "sector": "Artificial Intelligence & Machine Learning",
+        "description": "Builds and fine-tunes large language models, retrieval-augmented generation (RAG) pipelines, and multimodal enterprise AI agents.",
+        "ncs_code": "2512.0305",
+        "esco_code": "2512.1.18",
+        "ncs_demand_score": 98,
+        "mahaswayam_supply_score": 22,
+        "deficit_score": 76,
+        "growth_rate_yoy": "+185%",
+        "gap_analysis": "Extreme talent scarcity in PyTorch deep learning, vector databases, LangChain/LlamaIndex frameworks, and parameter-efficient fine-tuning (LoRA/QLoRA).",
+        "recommended_courses": [
+            {
+                "title": "Deep Learning - NPTEL (IIT Ropar)",
+                "url": "https://swayam.gov.in/explorer?searchText=machine+learning"
+            },
+            {
+                "title": "Natural Language Processing - NPTEL (IIT Kharagpur)",
+                "url": "https://swayam.gov.in/explorer?searchText=natural+language+processing"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "Logistics Automation Specialist",
+        "sector": "Supply Chain & Warehousing",
+        "description": "Implements automated guided vehicles (AGVs), warehouse management system (WMS) integrations, and RFID inventory telemetry for logistics hubs.",
+        "ncs_code": "4321.0102",
+        "esco_code": "4321.1.4",
+        "ncs_demand_score": 88,
+        "mahaswayam_supply_score": 36,
+        "deficit_score": 52,
+        "growth_rate_yoy": "+58%",
+        "gap_analysis": "Rapid expansion of multi-modal logistics parks across Maharashtra creates massive demand for warehouse robotics integration and real-time inventory automation.",
+        "recommended_courses": [
+            {
+                "title": "Operations and Supply Chain Management - NPTEL (IIT Madras)",
+                "url": "https://swayam.gov.in/explorer?searchText=logistics"
+            },
+            {
+                "title": "Supply Chain Analytics - NPTEL (IIT Roorkee)",
+                "url": "https://swayam.gov.in/explorer?searchText=supply+chain"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "Industrial Robotics & Mechatronics Engineer",
+        "sector": "Automation & Heavy Engineering",
+        "description": "Programs and maintains robotic arms, PLC controllers, SCADA industrial interfaces, and pneumatic actuators on assembly lines.",
+        "ncs_code": "2144.0304",
+        "esco_code": "2144.3.2",
+        "ncs_demand_score": 90,
+        "mahaswayam_supply_score": 33,
+        "deficit_score": 57,
+        "growth_rate_yoy": "+65%",
+        "gap_analysis": "Shortage of engineers proficient in Fanuc/KUKA robot kinematics, PLC ladder logic programming, and machine vision inspection systems.",
+        "recommended_courses": [
+            {
+                "title": "Robotics and Control - NPTEL (IIT Roorkee)",
+                "url": "https://swayam.gov.in/explorer?searchText=robotics"
+            },
+            {
+                "title": "Industrial Automation and Control - NPTEL (IIT Kharagpur)",
+                "url": "https://swayam.gov.in/explorer?searchText=industrial+automation"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
+    },
+    {
+        "role": "Smart Grid & Renewable Energy Specialist",
+        "sector": "Energy & Power Systems",
+        "description": "Supervises smart microgrid networks, energy storage systems (BESS), AMI smart meter rollouts, and renewable power quality stabilization.",
+        "ncs_code": "2151.0202",
+        "esco_code": "2151.2.1",
+        "ncs_demand_score": 87,
+        "mahaswayam_supply_score": 30,
+        "deficit_score": 57,
+        "growth_rate_yoy": "+60%",
+        "gap_analysis": "State modernization of electrical sub-stations requires grid engineers trained in SCADA protocols, IEEE 1547 interconnection standards, and power inverter harmonics.",
+        "recommended_courses": [
+            {
+                "title": "Smart Grid: Basics to Advanced Technologies - NPTEL (IIT Roorkee)",
+                "url": "https://swayam.gov.in/explorer?searchText=smart+grid"
+            },
+            {
+                "title": "Power System Protection and Switchgear - NPTEL",
+                "url": "https://swayam.gov.in/explorer?searchText=power+systems"
+            }
+        ],
+        "mahaswayam_action_url": "https://rojgar.mahaswayam.gov.in/"
     }
 ]
 
@@ -386,11 +478,23 @@ SEED_JOB_ROLES: List[Dict[str, Any]] = [
 # ============================================================================
 
 def seed_database(db: Session) -> None:
-    """Seeds benchmark job roles and telemetry into the live SQLite database."""
-    # 1. Seed Job Roles
-    existing_roles = db.query(JobRole).count()
-    if existing_roles == 0:
-        for r_data in SEED_JOB_ROLES:
+    """Seeds and updates benchmark job roles and telemetry into the live SQLite database."""
+    # 1. Upsert Job Roles
+    for r_data in SEED_JOB_ROLES:
+        existing = db.query(JobRole).filter(JobRole.role == r_data["role"]).first()
+        if existing:
+            existing.sector = r_data["sector"]
+            existing.description = r_data["description"]
+            existing.ncs_code = r_data.get("ncs_code")
+            existing.esco_code = r_data.get("esco_code")
+            existing.ncs_demand_score = r_data["ncs_demand_score"]
+            existing.mahaswayam_supply_score = r_data["mahaswayam_supply_score"]
+            existing.deficit_score = r_data["deficit_score"]
+            existing.growth_rate_yoy = r_data.get("growth_rate_yoy", "+15%")
+            existing.gap_analysis = r_data["gap_analysis"]
+            existing.recommended_courses = r_data.get("recommended_courses", [])
+            existing.mahaswayam_action_url = r_data.get("mahaswayam_action_url", "https://rojgar.mahaswayam.gov.in/")
+        else:
             job_role = JobRole(
                 role=r_data["role"],
                 sector=r_data["sector"],
@@ -406,7 +510,7 @@ def seed_database(db: Session) -> None:
                 mahaswayam_action_url=r_data.get("mahaswayam_action_url", "https://rojgar.mahaswayam.gov.in/")
             )
             db.add(job_role)
-        db.commit()
+    db.commit()
 
     # 2. Seed Job Demands and Candidate Supplies for LMI dashboard
     existing_demands = db.query(JobDemand).count()

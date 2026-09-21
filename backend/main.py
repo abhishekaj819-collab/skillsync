@@ -5,6 +5,8 @@ Orchestrates IngestionAgent, AnalyticsAgent, and CurriculumAgent.
 Provides PyTorch vector search against live SQLite database for job roles and SWAYAM courses.
 """
 
+import sys
+import traceback
 from contextlib import asynccontextmanager
 from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, Query, HTTPException, Depends
@@ -128,6 +130,12 @@ def search_job_roles_endpoint(
     {
         "status": "success",
         "query": "...",
+        "aggregate": {
+            "total_demand": 482910,
+            "total_supply": 319450,
+            "alignment_score": 66.2,
+            "deficit_rate": -33.8
+        },
         "results": [
             {
                 "role": "...",
@@ -142,6 +150,7 @@ def search_job_roles_endpoint(
     try:
         return search_job_roles(db=db, query=payload.query, top_k=payload.top_k or 5)
     except Exception as e:
+        traceback.print_exc(file=sys.stderr)
         raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
 
 
@@ -157,6 +166,7 @@ def search_job_roles_get_endpoint(
     try:
         return search_job_roles(db=db, query=query, top_k=top_k or 5)
     except Exception as e:
+        traceback.print_exc(file=sys.stderr)
         raise HTTPException(status_code=500, detail=f"Vector search failed: {str(e)}")
 
 

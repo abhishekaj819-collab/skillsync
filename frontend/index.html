@@ -1128,6 +1128,231 @@
       transform: translateY(-1px);
     }
 
+    /* Curriculum Alignment Obsolescence Grid */
+    .obsolescence-view-header {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .obsolescence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .obsolescence-detail-card {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-left: 4px solid var(--accent-red) !important;
+      position: relative;
+    }
+
+    .obsolescence-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .obsolescence-flags {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .obs-flag-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .obs-flag-badge.red {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
+
+    .obs-flag-badge.yellow {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fcd34d;
+    }
+
+    /* Employer Validation View Styles */
+    .employer-view-header {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .employer-kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .employer-table-card {
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .employer-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    .employer-table th {
+      padding: 0.85rem 1rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .employer-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: middle;
+    }
+
+    .employer-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .employer-actions-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-action-approve {
+      padding: 0.4rem 0.75rem;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--accent-green);
+      border-radius: var(--radius-sm);
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-approve:hover {
+      background: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      color: #fff;
+    }
+
+    .btn-action-flag {
+      padding: 0.4rem 0.75rem;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      border-radius: var(--radius-sm);
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-flag:hover {
+      background: rgba(239, 68, 68, 0.3);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    .btn-action-custom {
+      padding: 0.4rem 0.75rem;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+      border-radius: var(--radius-sm);
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-custom:hover {
+      background: rgba(59, 130, 246, 0.3);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+      color: #fff;
+    }
+
+    /* Modal dialog styling */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-content {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--accent-blue);
+    }
+
     /* ==========================================================================
        11. KEYFRAME ANIMATIONS & RESPONSIVE BREAKPOINTS
        ========================================================================== */
@@ -1434,21 +1659,15 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#mahaswayam" id="nav-mahaswayam">
-              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              Mahaswayam Supply
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#swayam" id="nav-swayam">
-              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-              SWAYAM Integration
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="#district-plans" id="nav-districts">
               <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
               District Plans
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#employer-validation" id="nav-employer">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Employer Validation
             </a>
           </li>
         </ul>
@@ -1469,9 +1688,9 @@
     <main class="main-content">
 
       <!-- ====================================================================
-           VIEW 1: SKILL GAP & CURRICULUM ALIGNMENT ANALYSIS (SPA)
+           VIEW 1: MARKET DEMAND & SKILL GAP DELTA (SPA)
            ==================================================================== -->
-      <div id="view-skill-analysis" class="spa-view">
+      <div id="view-market-demand" class="spa-view">
 
         <!-- Top Bar: Search & Regional Quick Filters -->
         <header class="top-bar glass-card">
@@ -1720,36 +1939,22 @@
           </section>
 
           <!-- ================================================================
-               RIGHT PANEL: CURRICULUM ALIGNMENT & ALERTS
+               RIGHT PANEL: SWAYAM / NPTEL CURRICULA ALIGNMENT (SEARCH RESULTS)
                ================================================================ -->
           <section class="curriculum-panel glass-card view-section active" id="curriculum">
-            
-            <!-- Obsolescence Warning Container -->
-            <div id="obsolescence-container">
-              <div class="obsolescence-alert-box">
-                <div class="alert-header">
-                  <span class="alert-badge">
-                    <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                    CRITICAL OBSOLESCENCE ALERT
-                  </span>
-                  <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-red);">NCS Flag #DEPR-2026</span>
-                </div>
-                <h3 class="alert-title">Legacy Tally ERP 9 & Desktop Win32 Bookkeeping</h3>
-                <p class="alert-desc">
-                  Market demand has collapsed by 64% YoY. Manual desktop accounting without GST e-invoicing API integration fails to meet current state commerce mandates.
-                </p>
-                <div class="replacement-box">
-                  <div class="replacement-label">Recommended Syllabus Migration</div>
-                  <div>Cloud ERP, Automated GSTN APIs & Python Financial Data Analytics (NCrF Level 5.5)</div>
-                </div>
-              </div>
+            <div class="panel-header">
+              <h2 class="panel-title">
+                <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                SWAYAM / NPTEL Curricula Alignment
+              </h2>
+              <span class="ncrf-tag">NCrF Credit Aligned</span>
             </div>
 
             <!-- SWAYAM / NPTEL Course Recommendations Card Deck -->
             <div class="recommendations-section view-section" id="swayam">
               <div class="section-subtitle">
-                <span>SWAYAM / NPTEL Curricula Alignment</span>
-                <span class="ncrf-tag">NCrF Credit Aligned</span>
+                <span>Vector Search Recommendations</span>
+                <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--accent-blue);">Real-Time PyTorch Similarity</span>
               </div>
               <div id="recommendations-container" style="display: flex; flex-direction: column; gap: 1rem;">
                 <!-- Dynamically populated via API upon search -->
@@ -1760,10 +1965,134 @@
 
         </div> <!-- analytics-grid -->
 
-      </div> <!-- view-skill-analysis -->
+      </div> <!-- view-market-demand -->
 
       <!-- ====================================================================
-           VIEW 2: DISTRICT SKILL DEVELOPMENT & EMPLOYMENT PLANS (SPA)
+           VIEW 2: CURRICULUM ALIGNMENT & OBSOLESCENCE GOVERNANCE (SPA)
+           ==================================================================== -->
+      <div id="view-curriculum-alignment" class="spa-view" style="display: none;">
+        <header class="obsolescence-view-header glass-card">
+          <div class="panel-header" style="border: none; margin: 0; padding: 0;">
+            <h2 class="panel-title" style="font-size: 1.25rem;">
+              <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Curriculum Alignment & Obsolescence Governance
+            </h2>
+            <button class="btn-filter" onclick="showToast('Syllabus modernization request dispatched to SWAYAM/AICTE board.', 'success')">
+              <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              Modernize Flagged Curricula
+            </button>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.25rem;">
+            Early warning telemetry detecting falling employer demand (< 25%), low placement rates (< 30%), and legacy tool stacks across vocational curricula, providing verified SWAYAM syllabus migration suggestions.
+          </p>
+        </header>
+
+        <!-- Obsolescence Grid -->
+        <div class="obsolescence-grid">
+          <!-- Card 1: Legacy Tally ERP 9 -->
+          <article class="obsolescence-detail-card glass-card">
+            <div class="obsolescence-meta-row">
+              <span class="obs-flag-badge red">CRITICAL OBSOLESCENCE</span>
+              <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--accent-red);">NCS Flag #DEPR-2026-01</span>
+            </div>
+            <h3 class="alert-title" style="font-size: 1.05rem;">Legacy Tally ERP 9 & Desktop Win32 Bookkeeping</h3>
+            <p class="alert-desc">
+              Employer demand contracted by 64% YoY. Manual desktop accounting without automated GSTN e-invoicing and direct API reconciliations fails current state commerce mandates.
+            </p>
+            <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+              <span style="color: var(--accent-red); font-weight: 600;">Placement: 22.4%</span>
+              <span style="color: var(--text-muted);">|</span>
+              <span style="color: var(--accent-red); font-weight: 600;">Demand YoY: -64%</span>
+            </div>
+            <div class="replacement-box">
+              <div class="replacement-label">Recommended SWAYAM Syllabus Migration</div>
+              <div style="font-weight: 500;">Cloud ERP, Automated GSTN APIs & Python Financial Data Analytics (NCrF Level 5.5)</div>
+              <a href="https://swayam.gov.in/explorer?searchText=cloud+erp" target="_blank" rel="noopener noreferrer" class="swayam-course-link" style="margin-top: 0.5rem;">
+                <span>Explore SWAYAM Cloud ERP Curriculum</span>
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 2: Desktop Visual Basic 6.0 -->
+          <article class="obsolescence-detail-card glass-card">
+            <div class="obsolescence-meta-row">
+              <span class="obs-flag-badge red">CRITICAL OBSOLESCENCE</span>
+              <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--accent-red);">NCS Flag #DEPR-2026-02</span>
+            </div>
+            <h3 class="alert-title" style="font-size: 1.05rem;">Visual Basic 6.0 & Monolithic Win32 Programming</h3>
+            <p class="alert-desc">
+              Statewide employer postings dropped by 88% YoY. Legacy client-server desktop development is non-compliant with modern cloud microservice architecture standards.
+            </p>
+            <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+              <span style="color: var(--accent-red); font-weight: 600;">Placement: 12.1%</span>
+              <span style="color: var(--text-muted);">|</span>
+              <span style="color: var(--accent-red); font-weight: 600;">Demand YoY: -88%</span>
+            </div>
+            <div class="replacement-box">
+              <div class="replacement-label">Recommended SWAYAM Syllabus Migration</div>
+              <div style="font-weight: 500;">Systems Programming with Rust & WebAssembly Microservices (NCrF Level 6)</div>
+              <a href="https://swayam.gov.in/explorer?searchText=cloud+computing" target="_blank" rel="noopener noreferrer" class="swayam-course-link" style="margin-top: 0.5rem;">
+                <span>Explore Modern Cloud & Systems Track</span>
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 3: Adobe Flash & ActionScript 2.0 -->
+          <article class="obsolescence-detail-card glass-card">
+            <div class="obsolescence-meta-row">
+              <span class="obs-flag-badge red">DEPRECATED STANDARD</span>
+              <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--accent-red);">NCS Flag #DEPR-2026-03</span>
+            </div>
+            <h3 class="alert-title" style="font-size: 1.05rem;">Adobe Flash & ActionScript Web Media</h3>
+            <p class="alert-desc">
+              End-of-life protocol with 0% enterprise recruitment. Training centers must immediately decommission Flash modules and redirect instructional hours to reactive frontends.
+            </p>
+            <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+              <span style="color: var(--accent-red); font-weight: 600;">Placement: 0.0%</span>
+              <span style="color: var(--text-muted);">|</span>
+              <span style="color: var(--accent-red); font-weight: 600;">Demand YoY: -100%</span>
+            </div>
+            <div class="replacement-box">
+              <div class="replacement-label">Recommended SWAYAM Syllabus Migration</div>
+              <div style="font-weight: 500;">Modern Full-Stack Web Technologies & WebGL Graphics (NCrF Level 5.5)</div>
+              <a href="https://swayam.gov.in/explorer?searchText=web+development" target="_blank" rel="noopener noreferrer" class="swayam-course-link" style="margin-top: 0.5rem;">
+                <span>Explore Modern Web Technologies Track</span>
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 4: Manual Mechanical Draughtsman -->
+          <article class="obsolescence-detail-card glass-card">
+            <div class="obsolescence-meta-row">
+              <span class="obs-flag-badge yellow">FALLING DEMAND</span>
+              <span style="font-family: var(--font-mono); font-size: 0.725rem; color: var(--accent-yellow);">NCS Flag #DEPR-2026-04</span>
+            </div>
+            <h3 class="alert-title" style="font-size: 1.05rem;">Manual 2D Lathe & Drafting Board Mechanical Drawing</h3>
+            <p class="alert-desc">
+              Automotive and aerospace suppliers in Pune-Chakan require 3D parametric CAD modeling and multi-axis CAM code generation rather than traditional manual pencil drafting.
+            </p>
+            <div style="display: flex; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+              <span style="color: var(--accent-yellow); font-weight: 600;">Placement: 28.5%</span>
+              <span style="color: var(--text-muted);">|</span>
+              <span style="color: var(--accent-red); font-weight: 600;">Demand YoY: -52%</span>
+            </div>
+            <div class="replacement-box">
+              <div class="replacement-label">Recommended SWAYAM Syllabus Migration</div>
+              <div style="font-weight: 500;">Multi-Axis CNC Programming & 3D Additive Manufacturing (NCrF Level 5)</div>
+              <a href="https://swayam.gov.in/explorer?searchText=cnc+machining" target="_blank" rel="noopener noreferrer" class="swayam-course-link" style="margin-top: 0.5rem;">
+                <span>Explore CNC & CAD/CAM Track</span>
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           VIEW 3: DISTRICT SKILL DEVELOPMENT & EMPLOYMENT PLANS (SPA)
            ==================================================================== -->
       <div id="view-district-plans" class="spa-view" style="display: none;">
         <!-- District Plans Header -->
@@ -1783,6 +2112,10 @@
               <option value="sambhajinagar">Chhatrapati Sambhajinagar</option>
               <option value="thane">Thane & Navi Mumbai</option>
             </select>
+            <button class="btn-filter" id="btn-export-district-pdf" onclick="exportDistrictPlanPDF()">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export District Plan (PDF)
+            </button>
           </div>
         </header>
 
@@ -2034,8 +2367,229 @@
         </div>
       </div> <!-- view-district-plans -->
 
+      <!-- ====================================================================
+           VIEW 4: EMPLOYER REVIEW & DEMAND VERIFICATION WORKFLOW (SPA)
+           ==================================================================== -->
+      <div id="view-employer-validation" class="spa-view" style="display: none;">
+        <header class="employer-view-header glass-card">
+          <div class="panel-header" style="border: none; margin: 0; padding: 0;">
+            <h2 class="panel-title" style="font-size: 1.25rem;">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Employer Review & Demand Verification Workflow
+            </h2>
+            <button class="btn-filter" onclick="openCustomSkillModal()">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Custom Skill
+            </button>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.25rem;">
+            Empowers registered employers across Maharashtra industrial clusters to audit NSQF-aligned syllabi, approve vocational competencies, flag urgent hiring deficits, and propose custom skill requisitions.
+          </p>
+        </header>
+
+        <!-- Employer KPI Strip -->
+        <section class="employer-kpi-strip">
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Verified Employers</span>
+              <span class="kpi-badge blue">Industry Base</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">84</span>
+              <span class="kpi-delta up">Active Audits</span>
+            </div>
+            <p class="kpi-subtext">Registered manufacturing, tech, and healthcare partners</p>
+          </article>
+
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Curriculum Endorsement</span>
+              <span class="kpi-badge green">Validation Rate</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">92.4%</span>
+              <span class="kpi-delta up">↑ +4.2% YoY</span>
+            </div>
+            <p class="kpi-subtext">Employer consensus score on NSQF Level 4-8 standards</p>
+          </article>
+
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Custom Skills Proposed</span>
+              <span class="kpi-badge yellow">Emerging Tracks</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="employer-custom-skills-count">18</span>
+              <span class="kpi-delta up">In Review</span>
+            </div>
+            <p class="kpi-subtext">Direct employer requests for new vocational curricula</p>
+          </article>
+        </section>
+
+        <!-- Employer Review Table Card -->
+        <article class="employer-table-card glass-card">
+          <table class="employer-table">
+            <thead>
+              <tr>
+                <th>Job Role & Sector</th>
+                <th>Demand / Supply</th>
+                <th>Deficit Status</th>
+                <th>Core Competencies</th>
+                <th>Employer Actions</th>
+              </tr>
+            </thead>
+            <tbody id="employer-roles-tbody">
+              <tr>
+                <td>
+                  <strong>AI & Generative LLM Engineer</strong><br>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Artificial Intelligence & ML</span>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem;">Demand: 98 | Supply: 22</span>
+                </td>
+                <td>
+                  <span class="skill-delta-tag shortage">-76% Deficit</span>
+                </td>
+                <td>
+                  <span style="font-size: 0.775rem; color: #cbd5e1;">PyTorch, LoRA Fine-Tuning, LangChain, Vector DBs</span>
+                </td>
+                <td>
+                  <div class="employer-actions-cell">
+                    <button class="btn-action-approve" onclick="handleEmployerAction('approve', 'AI & Generative LLM Engineer')">Approve</button>
+                    <button class="btn-action-flag" onclick="handleEmployerAction('flag', 'AI & Generative LLM Engineer')">Flag Deficit</button>
+                    <button class="btn-action-custom" onclick="openCustomSkillModal('AI & Generative LLM Engineer')">Add Skill</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Electric Vehicle (EV) Service Engineer</strong><br>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Automotive & Clean Mobility</span>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem;">Demand: 94 | Supply: 26</span>
+                </td>
+                <td>
+                  <span class="skill-delta-tag shortage">-68% Deficit</span>
+                </td>
+                <td>
+                  <span style="font-size: 0.775rem; color: #cbd5e1;">High-Voltage BMS, CAN Bus Telemetry, Thermal Safety</span>
+                </td>
+                <td>
+                  <div class="employer-actions-cell">
+                    <button class="btn-action-approve" onclick="handleEmployerAction('approve', 'Electric Vehicle (EV) Service Engineer')">Approve</button>
+                    <button class="btn-action-flag" onclick="handleEmployerAction('flag', 'Electric Vehicle (EV) Service Engineer')">Flag Deficit</button>
+                    <button class="btn-action-custom" onclick="openCustomSkillModal('Electric Vehicle (EV) Service Engineer')">Add Skill</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Cloud & DevOps Engineer</strong><br>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Information Technology</span>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem;">Demand: 95 | Supply: 42</span>
+                </td>
+                <td>
+                  <span class="skill-delta-tag shortage">-53% Deficit</span>
+                </td>
+                <td>
+                  <span style="font-size: 0.775rem; color: #cbd5e1;">Kubernetes, Terraform IaC, CI/CD GitOps</span>
+                </td>
+                <td>
+                  <div class="employer-actions-cell">
+                    <button class="btn-action-approve" onclick="handleEmployerAction('approve', 'Cloud & DevOps Engineer')">Approve</button>
+                    <button class="btn-action-flag" onclick="handleEmployerAction('flag', 'Cloud & DevOps Engineer')">Flag Deficit</button>
+                    <button class="btn-action-custom" onclick="openCustomSkillModal('Cloud & DevOps Engineer')">Add Skill</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Solar Technician</strong><br>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Renewable Energy & Utilities</span>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem;">Demand: 89 | Supply: 35</span>
+                </td>
+                <td>
+                  <span class="skill-delta-tag shortage">-54% Deficit</span>
+                </td>
+                <td>
+                  <span style="font-size: 0.775rem; color: #cbd5e1;">Rooftop Mounting, MPPT Inverters, Net-Metering</span>
+                </td>
+                <td>
+                  <div class="employer-actions-cell">
+                    <button class="btn-action-approve" onclick="handleEmployerAction('approve', 'Solar Technician')">Approve</button>
+                    <button class="btn-action-flag" onclick="handleEmployerAction('flag', 'Solar Technician')">Flag Deficit</button>
+                    <button class="btn-action-custom" onclick="openCustomSkillModal('Solar Technician')">Add Skill</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Precision Agriculture Specialist</strong><br>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Agriculture & Agritech</span>
+                </td>
+                <td>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem;">Demand: 81 | Supply: 29</span>
+                </td>
+                <td>
+                  <span class="skill-delta-tag shortage">-52% Deficit</span>
+                </td>
+                <td>
+                  <span style="font-size: 0.775rem; color: #cbd5e1;">IoT Soil Sensors, Drone Crop Survey, Drip Automation</span>
+                </td>
+                <td>
+                  <div class="employer-actions-cell">
+                    <button class="btn-action-approve" onclick="handleEmployerAction('approve', 'Precision Agriculture Specialist')">Approve</button>
+                    <button class="btn-action-flag" onclick="handleEmployerAction('flag', 'Precision Agriculture Specialist')">Flag Deficit</button>
+                    <button class="btn-action-custom" onclick="openCustomSkillModal('Precision Agriculture Specialist')">Add Skill</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div> <!-- view-employer-validation -->
+
     </main>
 
+  </div>
+
+  <!-- Modal Dialog: Add Custom Industry Skill -->
+  <div id="custom-skill-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Custom Industry Skill</h3>
+        <button class="modal-close-btn" onclick="closeCustomSkillModal()">&times;</button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">
+        Submit emerging industry skills for fast-track curriculum review and NSQF inclusion.
+      </p>
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); display: block; margin-bottom: 0.35rem;">TARGET JOB ROLE</label>
+        <input type="text" id="modal-role-input" class="modal-input" placeholder="e.g. AI & Generative LLM Engineer">
+      </div>
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); display: block; margin-bottom: 0.35rem;">CUSTOM SKILL NAME</label>
+        <input type="text" id="modal-skill-input" class="modal-input" placeholder="e.g. Multimodal Vision-Language Models">
+      </div>
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); display: block; margin-bottom: 0.35rem;">RECOMMENDED NSQF LEVEL</label>
+        <select id="modal-nsqf-select" class="district-dropdown" style="width: 100%;">
+          <option value="Level 5">NSQF Level 5 (Vocational Specialist)</option>
+          <option value="Level 6" selected>NSQF Level 6 (Advanced Technologist)</option>
+          <option value="Level 7">NSQF Level 7 (Research & Design Engineer)</option>
+          <option value="Level 8">NSQF Level 8 (Master Innovator)</option>
+        </select>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+        <button class="btn-filter" style="background: transparent; border-color: rgba(255,255,255,0.2);" onclick="closeCustomSkillModal()">Cancel</button>
+        <button class="btn-filter" onclick="submitCustomSkill()">Submit for Review</button>
+      </div>
+    </div>
   </div>
 
   <!-- Initialize Lenis Smooth Scroll & Particle Network Simulation -->
@@ -2461,65 +3015,31 @@
             }),
             signal: AbortSignal.timeout(6000)
           });
-          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          if (!res.ok) {
+            const errDetail = await res.text();
+            throw new Error(`HTTP ${res.status}: ${errDetail}`);
+          }
           const data = await res.json();
           return { success: true, data };
         } catch (err) {
-          showToast(`Search engine offline (${err.message}). Displaying local benchmark telemetry.`, 'warning');
+          // Clean error message instead of silently injecting repetitive fallback bars
+          showToast(`Search service error: ${err.message}`, 'error');
           return {
             success: false,
             data: {
-              status: "fallback",
+              status: "error",
               query: query,
-              results: SEED_JOB_ROLES_FALLBACK
+              aggregate: {
+                total_demand: 482910,
+                total_supply: 319450,
+                alignment_score: 66.2,
+                deficit_rate: -33.8
+              },
+              results: []
             }
           };
         }
       }
-
-      // Fallback realistic job roles aligned with SQLite database seeding
-      const SEED_JOB_ROLES_FALLBACK = [
-        {
-          role: "Data Analyst",
-          match_score: 0.95,
-          gap_analysis: "Acute shortage in advanced statistical modeling, SQL pipelining, and automated PowerBI/Tableau dashboarding across Maharashtra's IT corridors.",
-          recommended_courses: [
-            {
-              title: "Data Analytics with Python - NPTEL (IIT Roorkee)",
-              url: "https://swayam.gov.in/explorer?searchText=data+analytics"
-            },
-            {
-              title: "Business Analytics & Data Mining - NPTEL (IIT Kharagpur)",
-              url: "https://swayam.gov.in/explorer?searchText=business+analytics"
-            }
-          ],
-          mahaswayam_action_url: "https://rojgar.mahaswayam.gov.in/"
-        },
-        {
-          role: "Solar Technician",
-          match_score: 0.89,
-          gap_analysis: "High demand for certified technicians skilled in rooftop solar mounting, MPPT inverter troubleshooting, and net-metering synchronization.",
-          recommended_courses: [
-            {
-              title: "Non-Conventional Energy Resources - NPTEL (IIT Madras)",
-              url: "https://swayam.gov.in/explorer?searchText=solar+energy"
-            }
-          ],
-          mahaswayam_action_url: "https://rojgar.mahaswayam.gov.in/"
-        },
-        {
-          role: "CNC Operator & Machining Specialist",
-          match_score: 0.86,
-          gap_analysis: "Critical shortage of G-code/M-code programmers and multi-axis CNC machinists in Pune-Chakan and Aurangabad automotive manufacturing hubs.",
-          recommended_courses: [
-            {
-              title: "Automation in Manufacturing - NPTEL (IIT Guwahati)",
-              url: "https://swayam.gov.in/explorer?searchText=cnc+machining"
-            }
-          ],
-          mahaswayam_action_url: "https://rojgar.mahaswayam.gov.in/"
-        }
-      ];
 
       // 3. Fetch Obsolete Courses
       async function fetchObsoleteCourses() {
@@ -2533,8 +3053,8 @@
         }
       }
 
-      // Render Functions
-      function renderKPIs(gapData, queryStr) {
+      // Render Dynamic Top 3 KPI Cards using data.aggregate
+      function renderKPIs(data, queryStr) {
         const demandEl = document.getElementById('metric-demand');
         const traineesEl = document.getElementById('metric-trainees');
         const alignEl = document.getElementById('metric-alignment');
@@ -2545,27 +3065,35 @@
           chipText.textContent = `Query: ${queryStr} | NCS & Mahaswayam Integrated`;
         }
 
-        const summary = gapData.summary || {};
-        if (demandEl) {
-          const baseDemand = 482910;
-          const mult = summary.average_industry_demand ? (summary.average_industry_demand / 73.2) : 1;
-          demandEl.textContent = Math.round(baseDemand * mult).toLocaleString();
+        // Dynamically extract aggregate metrics from search API response or summary
+        const agg = (data && data.aggregate) ? data.aggregate : (data && data.summary ? {
+          total_demand: Math.round(482910 * (data.summary.average_industry_demand ? data.summary.average_industry_demand / 73.2 : 1)),
+          total_supply: Math.round(319450 * (data.summary.average_workforce_supply ? data.summary.average_workforce_supply / 50.7 : 1)),
+          alignment_score: parseFloat(data.summary.alignment_index) || 73.0,
+          deficit_rate: data.summary.net_deficit !== undefined ? -Math.abs(data.summary.net_deficit) : -22.5
+        } : {
+          total_demand: 482910,
+          total_supply: 319450,
+          alignment_score: 66.2,
+          deficit_rate: -33.8
+        });
+
+        if (demandEl && agg.total_demand !== undefined) {
+          demandEl.textContent = Number(agg.total_demand).toLocaleString();
         }
 
-        if (traineesEl) {
-          const baseSupply = 319450;
-          const mult = summary.average_workforce_supply ? (summary.average_workforce_supply / 50.7) : 1;
-          traineesEl.textContent = Math.round(baseSupply * mult).toLocaleString();
+        if (traineesEl && agg.total_supply !== undefined) {
+          traineesEl.textContent = Number(agg.total_supply).toLocaleString();
         }
 
-        if (alignEl) {
-          alignEl.textContent = summary.alignment_index || '73.0%';
+        if (alignEl && agg.alignment_score !== undefined) {
+          alignEl.textContent = `${agg.alignment_score}%`;
         }
 
-        if (alignDeltaEl) {
-          const net = summary.net_deficit !== undefined ? summary.net_deficit : 22.5;
-          alignDeltaEl.textContent = `Net Deficit: -${Math.abs(net)}%`;
-          alignDeltaEl.className = net > 0 ? 'kpi-delta deficit' : 'kpi-delta up';
+        if (alignDeltaEl && agg.deficit_rate !== undefined) {
+          const isNegative = Number(agg.deficit_rate) < 0;
+          alignDeltaEl.textContent = `Net Deficit: ${agg.deficit_rate}%`;
+          alignDeltaEl.className = isNegative ? 'kpi-delta deficit' : 'kpi-delta up';
         }
       }
 
@@ -2655,7 +3183,7 @@
         container.innerHTML = '';
 
         if (!results || results.length === 0) {
-          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No matching job roles found.</div>';
+          container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;">No matching job roles found. Please refine your search query.</div>';
           return;
         }
 
@@ -2744,10 +3272,10 @@
             sector = 'Information Technology & Analytics';
           }
 
-          // If initial load: fetch gap analysis and obsolete courses only; do NOT fetch search recommendations
+          // If initial load: fetch gap analysis only; do NOT fetch search recommendations
           const promises = [
             fetchGapAnalysis(sector, region),
-            isInitialLoad ? Promise.resolve({ success: true, data: { results: [] } }) : fetchSearchResults(queryText),
+            isInitialLoad ? Promise.resolve({ success: true, data: { results: [], aggregate: { total_demand: 482910, total_supply: 319450, alignment_score: 66.2, deficit_rate: -33.8 } } }) : fetchSearchResults(queryText),
             fetchObsoleteCourses()
           ];
 
@@ -2762,8 +3290,13 @@
           State.searchResults = (searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : [];
           State.obsoleteCourses = obsRes.data.obsolete_courses || [];
 
-          // Render DOM
-          renderKPIs(gapRes.data, queryText);
+          // Render Dynamic KPIs using data.aggregate from searchRes if available, else gapRes
+          if (searchRes.success && searchRes.data && searchRes.data.aggregate) {
+            renderKPIs(searchRes.data, queryText);
+          } else {
+            renderKPIs(gapRes.data, queryText);
+          }
+
           renderSkillBars(State.skillGaps);
           renderObsoleteCourses(State.obsoleteCourses);
 
@@ -2789,7 +3322,7 @@
       }
 
       // ====================================================================
-      // 4. SPA VIEW ROUTING & NAVIGATION TAB WIRING
+      // 4. SPA VIEW ROUTING & NAVIGATION TAB WIRING (4 Mutually Exclusive Views)
       // ====================================================================
 
       // Navigation Tabs: Prevent default anchor jump, toggle active class, and toggle views
@@ -2803,7 +3336,7 @@
           const parentItem = link.closest('.nav-item');
           if (parentItem) parentItem.classList.add('active');
 
-          // 2. Handle SPA view switching & section highlighting
+          // 2. Handle SPA view switching
           const href = link.getAttribute('href') || '';
           const targetId = href.replace('#', '');
           handleNavViewSwitch(link.id, targetId);
@@ -2811,63 +3344,42 @@
       });
 
       function handleNavViewSwitch(navId, targetId) {
-        const viewSkillAnalysis = document.getElementById('view-skill-analysis');
-        const viewDistrictPlans = document.getElementById('view-district-plans');
+        const views = {
+          demand: document.getElementById('view-market-demand'),
+          curriculum: document.getElementById('view-curriculum-alignment'),
+          districts: document.getElementById('view-district-plans'),
+          employer: document.getElementById('view-employer-validation')
+        };
 
-        // Toggle SPA Views strictly with display: block / display: none
-        if (navId === 'nav-districts' || targetId === 'district-plans') {
-          if (viewSkillAnalysis) viewSkillAnalysis.style.display = 'none';
-          if (viewDistrictPlans) viewDistrictPlans.style.display = 'block';
+        // Hide all 4 views
+        Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
+
+        // Show selected view strictly with display: block
+        if (navId === 'nav-demand' || targetId === 'demand' || targetId === 'market-demand') {
+          if (views.demand) views.demand.style.display = 'block';
+          showToast('Viewing Market Demand & Real-Time Skill Gap Analysis.', 'info');
+        } else if (navId === 'nav-curriculum' || targetId === 'curriculum' || targetId === 'curriculum-alignment') {
+          if (views.curriculum) views.curriculum.style.display = 'block';
+          showToast('Viewing Curriculum Alignment & Obsolescence Flags.', 'info');
+        } else if (navId === 'nav-districts' || targetId === 'district-plans' || targetId === 'districts') {
+          if (views.districts) views.districts.style.display = 'block';
           showToast('Viewing District Skill Development & Employment Plans.', 'info');
-          return;
-        }
-
-        // For all other nav tabs: show skill analysis view, hide district plans view
-        if (viewDistrictPlans) viewDistrictPlans.style.display = 'none';
-        if (viewSkillAnalysis) viewSkillAnalysis.style.display = 'block';
-
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
-
-        if (navId === 'nav-demand' || targetId === 'demand') {
-          const target = document.getElementById('demand') || document.querySelector('.gap-panel');
-          if (target) {
-            target.classList.add('view-active');
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        } else if (navId === 'nav-curriculum' || targetId === 'curriculum') {
-          const target = document.getElementById('curriculum') || document.querySelector('.curriculum-panel');
-          if (target) {
-            target.classList.add('view-active');
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        } else if (navId === 'nav-mahaswayam' || targetId === 'mahaswayam') {
-          const target = document.getElementById('demand') || document.querySelector('.gap-panel');
-          if (target) {
-            target.classList.add('view-active');
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          // Highlight Mahaswayam supply bars
-          document.querySelectorAll('.bar-fill.supply').forEach(bar => {
-            bar.style.boxShadow = '0 0 16px var(--accent-green)';
-            setTimeout(() => { bar.style.boxShadow = ''; }, 2500);
-          });
-          showToast('Viewing Mahaswayam vocational candidate supply telemetry.', 'info');
-        } else if (navId === 'nav-swayam' || targetId === 'swayam') {
-          const target = document.getElementById('swayam') || document.querySelector('.recommendations-section');
-          if (target) {
-            target.classList.add('view-active');
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          showToast('Viewing SWAYAM / NPTEL accredited curriculum recommendations.', 'info');
+        } else if (navId === 'nav-employer' || targetId === 'employer-validation' || targetId === 'employer') {
+          if (views.employer) views.employer.style.display = 'block';
+          showToast('Viewing Employer Review & Demand Verification Workflow.', 'info');
         }
       }
 
       // District Plans Helper: Pivot from District Card into Skill Analysis
       window.switchDistrictAndSearch = function(query) {
-        const viewSkillAnalysis = document.getElementById('view-skill-analysis');
-        const viewDistrictPlans = document.getElementById('view-district-plans');
-        if (viewDistrictPlans) viewDistrictPlans.style.display = 'none';
-        if (viewSkillAnalysis) viewSkillAnalysis.style.display = 'block';
+        const views = {
+          demand: document.getElementById('view-market-demand'),
+          curriculum: document.getElementById('view-curriculum-alignment'),
+          districts: document.getElementById('view-district-plans'),
+          employer: document.getElementById('view-employer-validation')
+        };
+        Object.values(views).forEach(v => { if (v) v.style.display = 'none'; });
+        if (views.demand) views.demand.style.display = 'block';
 
         // Update nav active tab to Market Demand
         document.querySelectorAll('.nav-menu .nav-item').forEach(item => item.classList.remove('active'));
@@ -2892,6 +3404,84 @@
             card.style.display = 'none';
           }
         });
+      };
+
+      // District Plans Helper: Export District Plan (PDF) Stub
+      window.exportDistrictPlanPDF = function() {
+        const districtSelect = document.getElementById('district-filter-select');
+        const distName = districtSelect ? districtSelect.options[districtSelect.selectedIndex].text : 'Maharashtra';
+        showToast(`Exporting District Skill Plan (PDF) for ${distName}... Download starting.`, 'success');
+      };
+
+      // Employer Review Workflow Helpers
+      window.handleEmployerAction = function(action, role) {
+        if (action === 'approve') {
+          showToast(`Curriculum alignment for '${role}' successfully endorsed by employer.`, 'success');
+        } else if (action === 'flag') {
+          showToast(`Critical talent deficit flagged for '${role}'. Submitted to State Skill Board.`, 'warning');
+        }
+      };
+
+      window.openCustomSkillModal = function(role = '') {
+        const modal = document.getElementById('custom-skill-modal');
+        const roleInput = document.getElementById('modal-role-input');
+        if (roleInput && role) roleInput.value = role;
+        if (modal) modal.style.display = 'flex';
+      };
+
+      window.closeCustomSkillModal = function() {
+        const modal = document.getElementById('custom-skill-modal');
+        if (modal) modal.style.display = 'none';
+      };
+
+      window.submitCustomSkill = function() {
+        const roleInput = document.getElementById('modal-role-input');
+        const skillInput = document.getElementById('modal-skill-input');
+        const nsqfSelect = document.getElementById('modal-nsqf-select');
+        const skillName = skillInput ? skillInput.value.trim() : '';
+        const roleName = roleInput ? roleInput.value.trim() : '';
+        const nsqfLevel = nsqfSelect ? nsqfSelect.value : 'Level 6';
+
+        if (!skillName) {
+          showToast('Please enter a custom skill name.', 'warning');
+          return;
+        }
+
+        const tbody = document.getElementById('employer-roles-tbody');
+        if (tbody) {
+          const newRow = document.createElement('tr');
+          newRow.innerHTML = `
+            <td>
+              <strong>${roleName || 'Custom Industry Track'}</strong><br>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Employer Proposed</span>
+            </td>
+            <td>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem;">Demand: 95 | Supply: 15</span>
+            </td>
+            <td>
+              <span class="skill-delta-tag shortage">-80% Urgent</span>
+            </td>
+            <td>
+              <span style="font-size: 0.775rem; color: #93c5fd;">${skillName} (${nsqfLevel})</span>
+            </td>
+            <td>
+              <div class="employer-actions-cell">
+                <button class="btn-action-approve" onclick="handleEmployerAction('approve', '${roleName || skillName}')">Approve</button>
+                <button class="btn-action-flag" onclick="handleEmployerAction('flag', '${roleName || skillName}')">Flag Deficit</button>
+              </div>
+            </td>
+          `;
+          tbody.prepend(newRow);
+        }
+
+        const countEl = document.getElementById('employer-custom-skills-count');
+        if (countEl) {
+          const cur = parseInt(countEl.textContent || '18', 10);
+          countEl.textContent = cur + 1;
+        }
+
+        closeCustomSkillModal();
+        showToast(`Custom skill '${skillName}' submitted for fast-track NSQF review!`, 'success');
       };
 
       // Filter Button & Search Input
