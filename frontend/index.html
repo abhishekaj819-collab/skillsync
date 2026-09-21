@@ -940,6 +940,194 @@
       font-style: italic;
     }
 
+    /* SPA View Transitions */
+    .spa-view {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* District Plans View Components */
+    .district-plans-header {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .district-plans-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .district-plans-title svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--accent-blue);
+      fill: none;
+    }
+
+    .district-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .district-dropdown {
+      padding: 0.6rem 1rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .district-dropdown:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .district-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .district-card {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .district-card:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .district-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .district-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .district-cluster-badge {
+      font-family: var(--font-mono);
+      font-size: 0.725rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #93c5fd;
+      white-space: nowrap;
+    }
+
+    .district-stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .district-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .district-stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .district-stat-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .district-skills-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .district-skills-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .district-skills-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .district-skill-tag {
+      font-size: 0.725rem;
+      padding: 0.25rem 0.55rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      color: #e2e8f0;
+    }
+
+    .district-skill-tag .nsqf-level {
+      color: var(--accent-purple);
+      font-weight: 600;
+      margin-left: 4px;
+    }
+
+    .btn-district-pivot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-district-pivot:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(59, 130, 246, 0.15));
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 14px var(--accent-blue-glow);
+      transform: translateY(-1px);
+    }
+
     /* ==========================================================================
        11. KEYFRAME ANIMATIONS & RESPONSIVE BREAKPOINTS
        ========================================================================== */
@@ -1280,292 +1468,571 @@
          ==================================================================== -->
     <main class="main-content">
 
-      <!-- Top Bar: Search & Regional Quick Filters -->
-      <header class="top-bar glass-card view-section" id="district-plans">
-        <div class="search-filter-wrap">
-          <div class="search-input-box">
-            <svg viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            <input 
-              type="text" 
-              class="search-input" 
-              id="lmi-search-input" 
-              placeholder="Search by role or district (e.g., 'Pune — Data Analytics', 'Generative AI')"
-              value="Pune — Data Analytics"
-            >
-          </div>
-          <button class="btn-filter" id="btn-run-query">
-            <svg viewBox="0 0 24 24">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-            </svg>
-            Run Filter
-          </button>
-        </div>
+      <!-- ====================================================================
+           VIEW 1: SKILL GAP & CURRICULUM ALIGNMENT ANALYSIS (SPA)
+           ==================================================================== -->
+      <div id="view-skill-analysis" class="spa-view">
 
-        <div class="top-meta-strip">
-          <div class="region-chip">
-            <span class="chip-dot"></span>
-            <span id="region-chip-text">Region: Maharashtra State (NCS Integrated)</span>
+        <!-- Top Bar: Search & Regional Quick Filters -->
+        <header class="top-bar glass-card">
+          <div class="search-filter-wrap">
+            <div class="search-input-box">
+              <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input 
+                type="text" 
+                class="search-input" 
+                id="lmi-search-input" 
+                placeholder="Search by role or district (e.g., 'Pune — Data Analytics', 'Generative AI')"
+                value="Pune — Data Analytics"
+              >
+            </div>
+            <button class="btn-filter" id="btn-run-query">
+              <svg viewBox="0 0 24 24">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              Run Filter
+            </button>
           </div>
-        </div>
-      </header>
 
-      <!-- KPI Metrics Strip: 3 Key Metric Cards -->
-      <section class="kpi-strip">
-        <!-- Card 1: Active Industry Demand -->
-        <article class="kpi-card glass-card">
-          <div class="kpi-header">
-            <span class="kpi-title">Active Industry Demand (NCS)</span>
-            <span class="kpi-badge blue">Real-Time</span>
-          </div>
-          <div class="kpi-value-row">
-            <span class="kpi-value" id="metric-demand">482,910</span>
-            <span class="kpi-delta up" id="metric-demand-delta">↑ +18.4%</span>
-          </div>
-          <p class="kpi-subtext">Verified job postings across National Career Service & state portals</p>
-        </article>
-
-        <!-- Card 2: Registered Trainees -->
-        <article class="kpi-card glass-card">
-          <div class="kpi-header">
-            <span class="kpi-title">Registered Trainees (Mahaswayam)</span>
-            <span class="kpi-badge green">Supply Base</span>
-          </div>
-          <div class="kpi-value-row">
-            <span class="kpi-value" id="metric-trainees">319,450</span>
-            <span class="kpi-delta up" id="metric-trainees-delta">↑ +9.2%</span>
-          </div>
-          <p class="kpi-subtext">Active vocational & degree candidate pool across 36 districts</p>
-        </article>
-
-        <!-- Card 3: Alignment Index Score -->
-        <article class="kpi-card glass-card">
-          <div class="kpi-header">
-            <span class="kpi-title">Alignment Index Score (%)</span>
-            <span class="kpi-badge yellow">Deficit Alert</span>
-          </div>
-          <div class="kpi-value-row">
-            <span class="kpi-value" id="metric-alignment">73.0%</span>
-            <span class="kpi-delta deficit" id="metric-alignment-delta">Net Deficit: -22.5%</span>
-          </div>
-          <p class="kpi-subtext">Curriculum-to-demand concordance across high-priority clusters</p>
-        </article>
-      </section>
-
-      <!-- Two-Column Analytics Grid -->
-      <div class="analytics-grid" id="analytics-grid">
-        <!-- NLP Calculation Skeleton/Spinner Overlay -->
-        <div class="grid-loading-overlay" id="grid-loading-overlay">
-          <div class="spinner-pulse"></div>
-          <span class="loading-status-text">NLP Alignment Engine Calculating...</span>
-        </div>
-
-        <!-- ================================================================
-             LEFT PANEL: SKILL GAP DELTA (NCS Demand vs Mahaswayam Supply)
-             ================================================================ -->
-        <section class="gap-panel glass-card view-section active" id="demand">
-          <div class="panel-header">
-            <h2 class="panel-title">
-              <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              Skill Gap Delta Analysis
-            </h2>
-            <div class="chart-legend">
-              <div class="legend-item">
-                <span class="legend-box demand"></span>
-                <span>Demand (NCS)</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-box supply"></span>
-                <span>Supply (Mahaswayam)</span>
-              </div>
+          <div class="top-meta-strip">
+            <div class="region-chip">
+              <span class="chip-dot"></span>
+              <span id="region-chip-text">Region: Maharashtra State (NCS Integrated)</span>
             </div>
           </div>
+        </header>
 
-          <div class="skill-bars-list" id="skill-bars-container">
-
-            <!-- Skill 1: Generative AI -->
-            <div class="skill-row">
-              <div class="skill-row-meta">
-                <span class="skill-name">
-                  Generative AI & LLM Fine-Tuning
-                  <span class="skill-esco-tag">ESCO: 2512.1.14</span>
-                </span>
-                <span class="skill-delta-tag shortage">-58% Shortage</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="bar-track">
-                  <div class="bar-fill demand" style="width: 96%;" title="Industry Demand: 96%"></div>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill supply" style="width: 38%;" title="Workforce Supply: 38%"></div>
-                </div>
-              </div>
-              <div class="bar-numeric-overlay">
-                <span>Demand: 96/100</span>
-                <span>Supply: 38/100</span>
-              </div>
+        <!-- KPI Metrics Strip: 3 Key Metric Cards -->
+        <section class="kpi-strip">
+          <!-- Card 1: Active Industry Demand -->
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Active Industry Demand (NCS)</span>
+              <span class="kpi-badge blue">Real-Time</span>
             </div>
-
-            <!-- Skill 2: Cloud & Kubernetes -->
-            <div class="skill-row">
-              <div class="skill-row-meta">
-                <span class="skill-name">
-                  Kubernetes & Cloud-Native Microservices
-                  <span class="skill-esco-tag">ESCO: 2511.2.3</span>
-                </span>
-                <span class="skill-delta-tag shortage">-48% Shortage</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="bar-track">
-                  <div class="bar-fill demand" style="width: 94%;" title="Industry Demand: 94%"></div>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill supply" style="width: 46%;" title="Workforce Supply: 46%"></div>
-                </div>
-              </div>
-              <div class="bar-numeric-overlay">
-                <span>Demand: 94/100</span>
-                <span>Supply: 46/100</span>
-              </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="metric-demand">482,910</span>
+              <span class="kpi-delta up" id="metric-demand-delta">↑ +18.4%</span>
             </div>
+            <p class="kpi-subtext">Verified job postings across National Career Service & state portals</p>
+          </article>
 
-            <!-- Skill 3: EV Battery Management -->
-            <div class="skill-row">
-              <div class="skill-row-meta">
-                <span class="skill-name">
-                  EV Battery Management Systems (BMS)
-                  <span class="skill-esco-tag">ESCO: 2144.2.7</span>
-                </span>
-                <span class="skill-delta-tag shortage">-64% Shortage</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="bar-track">
-                  <div class="bar-fill demand" style="width: 92%;" title="Industry Demand: 92%"></div>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill supply" style="width: 28%;" title="Workforce Supply: 28%"></div>
-                </div>
-              </div>
-              <div class="bar-numeric-overlay">
-                <span>Demand: 92/100</span>
-                <span>Supply: 28/100</span>
-              </div>
+          <!-- Card 2: Registered Trainees -->
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Registered Trainees (Mahaswayam)</span>
+              <span class="kpi-badge green">Supply Base</span>
             </div>
-
-            <!-- Skill 4: Cybersecurity & Zero Trust -->
-            <div class="skill-row">
-              <div class="skill-row-meta">
-                <span class="skill-name">
-                  Cloud Security Architecture & Zero Trust
-                  <span class="skill-esco-tag">ESCO: 2529.1.5</span>
-                </span>
-                <span class="skill-delta-tag shortage">-61% Shortage</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="bar-track">
-                  <div class="bar-fill demand" style="width: 95%;" title="Industry Demand: 95%"></div>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill supply" style="width: 34%;" title="Workforce Supply: 34%"></div>
-                </div>
-              </div>
-              <div class="bar-numeric-overlay">
-                <span>Demand: 95/100</span>
-                <span>Supply: 34/100</span>
-              </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="metric-trainees">319,450</span>
+              <span class="kpi-delta up" id="metric-trainees-delta">↑ +9.2%</span>
             </div>
+            <p class="kpi-subtext">Active vocational & degree candidate pool across 36 districts</p>
+          </article>
 
-            <!-- Skill 5: Distributed Data Engineering -->
-            <div class="skill-row">
-              <div class="skill-row-meta">
-                <span class="skill-name">
-                  Distributed Data Engineering (Spark/Flink)
-                  <span class="skill-esco-tag">ESCO: 2521.1.2</span>
-                </span>
-                <span class="skill-delta-tag shortage">-36% Shortage</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="bar-track">
-                  <div class="bar-fill demand" style="width: 88%;" title="Industry Demand: 88%"></div>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill supply" style="width: 52%;" title="Workforce Supply: 52%"></div>
-                </div>
-              </div>
-              <div class="bar-numeric-overlay">
-                <span>Demand: 88/100</span>
-                <span>Supply: 52/100</span>
-              </div>
+          <!-- Card 3: Alignment Index Score -->
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Alignment Index Score (%)</span>
+              <span class="kpi-badge yellow">Deficit Alert</span>
             </div>
-
-            <!-- Skill 6: Legacy Tally ERP (Surplus / Deprecated) -->
-            <div class="skill-row">
-              <div class="skill-row-meta">
-                <span class="skill-name">
-                  Legacy Tally ERP 9 / NSQF Level 4
-                  <span class="skill-esco-tag">ESCO: 2512.9.1</span>
-                </span>
-                <span class="skill-delta-tag surplus">+56% Surplus (Low Demand)</span>
-              </div>
-              <div class="progress-bar-container">
-                <div class="bar-track">
-                  <div class="bar-fill demand" style="width: 18%;" title="Industry Demand: 18%"></div>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill supply" style="width: 74%;" title="Workforce Supply: 74%"></div>
-                </div>
-              </div>
-              <div class="bar-numeric-overlay">
-                <span>Demand: 18/100</span>
-                <span>Supply: 74/100</span>
-              </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="metric-alignment">73.0%</span>
+              <span class="kpi-delta deficit" id="metric-alignment-delta">Net Deficit: -22.5%</span>
             </div>
-
-          </div>
+            <p class="kpi-subtext">Curriculum-to-demand concordance across high-priority clusters</p>
+          </article>
         </section>
 
-        <!-- ================================================================
-             RIGHT PANEL: CURRICULUM ALIGNMENT & ALERTS
-             ================================================================ -->
-        <section class="curriculum-panel glass-card view-section active" id="curriculum">
-          
-          <!-- Obsolescence Warning Container -->
-          <div id="obsolescence-container">
-            <div class="obsolescence-alert-box">
-              <div class="alert-header">
-                <span class="alert-badge">
-                  <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                  CRITICAL OBSOLESCENCE ALERT
-                </span>
-                <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-red);">NCS Flag #DEPR-2026</span>
-              </div>
-              <h3 class="alert-title">Legacy Tally ERP 9 & Desktop Win32 Bookkeeping</h3>
-              <p class="alert-desc">
-                Market demand has collapsed by 64% YoY. Manual desktop accounting without GST e-invoicing API integration fails to meet current state commerce mandates.
-              </p>
-              <div class="replacement-box">
-                <div class="replacement-label">Recommended Syllabus Migration</div>
-                <div>Cloud ERP, Automated GSTN APIs & Python Financial Data Analytics (NCrF Level 5.5)</div>
-              </div>
-            </div>
+        <!-- Two-Column Analytics Grid -->
+        <div class="analytics-grid" id="analytics-grid">
+          <!-- NLP Calculation Skeleton/Spinner Overlay -->
+          <div class="grid-loading-overlay" id="grid-loading-overlay">
+            <div class="spinner-pulse"></div>
+            <span class="loading-status-text">NLP Alignment Engine Calculating...</span>
           </div>
 
-          <!-- SWAYAM / NPTEL Course Recommendations Card Deck -->
-          <div class="recommendations-section view-section" id="swayam">
-            <div class="section-subtitle">
-              <span>SWAYAM / NPTEL Curricula Alignment</span>
-              <span class="ncrf-tag">NCrF Credit Aligned</span>
+          <!-- ================================================================
+               LEFT PANEL: SKILL GAP DELTA (NCS Demand vs Mahaswayam Supply)
+               ================================================================ -->
+          <section class="gap-panel glass-card view-section active" id="demand">
+            <div class="panel-header">
+              <h2 class="panel-title">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Skill Gap Delta Analysis
+              </h2>
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <span class="legend-box demand"></span>
+                  <span>Demand (NCS)</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-box supply"></span>
+                  <span>Supply (Mahaswayam)</span>
+                </div>
+              </div>
             </div>
-            <div id="recommendations-container" style="display: flex; flex-direction: column; gap: 1rem;">
-              <!-- Dynamically populated via API -->
-            </div>
-          </div>
 
+            <div class="skill-bars-list" id="skill-bars-container">
+
+              <!-- Skill 1: Generative AI -->
+              <div class="skill-row">
+                <div class="skill-row-meta">
+                  <span class="skill-name">
+                    Generative AI & LLM Fine-Tuning
+                    <span class="skill-esco-tag">ESCO: 2512.1.14</span>
+                  </span>
+                  <span class="skill-delta-tag shortage">-58% Shortage</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="bar-track">
+                    <div class="bar-fill demand" style="width: 96%;" title="Industry Demand: 96%"></div>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill supply" style="width: 38%;" title="Workforce Supply: 38%"></div>
+                  </div>
+                </div>
+                <div class="bar-numeric-overlay">
+                  <span>Demand: 96/100</span>
+                  <span>Supply: 38/100</span>
+                </div>
+              </div>
+
+              <!-- Skill 2: Cloud & Kubernetes -->
+              <div class="skill-row">
+                <div class="skill-row-meta">
+                  <span class="skill-name">
+                    Kubernetes & Cloud-Native Microservices
+                    <span class="skill-esco-tag">ESCO: 2511.2.3</span>
+                  </span>
+                  <span class="skill-delta-tag shortage">-48% Shortage</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="bar-track">
+                    <div class="bar-fill demand" style="width: 94%;" title="Industry Demand: 94%"></div>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill supply" style="width: 46%;" title="Workforce Supply: 46%"></div>
+                  </div>
+                </div>
+                <div class="bar-numeric-overlay">
+                  <span>Demand: 94/100</span>
+                  <span>Supply: 46/100</span>
+                </div>
+              </div>
+
+              <!-- Skill 3: EV Battery Management -->
+              <div class="skill-row">
+                <div class="skill-row-meta">
+                  <span class="skill-name">
+                    EV Battery Management Systems (BMS)
+                    <span class="skill-esco-tag">ESCO: 2144.2.7</span>
+                  </span>
+                  <span class="skill-delta-tag shortage">-64% Shortage</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="bar-track">
+                    <div class="bar-fill demand" style="width: 92%;" title="Industry Demand: 92%"></div>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill supply" style="width: 28%;" title="Workforce Supply: 28%"></div>
+                  </div>
+                </div>
+                <div class="bar-numeric-overlay">
+                  <span>Demand: 92/100</span>
+                  <span>Supply: 28/100</span>
+                </div>
+              </div>
+
+              <!-- Skill 4: Cybersecurity & Zero Trust -->
+              <div class="skill-row">
+                <div class="skill-row-meta">
+                  <span class="skill-name">
+                    Cloud Security Architecture & Zero Trust
+                    <span class="skill-esco-tag">ESCO: 2529.1.5</span>
+                  </span>
+                  <span class="skill-delta-tag shortage">-61% Shortage</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="bar-track">
+                    <div class="bar-fill demand" style="width: 95%;" title="Industry Demand: 95%"></div>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill supply" style="width: 34%;" title="Workforce Supply: 34%"></div>
+                  </div>
+                </div>
+                <div class="bar-numeric-overlay">
+                  <span>Demand: 95/100</span>
+                  <span>Supply: 34/100</span>
+                </div>
+              </div>
+
+              <!-- Skill 5: Distributed Data Engineering -->
+              <div class="skill-row">
+                <div class="skill-row-meta">
+                  <span class="skill-name">
+                    Distributed Data Engineering (Spark/Flink)
+                    <span class="skill-esco-tag">ESCO: 2521.1.2</span>
+                  </span>
+                  <span class="skill-delta-tag shortage">-36% Shortage</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="bar-track">
+                    <div class="bar-fill demand" style="width: 88%;" title="Industry Demand: 88%"></div>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill supply" style="width: 52%;" title="Workforce Supply: 52%"></div>
+                  </div>
+                </div>
+                <div class="bar-numeric-overlay">
+                  <span>Demand: 88/100</span>
+                  <span>Supply: 52/100</span>
+                </div>
+              </div>
+
+              <!-- Skill 6: Legacy Tally ERP (Surplus / Deprecated) -->
+              <div class="skill-row">
+                <div class="skill-row-meta">
+                  <span class="skill-name">
+                    Legacy Tally ERP 9 / NSQF Level 4
+                    <span class="skill-esco-tag">ESCO: 2512.9.1</span>
+                  </span>
+                  <span class="skill-delta-tag surplus">+56% Surplus (Low Demand)</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="bar-track">
+                    <div class="bar-fill demand" style="width: 18%;" title="Industry Demand: 18%"></div>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill supply" style="width: 74%;" title="Workforce Supply: 74%"></div>
+                  </div>
+                </div>
+                <div class="bar-numeric-overlay">
+                  <span>Demand: 18/100</span>
+                  <span>Supply: 74/100</span>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ================================================================
+               RIGHT PANEL: CURRICULUM ALIGNMENT & ALERTS
+               ================================================================ -->
+          <section class="curriculum-panel glass-card view-section active" id="curriculum">
+            
+            <!-- Obsolescence Warning Container -->
+            <div id="obsolescence-container">
+              <div class="obsolescence-alert-box">
+                <div class="alert-header">
+                  <span class="alert-badge">
+                    <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    CRITICAL OBSOLESCENCE ALERT
+                  </span>
+                  <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-red);">NCS Flag #DEPR-2026</span>
+                </div>
+                <h3 class="alert-title">Legacy Tally ERP 9 & Desktop Win32 Bookkeeping</h3>
+                <p class="alert-desc">
+                  Market demand has collapsed by 64% YoY. Manual desktop accounting without GST e-invoicing API integration fails to meet current state commerce mandates.
+                </p>
+                <div class="replacement-box">
+                  <div class="replacement-label">Recommended Syllabus Migration</div>
+                  <div>Cloud ERP, Automated GSTN APIs & Python Financial Data Analytics (NCrF Level 5.5)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SWAYAM / NPTEL Course Recommendations Card Deck -->
+            <div class="recommendations-section view-section" id="swayam">
+              <div class="section-subtitle">
+                <span>SWAYAM / NPTEL Curricula Alignment</span>
+                <span class="ncrf-tag">NCrF Credit Aligned</span>
+              </div>
+              <div id="recommendations-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Dynamically populated via API upon search -->
+              </div>
+            </div>
+
+          </section>
+
+        </div> <!-- analytics-grid -->
+
+      </div> <!-- view-skill-analysis -->
+
+      <!-- ====================================================================
+           VIEW 2: DISTRICT SKILL DEVELOPMENT & EMPLOYMENT PLANS (SPA)
+           ==================================================================== -->
+      <div id="view-district-plans" class="spa-view" style="display: none;">
+        <!-- District Plans Header -->
+        <header class="district-plans-header glass-card">
+          <div class="district-plans-title">
+            <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span>District Skill Development & Employment Plans</span>
+          </div>
+          <div class="district-select-wrap">
+            <label for="district-filter-select" style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">SELECT DISTRICT:</label>
+            <select id="district-filter-select" class="district-dropdown" onchange="filterDistrictCards(this.value)">
+              <option value="all">All Maharashtra Districts (36)</option>
+              <option value="pune">Pune District</option>
+              <option value="mumbai">Mumbai Metro & Suburban</option>
+              <option value="nagpur">Nagpur Industrial</option>
+              <option value="nashik">Nashik Agro-Tech</option>
+              <option value="sambhajinagar">Chhatrapati Sambhajinagar</option>
+              <option value="thane">Thane & Navi Mumbai</option>
+            </select>
+          </div>
+        </header>
+
+        <!-- District KPI Metrics Strip -->
+        <section class="kpi-strip">
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">District Target Demand</span>
+              <span class="kpi-badge blue">NCS Verified</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">168,400</span>
+              <span class="kpi-delta up">↑ +21.2% YoY</span>
+            </div>
+            <p class="kpi-subtext">Priority vacancies aggregated across 6 key industrial district zones</p>
+          </article>
+
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Mahaswayam Training Centers</span>
+              <span class="kpi-badge green">Accredited Base</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">142</span>
+              <span class="kpi-delta up">36 ITIs / Centers</span>
+            </div>
+            <p class="kpi-subtext">Active vocational centers offering NSQF Level 4-8 training</p>
+          </article>
+
+          <article class="kpi-card glass-card">
+            <div class="kpi-header">
+              <span class="kpi-title">NSQF Alignment Index</span>
+              <span class="kpi-badge yellow">Target: 85%</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">79.6%</span>
+              <span class="kpi-delta up">+6.6% Uplift</span>
+            </div>
+            <p class="kpi-subtext">Regional curriculum alignment with state industrial modernization directives</p>
+          </article>
         </section>
 
-      </div>
+        <!-- District Cards Grid -->
+        <div class="district-grid" id="district-cards-grid">
+          <!-- Pune Card -->
+          <article class="district-card glass-card" data-district="pune">
+            <div class="district-card-header">
+              <span class="district-name">Pune District</span>
+              <span class="district-cluster-badge">Automotive & IT Hub</span>
+            </div>
+            <div class="district-stats-row">
+              <div class="district-stat">
+                <span class="district-stat-label">NCS Demand</span>
+                <span class="district-stat-val">58,200</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Supply Base</span>
+                <span class="district-stat-val">34,100</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Deficit</span>
+                <span class="district-stat-val" style="color: var(--accent-red);">-41.4%</span>
+              </div>
+            </div>
+            <div class="district-skills-section">
+              <span class="district-skills-title">Priority NSQF Skill Tracks</span>
+              <div class="district-skills-tags">
+                <span class="district-skill-tag">CNC Machining <span class="nsqf-level">(NSQF L4.5)</span></span>
+                <span class="district-skill-tag">EV Battery Tech <span class="nsqf-level">(NSQF L5.5)</span></span>
+                <span class="district-skill-tag">Cloud & DevOps <span class="nsqf-level">(NSQF L6)</span></span>
+                <span class="district-skill-tag">Data Analytics <span class="nsqf-level">(NSQF L6)</span></span>
+              </div>
+            </div>
+            <button class="btn-district-pivot" onclick="switchDistrictAndSearch('Pune — Data Analytics')">
+              <span>Analyze Pune Skill Gaps</span>
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </article>
+
+          <!-- Mumbai Metro Card -->
+          <article class="district-card glass-card" data-district="mumbai">
+            <div class="district-card-header">
+              <span class="district-name">Mumbai Metro & Suburban</span>
+              <span class="district-cluster-badge">BFSI, FinTech & Cyber</span>
+            </div>
+            <div class="district-stats-row">
+              <div class="district-stat">
+                <span class="district-stat-label">NCS Demand</span>
+                <span class="district-stat-val">49,800</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Supply Base</span>
+                <span class="district-stat-val">29,400</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Deficit</span>
+                <span class="district-stat-val" style="color: var(--accent-red);">-40.9%</span>
+              </div>
+            </div>
+            <div class="district-skills-section">
+              <span class="district-skills-title">Priority NSQF Skill Tracks</span>
+              <div class="district-skills-tags">
+                <span class="district-skill-tag">Cybersecurity SOC <span class="nsqf-level">(NSQF L7)</span></span>
+                <span class="district-skill-tag">Data Engineering <span class="nsqf-level">(NSQF L6)</span></span>
+                <span class="district-skill-tag">Cloud Microservices <span class="nsqf-level">(NSQF L6)</span></span>
+              </div>
+            </div>
+            <button class="btn-district-pivot" onclick="switchDistrictAndSearch('Mumbai — Cybersecurity')">
+              <span>Analyze Mumbai Skill Gaps</span>
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </article>
+
+          <!-- Nagpur Industrial Card -->
+          <article class="district-card glass-card" data-district="nagpur">
+            <div class="district-card-header">
+              <span class="district-name">Nagpur Industrial Zone</span>
+              <span class="district-cluster-badge">Solar, Energy & Logistics</span>
+            </div>
+            <div class="district-stats-row">
+              <div class="district-stat">
+                <span class="district-stat-label">NCS Demand</span>
+                <span class="district-stat-val">24,300</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Supply Base</span>
+                <span class="district-stat-val">12,100</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Deficit</span>
+                <span class="district-stat-val" style="color: var(--accent-red);">-50.2%</span>
+              </div>
+            </div>
+            <div class="district-skills-section">
+              <span class="district-skills-title">Priority NSQF Skill Tracks</span>
+              <div class="district-skills-tags">
+                <span class="district-skill-tag">Solar Technician <span class="nsqf-level">(NSQF L4)</span></span>
+                <span class="district-skill-tag">Grid Inverter Wiring <span class="nsqf-level">(NSQF L4)</span></span>
+                <span class="district-skill-tag">Smart Grid SCADA <span class="nsqf-level">(NSQF L5.5)</span></span>
+              </div>
+            </div>
+            <button class="btn-district-pivot" onclick="switchDistrictAndSearch('Nagpur — Solar Technician')">
+              <span>Analyze Nagpur Skill Gaps</span>
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </article>
+
+          <!-- Nashik Card -->
+          <article class="district-card glass-card" data-district="nashik">
+            <div class="district-card-header">
+              <span class="district-name">Nashik Agro-Tech Zone</span>
+              <span class="district-cluster-badge">Precision Agriculture</span>
+            </div>
+            <div class="district-stats-row">
+              <div class="district-stat">
+                <span class="district-stat-label">NCS Demand</span>
+                <span class="district-stat-val">18,600</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Supply Base</span>
+                <span class="district-stat-val">9,800</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Deficit</span>
+                <span class="district-stat-val" style="color: var(--accent-red);">-47.3%</span>
+              </div>
+            </div>
+            <div class="district-skills-section">
+              <span class="district-skills-title">Priority NSQF Skill Tracks</span>
+              <div class="district-skills-tags">
+                <span class="district-skill-tag">IoT Soil Sensors <span class="nsqf-level">(NSQF L5)</span></span>
+                <span class="district-skill-tag">Smart Drip Automation <span class="nsqf-level">(NSQF L4)</span></span>
+                <span class="district-skill-tag">Drone Crop Survey <span class="nsqf-level">(NSQF L4)</span></span>
+              </div>
+            </div>
+            <button class="btn-district-pivot" onclick="switchDistrictAndSearch('Nashik — Precision Agriculture')">
+              <span>Analyze Nashik Skill Gaps</span>
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </article>
+
+          <!-- Sambhajinagar Card -->
+          <article class="district-card glass-card" data-district="sambhajinagar">
+            <div class="district-card-header">
+              <span class="district-name">Chhatrapati Sambhajinagar</span>
+              <span class="district-cluster-badge">Robotics & Healthcare IT</span>
+            </div>
+            <div class="district-stats-row">
+              <div class="district-stat">
+                <span class="district-stat-label">NCS Demand</span>
+                <span class="district-stat-val">17,500</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Supply Base</span>
+                <span class="district-stat-val">8,700</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Deficit</span>
+                <span class="district-stat-val" style="color: var(--accent-red);">-50.3%</span>
+              </div>
+            </div>
+            <div class="district-skills-section">
+              <span class="district-skills-title">Priority NSQF Skill Tracks</span>
+              <div class="district-skills-tags">
+                <span class="district-skill-tag">Industrial Robotics <span class="nsqf-level">(NSQF L6)</span></span>
+                <span class="district-skill-tag">PLC / SCADA <span class="nsqf-level">(NSQF L5)</span></span>
+                <span class="district-skill-tag">Hospital EHR / ABDM <span class="nsqf-level">(NSQF L5)</span></span>
+              </div>
+            </div>
+            <button class="btn-district-pivot" onclick="switchDistrictAndSearch('Sambhajinagar — Industrial Automation')">
+              <span>Analyze Sambhajinagar Gaps</span>
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </article>
+
+          <!-- Thane & Navi Mumbai Card -->
+          <article class="district-card glass-card" data-district="thane">
+            <div class="district-card-header">
+              <span class="district-name">Thane & Navi Mumbai</span>
+              <span class="district-cluster-badge">Drone & Clean Mobility</span>
+            </div>
+            <div class="district-stats-row">
+              <div class="district-stat">
+                <span class="district-stat-label">NCS Demand</span>
+                <span class="district-stat-val">19,200</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Supply Base</span>
+                <span class="district-stat-val">10,800</span>
+              </div>
+              <div class="district-stat">
+                <span class="district-stat-label">Deficit</span>
+                <span class="district-stat-val" style="color: var(--accent-red);">-43.8%</span>
+              </div>
+            </div>
+            <div class="district-skills-section">
+              <span class="district-skills-title">Priority NSQF Skill Tracks</span>
+              <div class="district-skills-tags">
+                <span class="district-skill-tag">DGCA Drone Pilot <span class="nsqf-level">(NSQF L4)</span></span>
+                <span class="district-skill-tag">LiDAR Mapping <span class="nsqf-level">(NSQF L5)</span></span>
+                <span class="district-skill-tag">EV Fleet Maintenance <span class="nsqf-level">(NSQF L5.5)</span></span>
+              </div>
+            </div>
+            <button class="btn-district-pivot" onclick="switchDistrictAndSearch('Thane — Drone Technician')">
+              <span>Analyze Thane Skill Gaps</span>
+              <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </article>
+        </div>
+      </div> <!-- view-district-plans -->
 
     </main>
 
@@ -2240,9 +2707,15 @@
       }
 
       // Master Orchestrator: Fetch & Bind
-      async function executeLMIQuery(queryText) {
+      async function executeLMIQuery(queryText, isInitialLoad = false) {
         const btn = document.getElementById('btn-run-query');
         const grid = document.getElementById('analytics-grid') || document.querySelector('.analytics-grid');
+        const recContainer = document.getElementById('recommendations-container');
+
+        // On initial load: Ensure recommendation container is strictly EMPTY
+        if (isInitialLoad && recContainer) {
+          recContainer.innerHTML = '';
+        }
 
         // Show loading state & disable button to prevent duplicate concurrent requests
         if (btn) {
@@ -2271,11 +2744,14 @@
             sector = 'Information Technology & Analytics';
           }
 
-          const [gapRes, searchRes, obsRes] = await Promise.all([
+          // If initial load: fetch gap analysis and obsolete courses only; do NOT fetch search recommendations
+          const promises = [
             fetchGapAnalysis(sector, region),
-            fetchSearchResults(queryText),
+            isInitialLoad ? Promise.resolve({ success: true, data: { results: [] } }) : fetchSearchResults(queryText),
             fetchObsoleteCourses()
-          ]);
+          ];
+
+          const [gapRes, searchRes, obsRes] = await Promise.all(promises);
 
           const isConnected = gapRes.success || searchRes.success || obsRes.success;
           State.apiConnected = isConnected;
@@ -2283,14 +2759,20 @@
 
           // Update State
           State.skillGaps = gapRes.data.skills || [];
-          State.searchResults = (searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : (searchRes.data?.results || []);
+          State.searchResults = (searchRes.success && searchRes.data && searchRes.data.results) ? searchRes.data.results : [];
           State.obsoleteCourses = obsRes.data.obsolete_courses || [];
 
           // Render DOM
           renderKPIs(gapRes.data, queryText);
           renderSkillBars(State.skillGaps);
           renderObsoleteCourses(State.obsoleteCourses);
-          renderRecommendations(State.searchResults);
+
+          // On initial load: container must be EMPTY. Populate ONLY after user runs a filter query.
+          if (!isInitialLoad) {
+            renderRecommendations(State.searchResults);
+          } else if (recContainer) {
+            recContainer.innerHTML = '';
+          }
         } catch (err) {
           showToast(`Critical pipeline error: ${err.message}`, 'error');
         } finally {
@@ -2307,7 +2789,7 @@
       }
 
       // ====================================================================
-      // 4. EVENT LISTENERS & NAVIGATION TAB WIRING
+      // 4. SPA VIEW ROUTING & NAVIGATION TAB WIRING
       // ====================================================================
 
       // Navigation Tabs: Prevent default anchor jump, toggle active class, and toggle views
@@ -2321,7 +2803,7 @@
           const parentItem = link.closest('.nav-item');
           if (parentItem) parentItem.classList.add('active');
 
-          // 2. Handle view switching & highlight
+          // 2. Handle SPA view switching & section highlighting
           const href = link.getAttribute('href') || '';
           const targetId = href.replace('#', '');
           handleNavViewSwitch(link.id, targetId);
@@ -2329,6 +2811,21 @@
       });
 
       function handleNavViewSwitch(navId, targetId) {
+        const viewSkillAnalysis = document.getElementById('view-skill-analysis');
+        const viewDistrictPlans = document.getElementById('view-district-plans');
+
+        // Toggle SPA Views strictly with display: block / display: none
+        if (navId === 'nav-districts' || targetId === 'district-plans') {
+          if (viewSkillAnalysis) viewSkillAnalysis.style.display = 'none';
+          if (viewDistrictPlans) viewDistrictPlans.style.display = 'block';
+          showToast('Viewing District Skill Development & Employment Plans.', 'info');
+          return;
+        }
+
+        // For all other nav tabs: show skill analysis view, hide district plans view
+        if (viewDistrictPlans) viewDistrictPlans.style.display = 'none';
+        if (viewSkillAnalysis) viewSkillAnalysis.style.display = 'block';
+
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
 
         if (navId === 'nav-demand' || targetId === 'demand') {
@@ -2362,21 +2859,40 @@
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
           showToast('Viewing SWAYAM / NPTEL accredited curriculum recommendations.', 'info');
-        } else if (navId === 'nav-districts' || targetId === 'district-plans') {
-          const searchInput = document.getElementById('lmi-search-input');
-          if (searchInput) {
-            searchInput.value = 'Pune District — High-Growth Skills';
-            searchInput.focus();
-          }
-          executeLMIQuery('Pune District — High-Growth Skills');
-          const topBar = document.getElementById('district-plans') || document.querySelector('.top-bar');
-          if (topBar) {
-            topBar.classList.add('view-active');
-            topBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          showToast('Loaded district-level skill development plan for Pune.', 'info');
         }
       }
+
+      // District Plans Helper: Pivot from District Card into Skill Analysis
+      window.switchDistrictAndSearch = function(query) {
+        const viewSkillAnalysis = document.getElementById('view-skill-analysis');
+        const viewDistrictPlans = document.getElementById('view-district-plans');
+        if (viewDistrictPlans) viewDistrictPlans.style.display = 'none';
+        if (viewSkillAnalysis) viewSkillAnalysis.style.display = 'block';
+
+        // Update nav active tab to Market Demand
+        document.querySelectorAll('.nav-menu .nav-item').forEach(item => item.classList.remove('active'));
+        const demandItem = document.getElementById('nav-demand')?.closest('.nav-item');
+        if (demandItem) demandItem.classList.add('active');
+
+        const searchInput = document.getElementById('lmi-search-input');
+        if (searchInput) {
+          searchInput.value = query;
+          searchInput.focus();
+        }
+        executeLMIQuery(query, false);
+      };
+
+      // District Plans Helper: Filter cards by dropdown selection
+      window.filterDistrictCards = function(districtVal) {
+        const cards = document.querySelectorAll('#district-cards-grid .district-card');
+        cards.forEach(card => {
+          if (districtVal === 'all' || card.getAttribute('data-district') === districtVal) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      };
 
       // Filter Button & Search Input
       const filterBtn = document.getElementById('btn-run-query');
@@ -2386,7 +2902,7 @@
         filterBtn.addEventListener('click', (e) => {
           e.preventDefault();
           const val = searchInput ? searchInput.value.trim() : '';
-          executeLMIQuery(val);
+          executeLMIQuery(val, false);
         });
       }
 
@@ -2394,14 +2910,14 @@
         searchInput.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            executeLMIQuery(searchInput.value.trim());
+            executeLMIQuery(searchInput.value.trim(), false);
           }
         });
       }
 
-      // Initial Data Fetch on load
+      // Initial Data Fetch on load: recommendations container MUST remain empty
       const initialQuery = searchInput ? searchInput.value.trim() : 'Pune — Data Analytics';
-      executeLMIQuery(initialQuery);
+      executeLMIQuery(initialQuery, true);
     });
   </script>
 
