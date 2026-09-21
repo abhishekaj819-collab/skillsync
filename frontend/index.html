@@ -2796,7 +2796,7 @@
       // ====================================================================
       // 3. PHASE 5: DYNAMIC FASTAPI INTEGRATION & STATE MANAGEMENT
       // ====================================================================
-      const BASE_URL = "https://pessimist-skier-left.ngrok-free.dev";
+      const BASE_URL = "https://skillsetu-backend-0304136646.asia-south1.run.app";
 
 
       // Global Toast Notification Manager
@@ -2998,8 +2998,7 @@
 
           const res = await fetch(url.toString(), {
             headers: {
-              "Content-Type": "application/json",
-              "ngrok-skip-browser-warning": "true"
+              "Content-Type": "application/json"
             },
             signal: AbortSignal.timeout(3500)
           });
@@ -3021,8 +3020,7 @@
           const res = await fetch(`${BASE_URL}/api/search`, {
             method: 'POST',
             headers: {
-              "Content-Type": "application/json",
-              "ngrok-skip-browser-warning": "true"
+              "Content-Type": "application/json"
             },
             body: JSON.stringify({
               query: query || 'Data Analyst',
@@ -3104,8 +3102,7 @@
         try {
           const res = await fetch(`${BASE_URL}/api/obsolete-courses`, {
             headers: {
-              "Content-Type": "application/json",
-              "ngrok-skip-browser-warning": "true"
+              "Content-Type": "application/json"
             },
             signal: AbortSignal.timeout(3500)
           });
