@@ -1,0 +1,19 @@
+# Google Cloud Principal Access Boundary (PAB) Policy
+# Enforces Least Privilege and Scopes Agent / Service Account strictly to this project
+
+name: "organizations/YOUR_ORGANIZATION_ID/locations/global/principalAccessBoundaryPolicies/skillsetu-pab-policy"
+displayName: "SkillSetu Agent Project Scoping Policy"
+description: "Restricts SkillSetu service account access strictly to gen-lang-client-0304136646 to prevent cross-org or unintended access."
+
+# Explicitly allowed resources
+rules:
+  - resources:
+      - "projects/gen-lang-client-0304136646"
+
+# Policy Binding with Condition
+binding:
+  principal: "principal://iam.googleapis.com/projects/gen-lang-client-0304136646/serviceAccounts/skillsetu-backend-sa@gen-lang-client-0304136646.iam.gserviceaccount.com"
+  condition:
+    title: "Enforce only on SkillSetu Backend Service Account"
+    description: "Ensures the boundary applies strictly to the dedicated backend service account"
+    expression: "request.auth.claims.email == 'skillsetu-backend-sa@gen-lang-client-0304136646.iam.gserviceaccount.com'"

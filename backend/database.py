@@ -11,20 +11,70 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Text, Date
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
 # ============================================================================
-# Database Configuration & Session Management
+# Database Configuration & Session Management (Cloud SQL & SQLite)
 # ============================================================================
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./skillsync.db")
+def create_database_engine():
+    """
+    Initializes a resilient SQLAlchemy connection pool for Google Cloud SQL
+    using the Cloud SQL Python Connector with IAM authentication, or falls
+    back to standard DATABASE_URL / SQLite for local development.
+    """
+    instance_connection_name = os.getenv("INSTANCE_CONNECTION_NAME")
+    db_user = os.getenv("DB_USER", "skillsetu-backend-sa")
+    db_pass = os.getenv("DB_PASS", "")
+    db_name = os.getenv("DB_NAME", "skillsetu_db")
+    db_type = os.getenv("DB_TYPE", "postgres").lower()
 
-# SQLite requires check_same_thread=False for multithreaded FastAPI requests
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+    if instance_connection_name:
+        try:
+            from google.cloud.sql.connector import Connector, IPTypes
+            connector = Connector()
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    echo=False
-)
+            def getconn():
+                conn = connector.connect(
+                    instance_connection_name,
+                    "pg8000" if "postgres" in db_type else "pymysql",
+                    user=db_user,
+                    password=db_pass if db_pass else None,
+                    db=db_name,
+                    ip_type=IPTypes.PUBLIC,
+                    enable_iam_auth=True if not db_pass else False
+                )
+                return conn
 
+            return create_engine(
+                "postgresql+pg8000://" if "postgres" in db_type else "mysql+pymysql://",
+                creator=getconn,
+                pool_size=5,
+                max_overflow=2,
+                pool_timeout=30,
+                pool_recycle=1800,
+                echo=False
+            )
+        except Exception as e:
+            print(f"[WARN] Cloud SQL Connector initialization failed ({e}). Falling back to DATABASE_URL.")
+
+    # Fallback to standard connection string (Postgres/MySQL or local SQLite)
+    database_url = os.getenv("DATABASE_URL", "sqlite:///./skillsync.db")
+    if database_url.startswith("sqlite"):
+        return create_engine(
+            database_url,
+            connect_args={"check_same_thread": False},
+            echo=False
+        )
+    else:
+        return create_engine(
+            database_url,
+            pool_size=5,
+            max_overflow=2,
+            pool_timeout=30,
+            pool_recycle=1800,
+            echo=False
+        )
+
+
+engine = create_database_engine()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
