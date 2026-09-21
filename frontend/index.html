@@ -2793,7 +2793,7 @@
       // ====================================================================
       // 3. PHASE 5: DYNAMIC FASTAPI INTEGRATION & STATE MANAGEMENT
       // ====================================================================
-      const BASE_URL = "https://skillsetu-api.onrender.com";
+      const BASE_URL = "https://pessimist-skier-left.ngrok-free.dev";
 
 
       // Global Toast Notification Manager
@@ -2993,7 +2993,13 @@
           if (sector) url.searchParams.append('sector', sector);
           if (region) url.searchParams.append('region', region);
 
-          const res = await fetch(url.toString(), { signal: AbortSignal.timeout(3500) });
+          const res = await fetch(url.toString(), {
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": "true"
+            },
+            signal: AbortSignal.timeout(3500)
+          });
           if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           const data = await res.json();
           return { success: true, data };
@@ -3011,7 +3017,10 @@
         try {
           const res = await fetch(`${BASE_URL}/api/search`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": "true"
+            },
             body: JSON.stringify({
               query: query || 'Data Analyst',
               top_k: 5
@@ -3090,7 +3099,13 @@
       // 3. Fetch Obsolete Courses
       async function fetchObsoleteCourses() {
         try {
-          const res = await fetch(`${BASE_URL}/api/obsolete-courses`, { signal: AbortSignal.timeout(3500) });
+          const res = await fetch(`${BASE_URL}/api/obsolete-courses`, {
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": "true"
+            },
+            signal: AbortSignal.timeout(3500)
+          });
           if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
           const data = await res.json();
           return { success: true, data };

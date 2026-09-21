@@ -6,7 +6,7 @@
  * - Error state rendering with interactive "Retry Search" button
  */
 
-const BASE_URL = "https://skillsetu-api.onrender.com";
+const BASE_URL = "https://pessimist-skier-left.ngrok-free.dev";
 
 // 1. Fetch Job Roles & SWAYAM Recommendations with 65s AbortController Timeout
 async function fetchSearchResults(query) {
@@ -16,7 +16,10 @@ async function fetchSearchResults(query) {
   try {
     const res = await fetch(`${BASE_URL}/api/search`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true"
+      },
       body: JSON.stringify({
         query: query || 'Data Analyst',
         top_k: 5
