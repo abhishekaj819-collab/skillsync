@@ -5,7 +5,7 @@
  * - PDF export for District Training Plans using html2pdf.js
  */
 
-const BASE_URL = "https://pessimist-skier-left.ngrok-free.dev";
+const BASE_URL = "https://abhishekaj819-collab--skillsync-api-serve.modal.run";
 
 // 1. Fetch Job Roles & SWAYAM Recommendations with 65s AbortController Timeout
 async function fetchSearchResults(query) {
@@ -16,8 +16,7 @@ async function fetchSearchResults(query) {
     const res = await fetch(`${BASE_URL}/api/search`, {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         query: query || 'Data Analyst',
