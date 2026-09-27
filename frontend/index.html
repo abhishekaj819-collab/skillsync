@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillSync | SIH PS 26134 Executive Labour-Market & Curriculum Dashboard</title>
+  <meta name="description" content="SkillSync is a next-generation Gov-Tech labour market intelligence and automated curriculum alignment engine for the Government of Maharashtra (SIH Problem Statement 26134).">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- Studio Freight / Lenis CDN for Butter-Smooth Scrolling -->
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       GOV-TECH DESIGN SYSTEM TOKENS & ADAPTIVE REM GRID
+       ========================================================================== */
+    :root {
+      /* Dynamic Rem-based scaling: scales seamlessly across viewports */
+      font-size: clamp(14px, 0.85rem + 0.35vw, 17px);
+
+      /* Typography */
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Primary Gov-Tech Palette */
+      --color-navy-darkest: #050a16;
+      --color-navy: #0B132B;
+      --color-navy-light: #1C2541;
+      --color-navy-card: #151F38;
+      --color-navy-card-hover: #1E2B4D;
+      
+      --color-white: #FFFFFF;
+      --color-surface: #F4F6F8;
+      --color-surface-card: #FFFFFF;
+      --color-surface-hover: #F8FAFC;
+      --color-border: #E2E8F0;
+      --color-border-dark: #273559;
+
+      /* Data-Viz Accents */
+      --color-emerald: #10B981;
+      --color-emerald-dark: #059669;
+      --color-emerald-glow: rgba(16, 185, 129, 0.22);
+      
+      --color-coral: #F43F5E;
+      --color-coral-dark: #E11D48;
+      --color-coral-glow: rgba(244, 63, 94, 0.22);
+
+      --color-amber: #F59E0B;
+      --color-amber-glow: rgba(245, 158, 11, 0.2);
+      
+      --color-cyan: #06B6D4;
+      --color-cyan-glow: rgba(6, 182, 212, 0.2);
+
+      --color-blue: #3B82F6;
+
+      /* Text Colors */
+      --color-text-main: #0F172A;
+      --color-text-muted: #64748B;
+      --color-text-light: #94A3B8;
+      --color-text-dark-theme: #F8FAFC;
+
+      /* Shadows & Transitions */
+      --shadow-sm: 0 2px 8px rgba(11, 19, 43, 0.05);
+      --shadow-md: 0 8px 24px -4px rgba(11, 19, 43, 0.08);
+      --shadow-lg: 0 20px 40px -8px rgba(11, 19, 43, 0.12);
+      --shadow-glow: 0 0 25px var(--color-emerald-glow);
+      --shadow-glow-coral: 0 0 25px var(--color-coral-glow);
+
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      /* Layout */
+      --header-height: 4.5rem;
+      --max-width: 82rem;
+    }
+
+    /* Resets & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: auto; /* Lenis handles smooth scrolling */
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      background-color: var(--color-surface);
+      color: var(--color-text-main);
+      font-family: var(--font-sans);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Adaptive container grid */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: clamp(1rem, 3vw, 2.5rem);
+      padding-right: clamp(1rem, 3vw, 2.5rem);
+    }
+
+    /* ==========================================================================
+       1. FIXED HEADER & STAKEHOLDER SWITCHER
+       ========================================================================== */
+    .app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: rgba(11, 19, 43, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--color-white);
+    }
+
+    .brand-icon-wrapper {
+      position: relative;
+      width: 2.6rem;
+      height: 2.6rem;
+      background: linear-gradient(135deg, #10B981, #06B6D4);
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .brand-icon-wrapper svg {
+      width: 1.4rem;
+      height: 1.4rem;
+      fill: #ffffff;
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--color-white);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sih-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(255, 255, 255, 0.12);
+      color: #38BDF8;
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--color-text-muted-dark);
+      letter-spacing: -0.01em;
+    }
+
+    /* 3-Pill Role-Based Portal Switcher */
+    .role-switcher-container {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.28rem;
+      border-radius: 9999px;
+      position: relative;
+    }
+
+    .role-pill {
+      position: relative;
+      z-index: 2;
+      border: none;
+      background: transparent;
+      color: var(--color-text-muted-dark);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .role-pill:hover {
+      color: var(--color-white);
+    }
+
+    .role-pill.active {
+      color: var(--color-white);
+    }
+
+    .role-pill-indicator {
+      position: absolute;
+      top: 0.28rem;
+      bottom: 0.28rem;
+      left: 0.28rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #1C2541, #253358);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      transition: transform var(--transition-smooth), width var(--transition-smooth);
+      z-index: 1;
+    }
+
+    /* Header Status Indicator */
+    .header-system-status {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #34D399;
+      font-family: var(--font-mono);
+    }
+
+    .status-beacon {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background-color: var(--color-emerald);
+      box-shadow: 0 0 10px var(--color-emerald);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.2); }
+    }
+
+    /* ==========================================================================
+       2. HERO METRICS PANEL (AUTOMATED DEMAND AGGREGATION)
+       ========================================================================== */
+    .hero-section {
+      background: radial-gradient(circle at 80% 20%, #15224A 0%, var(--color-navy) 60%, var(--color-navy-darkest) 100%);
+      color: var(--color-white);
+      padding-top: calc(var(--header-height) + 1.5rem);
+      padding-bottom: 4.5rem;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 3rem 3rem;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, transparent 80%);
+    }
+
+    /* Live Market Signals Ticker */
+    .signals-ticker-wrapper {
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0.75rem;
+      padding: 0.45rem 0.9rem;
+      overflow: hidden;
+    }
+
+    .signals-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(244, 63, 94, 0.2);
+      color: #FDA4AF;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      padding: 0.25rem 0.65rem;
+      border-radius: 0.4rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .signals-ticker-viewport {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+    }
+
+    .signals-track {
+      display: flex;
+      gap: 2.5rem;
+      white-space: nowrap;
+      animation: tickerAnimation 40s linear infinite;
+    }
+
+    .signals-track:hover {
+      animation-play-state: paused;
+    }
+
+    .signal-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--color-text-muted-dark);
+    }
+
+    .signal-item strong {
+      color: var(--color-white);
+      font-weight: 600;
+    }
+
+    .signal-item .trend-up {
+      color: var(--color-emerald);
+      font-weight: 600;
+    }
+
+    .signal-item .trend-down {
+      color: var(--color-coral);
+      font-weight: 600;
+    }
+
+    @keyframes tickerAnimation {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Hero Heading Area */
+    .hero-header-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-title-group {
+      max-width: 48rem;
+    }
+
+    .hero-context-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #38BDF8;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3.2vw + 1rem, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.9rem;
+      background: linear-gradient(135deg, #FFFFFF 30%, #94A3B8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 1.05rem;
+      color: var(--color-text-muted-dark);
+      line-height: 1.6;
+      max-width: 42rem;
+    }
+
+    .portal-context-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 0.85rem 1.4rem;
+      backdrop-filter: blur(10px);
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .context-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted-dark);
+      font-weight: 700;
+    }
+
+    .context-val {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-white);
+    }
+
+    /* Massive Count-up Statistic Blocks */
+    .hero-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      gap: 1.5rem;
+    }
+
+    .metric-card {
+      background: rgba(21, 31, 56, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.25rem;
+      padding: 1.75rem 1.85rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+      backdrop-filter: blur(12px);
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.4);
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-color, var(--color-emerald)), transparent);
+      opacity: 0.85;
+    }
+
+    .metric-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .metric-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--color-text-muted-dark);
+      letter-spacing: -0.01em;
+    }
+
+    .metric-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.4rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .metric-pill.emerald {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .metric-pill.coral {
+      background: rgba(244, 63, 94, 0.18);
+      color: #FB7185;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+
+    .metric-pill.cyan {
+      background: rgba(6, 182, 212, 0.18);
+      color: #38BDF8;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+    }
+
+    .metric-number-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .metric-value {
+      font-size: 3.25rem;
+      font-weight: 800;
+      line-height: 1;
+      font-family: var(--font-mono);
+      letter-spacing: -0.04em;
+      color: var(--color-white);
+    }
+
+    .metric-unit {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text-muted-dark);
+    }
+
+    .metric-subtext {
+      font-size: 0.82rem;
+      color: var(--color-text-muted-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ==========================================================================
+       3. THE CORE ENGINE (VECTOR EMBEDDING INTERFACE)
+       ========================================================================== */
+    .engine-section {
+      padding: 5rem 0;
+      background: var(--color-surface);
+      position: relative;
+    }
+
+    .section-header {
+      margin-bottom: 2.75rem;
+      text-align: left;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-navy);
+      background: rgba(11, 19, 43, 0.08);
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 0.85rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 2.4vw + 0.8rem, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--color-navy);
+      margin-bottom: 0.65rem;
+    }
+
+    .section-description {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      max-width: 44rem;
+      line-height: 1.6;
+    }
+
+    .engine-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 1.5rem;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 992px) {
+      .engine-card {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .input-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .input-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--color-navy);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .model-spec-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      background: #F1F5F9;
+      color: #475569;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.4rem;
+      border: 1px solid #CBD5E1;
+    }
+
+    .quick-preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .preset-chip {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--color-navy);
+      background: #EDF2F7;
+      border: 1px solid #CBD5E1;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .preset-chip:hover {
+      background: #E2E8F0;
+      border-color: #94A3B8;
+      transform: translateY(-1px);
+    }
+
+    .textarea-wrapper {
+      position: relative;
+    }
+
+    .curriculum-textarea {
+      width: 100%;
+      min-height: 9.5rem;
+      padding: 1.1rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--color-navy);
+      background: #FAFCFE;
+      border: 1.5px solid var(--color-border);
+      border-radius: 1rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .curriculum-textarea:focus {
+      border-color: var(--color-blue);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      background: #FFFFFF;
+    }
+
+    .textarea-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 0.4rem;
+    }
+
+    .char-count {
+      font-family: var(--font-mono);
+    }
+
+    /* Action Button */
+    .btn-extract {
+      background: linear-gradient(135deg, var(--color-navy), #1C2541);
+      color: var(--color-white);
+      border: none;
+      border-radius: 0.85rem;
+      padding: 1rem 1.8rem;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      box-shadow: 0 4px 18px rgba(11, 19, 43, 0.25);
+      transition: all var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-extract:hover {
+      background: linear-gradient(135deg, #15224A, #24335A);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(11, 19, 43, 0.35);
+    }
+
+    .btn-extract:active {
+      transform: translateY(0);
+    }
+
+    .btn-extract.loading .btn-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Results Column */
+    .output-column {
+      background: #0B132B;
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      color: var(--color-white);
+      min-height: 22rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.8rem;
+    }
+
+    .output-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .api-status-pill {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.35rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .skills-badges-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .skill-tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #E2E8F0;
+      animation: badgePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .skill-tag.high-demand {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #6EE7B7;
+    }
+
+    .skill-tag.gap {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.4);
+      color: #FDA4AF;
+    }
+
+    /* Vector Stream Terminal */
+    .vector-terminal {
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 0.75rem;
+      padding: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #94A3B8;
+      overflow-x: auto;
+      margin-top: auto;
+    }
+
+    .vector-label {
+      color: #38BDF8;
+      margin-bottom: 0.3rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .vector-data {
+      color: #A7F3D0;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       4. DYNAMIC CURRICULUM HEATMAP SECTION
+       ========================================================================== */
+    .heatmap-section {
+      padding: 5rem 0;
+      background: #FFFFFF;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .heatmap-header-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: #F8FAFC;
+      border: 1px solid var(--color-border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.85rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+    }
+
+    .legend-dot {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 0.25rem;
+    }
+
+    .legend-dot.emerald { background: var(--color-emerald); box-shadow: 0 0 8px var(--color-emerald-glow); }
+    .legend-dot.amber { background: var(--color-amber); }
+    .legend-dot.coral { background: var(--color-coral); box-shadow: 0 0 8px var(--color-coral-glow); }
+
+    .heatmap-canvas-container {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 1.5rem;
+      padding: clamp(1rem, 2.5vw, 2rem);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      min-height: 26rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #alignmentHeatmap {
+      width: 100% !important;
+      max-height: 25rem;
+    }
+
+    /* ==========================================================================
+       5. DISTRICT-LEVEL ACTION PLANS
+       ========================================================================== */
+    .districts-section {
+      padding: 5rem 0 6.5rem 0;
+      background: var(--color-surface);
+    }
+
+    .districts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .district-card {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.4rem;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition-smooth);
+    }
+
+    .district-card:hover {
+      transform: translateY(-4px);
+      border-color: #94A3B8;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .district-card.active-district {
+      border-color: var(--color-navy);
+      box-shadow: 0 0 0 2px var(--color-navy), var(--shadow-md);
+      background: #FFFFFF;
+    }
+
+    .district-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+    }
+
+    .district-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--color-navy);
+      letter-spacing: -0.02em;
+    }
+
+    .district-zone {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .district-deficit-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .deficit-high {
+      background: rgba(244, 63, 94, 0.12);
+      color: var(--color-coral);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+    }
+
+    .deficit-medium {
+      background: rgba(245, 158, 11, 0.12);
+      color: #D97706;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .district-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding: 0.85rem;
+      background: var(--color-surface);
+      border-radius: 0.85rem;
+    }
+
+    .stat-mini-label {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .stat-mini-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--color-navy);
+      font-family: var(--font-mono);
+    }
+
+    .district-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .district-tag-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: #F1F5F9;
+      color: #475569;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.35rem;
+    }
+
+    .view-plan-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-navy);
+      border-top: 1px solid var(--color-border);
+      padding-top: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .district-card.active-district .view-plan-cta {
+      color: var(--color-emerald-dark);
+    }
+
+    /* Auto-Recommended Action Plan Modal / Drawer */
+    .action-plan-detail-card {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.5rem;
+      padding: 2.25rem;
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-smooth);
+      position: relative;
+    }
+
+    .action-plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .plan-title-block h3 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--color-navy);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .plan-title-block p {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+
+    .plan-actions-group {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-secondary {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      color: var(--color-navy);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.55rem 1rem;
+      border-radius: 0.65rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary:hover {
+      background: #F8FAFC;
+      border-color: #94A3B8;
+    }
+
+    .btn-primary-action {
+      background: var(--color-emerald);
+      border: none;
+      color: #FFFFFF;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.55rem 1.15rem;
+      border-radius: 0.65rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 2px 10px var(--color-emerald-glow);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-primary-action:hover {
+      background: var(--color-emerald-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Training Upgrades Table / Cards */
+    .upgrade-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .upgrade-items-table th {
+      text-align: left;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      padding: 0.85rem 1rem;
+      background: #F8FAFC;
+      border-bottom: 1.5px solid var(--color-border);
+    }
+
+    .upgrade-items-table td {
+      padding: 1.15rem 1rem;
+      font-size: 0.88rem;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+    }
+
+    .upgrade-action-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.35rem;
+      display: inline-block;
+    }
+
+    .action-expand {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-emerald-dark);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .action-phase-out {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--color-coral-dark);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .action-reduce {
+      background: rgba(245, 158, 11, 0.15);
+      color: #B45309;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    /* ==========================================================================
+       SCROLL-TRIGGERED TRANSITIONS & REVEALS
+       ========================================================================== */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(2rem);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered Delay Utilities */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* Cross-fade Animation Container */
+    .cross-fade-wrapper {
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .cross-fade-wrapper.fading {
+      opacity: 0;
+      transform: scale(0.985);
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .dashboard-footer {
+      background: var(--color-navy);
+      color: var(--color-text-muted-dark);
+      padding: 3rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.85rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--color-white);
+      font-weight: 700;
+    }
+
+    .footer-specs {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #64748B;
+    }
+
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--color-navy);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.85rem;
+      padding: 0.9rem 1.4rem;
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      z-index: 9999;
+      transform: translateY(150%);
+      opacity: 0;
+      transition: all var(--transition-smooth);
+    }
+
+    .toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .hero-header-area {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .role-switcher-container {
+        width: 100%;
+        overflow-x: auto;
+      }
+      .role-pill {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.74rem;
+      }
+      .upgrade-items-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. FIXED TOP HEADER & STAKEHOLDER SWITCHER
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="container header-content">
+      <a href="#" class="brand-group" id="brandLogo">
+        <div class="brand-icon-wrapper">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="brand-meta">
+          <div class="brand-title">
+            SKILLSYNC <span class="sih-tag">SIH PS 26134</span>
+          </div>
+          <div class="brand-subtitle">Govt. of Maharashtra • Vocational & Technical Education Directorate</div>
+        </div>
+      </a>
+
+      <!-- 3-Pill Role-Based Portal Switcher -->
+      <div class="role-switcher-container" role="tablist" aria-label="Stakeholder Portal Switcher">
+        <div class="role-pill-indicator" id="rolePillIndicator"></div>
+        <button class="role-pill active" id="roleGovtBtn" data-role="govt" role="tab" aria-selected="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"/></svg>
+          Govt / Admin
+        </button>
+        <button class="role-pill" id="roleInstituteBtn" data-role="institute" role="tab" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Training Institute
+        </button>
+        <button class="role-pill" id="roleEmployerBtn" data-role="employer" role="tab" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Employer
+        </button>
+      </div>
+
+      <!-- Live Backend Status -->
+      <div class="header-system-status" id="backendStatusBadge" title="Live PyTorch Container Endpoint">
+        <span class="status-beacon"></span>
+        <span id="backendStatusText">PyTorch Engine Active</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper with Cross-fade capability -->
+  <main id="dashboardMain" class="cross-fade-wrapper">
+
+    <!-- ======================================================================
+         2. HERO METRICS PANEL (AUTOMATED DEMAND AGGREGATION)
+         ====================================================================== -->
+    <section class="hero-section" id="heroSection">
+      <div class="container">
+        
+        <!-- Live Market Signals Scrolling Ticker -->
+        <div class="signals-ticker-wrapper">
+          <div class="signals-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Live Market Signals
+          </div>
+          <div class="signals-ticker-viewport">
+            <div class="signals-track" id="signalsTickerTrack">
+              <span class="signal-item">⚡ <strong>Pune Tech Corridor:</strong> Surge in Python & PyTorch roles <span class="trend-up">(+42% YoY, 1,420 openings)</span></span>
+              <span class="signal-item">⚠️ <strong>Nagpur Region:</strong> Severe deficit of UI/UX & Product Design <span class="trend-down">(-68% supply)</span></span>
+              <span class="signal-item">📈 <strong>Mumbai Metro:</strong> Cloud DevOps & Kubernetes demand peaking across BFSI IT</span>
+              <span class="signal-item">🔋 <strong>Chakan & Pimpri:</strong> Electric Vehicle & Battery Tech hiring up <span class="trend-up">+310%</span></span>
+              <span class="signal-item">🔍 <strong>Vidarbha District:</strong> NSQF Level 5 Data Analytics gap detected in 14 ITI centers</span>
+              <!-- Repeated for infinite marquee loop -->
+              <span class="signal-item">⚡ <strong>Pune Tech Corridor:</strong> Surge in Python & PyTorch roles <span class="trend-up">(+42% YoY, 1,420 openings)</span></span>
+              <span class="signal-item">⚠️ <strong>Nagpur Region:</strong> Severe deficit of UI/UX & Product Design <span class="trend-down">(-68% supply)</span></span>
+              <span class="signal-item">📈 <strong>Mumbai Metro:</strong> Cloud DevOps & Kubernetes demand peaking across BFSI IT</span>
+              <span class="signal-item">🔋 <strong>Chakan & Pimpri:</strong> Electric Vehicle & Battery Tech hiring up <span class="trend-up">+310%</span></span>
+              <span class="signal-item">🔍 <strong>Vidarbha District:</strong> NSQF Level 5 Data Analytics gap detected in 14 ITI centers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Header -->
+        <div class="hero-header-area">
+          <div class="hero-title-group">
+            <div class="hero-context-pill" id="portalContextPill">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span id="portalRoleContextName">State Executive Portal</span>
+            </div>
+            <h1 class="hero-title" id="heroPortalHeading">Automated Labour Demand & Curriculum Alignment</h1>
+            <p class="hero-description" id="heroPortalDesc">
+              Real-time vector matching between Maharashtra industrial job requisitions and vocational course syllabi. Empowering policy-makers with automated skill gap intelligence.
+            </p>
+          </div>
+
+          <div class="portal-context-badge">
+            <span class="context-label">Active Stakeholder Mode</span>
+            <span class="context-val" id="portalActiveModeText">Directorate of Vocational Education</span>
+          </div>
+        </div>
+
+        <!-- Three Massive Count-up Statistic Blocks -->
+        <div class="hero-metrics-grid">
+          
+          <!-- Block 1: Curriculum Alignment Score -->
+          <div class="metric-card reveal-on-scroll delay-1" style="--accent-color: var(--color-emerald)">
+            <div class="metric-top">
+              <span class="metric-label">Curriculum Alignment Score</span>
+              <span class="metric-pill emerald" id="alignmentTrendPill">↑ +14.2% YoY</span>
+            </div>
+            <div class="metric-number-row">
+              <span class="metric-value counter-value" id="curriculumScoreValue" data-target="79.4" data-decimals="1">0.0</span>
+              <span class="metric-unit">%</span>
+            </div>
+            <div class="metric-subtext">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span id="metric1Subtitle">Statewide benchmark across 412 vocational courses</span>
+            </div>
+          </div>
+
+          <!-- Block 2: Active Skill Gaps Flagged -->
+          <div class="metric-card reveal-on-scroll delay-2" style="--accent-color: var(--color-coral)">
+            <div class="metric-top">
+              <span class="metric-label">Active Skill Gaps Flagged</span>
+              <span class="metric-pill coral" id="gapSeverityPill">Critical Alert</span>
+            </div>
+            <div class="metric-number-row">
+              <span class="metric-value counter-value" id="skillGapsValue" data-target="148" data-decimals="0">0</span>
+              <span class="metric-unit">Gaps</span>
+            </div>
+            <div class="metric-subtext">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span id="metric2Subtitle">28 emerging tech roles lacking certified syllabus</span>
+            </div>
+          </div>
+
+          <!-- Block 3: Districts Analyzed -->
+          <div class="metric-card reveal-on-scroll delay-3" style="--accent-color: var(--color-cyan)">
+            <div class="metric-top">
+              <span class="metric-label">Districts Analyzed</span>
+              <span class="metric-pill cyan">100% Coverage</span>
+            </div>
+            <div class="metric-number-row">
+              <span class="metric-value counter-value" id="districtsCountValue" data-target="36" data-decimals="0">0</span>
+              <span class="metric-unit">/ 36</span>
+            </div>
+            <div class="metric-subtext">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span id="metric3Subtitle">Covering 1,280+ ITI, Polytechnic & Vocational Centers</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. THE CORE ENGINE (VECTOR EMBEDDING INTERFACE)
+         ====================================================================== -->
+    <section class="engine-section" id="engineSection">
+      <div class="container">
+        
+        <div class="section-header reveal-on-scroll">
+          <div class="section-eyebrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            PyTorch Semantic Engine
+          </div>
+          <h2 class="section-title">Vector Embedding & NLP Skill Extraction</h2>
+          <p class="section-description">
+            Type or paste any vocational curriculum module to compute neural dense vector embeddings. The engine maps textual syllabus components directly to industry demand taxonomy.
+          </p>
+        </div>
+
+        <div class="engine-card reveal-on-scroll">
+          
+          <!-- Input Column -->
+          <div class="input-column">
+            <div class="input-label-row">
+              <label for="curriculumInput" class="input-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Curriculum Module Content
+              </label>
+              <span class="model-spec-tag">MiniLM-L6-v2 • 384-dim</span>
+            </div>
+
+            <!-- Preset Chips -->
+            <div class="quick-preset-chips">
+              <span class="preset-chip" data-text="Basic Data Structures, Arrays, Linked Lists, Trees, Graph Traversal, Time Complexity analysis, Memory Allocation in C++">
+                Basic Data Structures
+              </span>
+              <span class="preset-chip" data-text="Deep Learning Fundamentals, PyTorch Tensor Operations, Neural Network Training, Convolutional Networks, Model Deployment with FastAPI">
+                Deep Learning & PyTorch
+              </span>
+              <span class="preset-chip" data-text="Industrial Automation, PLC Programming, SCADA Systems, Sensor Interfacing, Modbus Protocol, Pneumatic Circuits">
+                Industrial IoT & PLC
+              </span>
+              <span class="preset-chip" data-text="Full-Stack Web Development, Modern JavaScript, React Component Architecture, Node.js REST APIs, PostgreSQL Relational Database Design">
+                Full-Stack Web Engineering
+              </span>
+            </div>
+
+            <!-- Textarea -->
+            <div class="textarea-wrapper">
+              <textarea 
+                id="curriculumInput" 
+                class="curriculum-textarea" 
+                placeholder="Type or paste syllabus topics (e.g. Basic Data Structures, Binary Search Trees, Dynamic Programming, Stack and Queue implementations...)"
+              >Basic Data Structures: Linear Arrays, Singly and Doubly Linked Lists, Binary Search Trees, Graph Traversal Algorithms (BFS/DFS), Time & Space Complexity Big-O Analysis, Memory Management in C++.</textarea>
+              
+              <div class="textarea-meta">
+                <span>Input character count: <strong id="charCountDisplay" class="char-count">196</strong> chars</span>
+                <span>Language: English (Technical NSQF)</span>
+              </div>
+            </div>
+
+            <!-- Extraction Trigger Button -->
+            <button id="runNlpBtn" class="btn-extract" type="button">
+              <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <span>Run NLP Skill Extraction</span>
+            </button>
+          </div>
+
+          <!-- Output / Vector Display Column -->
+          <div class="output-column">
+            <div class="output-header">
+              <span class="output-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Extracted Competencies
+              </span>
+              <span class="api-status-pill" id="extractionPill">PyTorch Vectorizer: Ready</span>
+            </div>
+
+            <div class="skills-badges-container" id="extractedSkillsContainer">
+              <!-- Dynamically populated or default skills -->
+              <span class="skill-tag high-demand">Data Structures (NSQF-6)</span>
+              <span class="skill-tag high-demand">Algorithmic Efficiency</span>
+              <span class="skill-tag high-demand">Binary Search Trees</span>
+              <span class="skill-tag">Graph Traversal (BFS/DFS)</span>
+              <span class="skill-tag high-demand">Memory Management</span>
+              <span class="skill-tag gap">⚠️ Cloud Architecture (Missing)</span>
+              <span class="skill-tag gap">⚠️ Async Systems (Missing)</span>
+            </div>
+
+            <!-- Vector Embedding Preview Terminal -->
+            <div class="vector-terminal">
+              <div class="vector-label">
+                <span>DENSE VECTOR EMBEDDING (384 DIMENSIONS)</span>
+                <span id="vectorCosineSim">Cosine Sim: 0.884</span>
+              </div>
+              <div class="vector-data" id="vectorDataSnippet">
+                [-0.0418, 0.0823, -0.1942, 0.3120, -0.0049, 0.1582, -0.2410, 0.0911, 0.2033, -0.1147, 0.4019, 0.0125, -0.0784, 0.1982, -0.0543, 0.1190, -0.3201, 0.2845, -0.1402, 0.0917 ... +364 dims]
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. DYNAMIC CURRICULUM HEATMAP SECTION
+         ====================================================================== -->
+    <section class="heatmap-section" id="heatmapSection">
+      <div class="container">
+        
+        <div class="heatmap-header-wrapper reveal-on-scroll">
+          <div>
+            <div class="section-eyebrow">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+              Live Labour-Market Alignment
+            </div>
+            <h2 class="section-title">Dynamic Curriculum Heatmap</h2>
+            <p class="section-description">
+              Multi-dimensional scoring of the active curriculum against real-time Maharashtra industry demand keywords across key tech corridors.
+            </p>
+          </div>
+
+          <!-- Color Matrix Legend -->
+          <div class="heatmap-legend">
+            <div class="legend-item">
+              <span class="legend-dot emerald"></span>
+              <span>High Alignment (≥80%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot amber"></span>
+              <span>Moderate (50-79%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot coral"></span>
+              <span>Critical Deficit (&lt;50%)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="heatmap-canvas-container reveal-on-scroll">
+          <canvas id="alignmentHeatmap" aria-label="Dynamic Curriculum Heatmap Matrix" role="img"></canvas>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. DISTRICT-LEVEL ACTION PLANS
+         ====================================================================== -->
+    <section class="districts-section" id="districtsSection">
+      <div class="container">
+        
+        <div class="section-header reveal-on-scroll">
+          <div class="section-eyebrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Localized Institutional Strategy
+          </div>
+          <h2 class="section-title">District-Level Action Plans</h2>
+          <p class="section-description">
+            Select a target district to inspect localized industry deficits and trigger auto-generated training capacity interventions (expand/phase-out/upgrade).
+          </p>
+        </div>
+
+        <!-- 3 District Cards: Pune, Mumbai, Nagpur -->
+        <div class="districts-grid">
+          
+          <!-- Card 1: Pune -->
+          <div class="district-card active-district reveal-on-scroll delay-1" data-district="pune">
+            <div class="district-header">
+              <div>
+                <h3 class="district-name">Pune</h3>
+                <span class="district-zone">Western Maharashtra Tech & Auto Hub</span>
+              </div>
+              <span class="district-deficit-pill deficit-high">42 Deficits</span>
+            </div>
+            <div class="district-stat-row">
+              <div>
+                <div class="stat-mini-label">Placement Rate</div>
+                <div class="stat-mini-val" style="color: var(--color-emerald)">84.2%</div>
+              </div>
+              <div>
+                <div class="stat-mini-label">Active Openings</div>
+                <div class="stat-mini-val">4,820</div>
+              </div>
+            </div>
+            <div class="district-tags">
+              <span class="district-tag-pill">AI & Machine Learning</span>
+              <span class="district-tag-pill">EV Powertrain</span>
+              <span class="district-tag-pill">Automotive Embedded</span>
+            </div>
+            <div class="view-plan-cta">
+              <span>View Capacity Reallocation Plan</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 2: Mumbai -->
+          <div class="district-card reveal-on-scroll delay-2" data-district="mumbai">
+            <div class="district-header">
+              <div>
+                <h3 class="district-name">Mumbai</h3>
+                <span class="district-zone">Konkan Metro • FinTech & Enterprise</span>
+              </div>
+              <span class="district-deficit-pill deficit-medium">29 Deficits</span>
+            </div>
+            <div class="district-stat-row">
+              <div>
+                <div class="stat-mini-label">Placement Rate</div>
+                <div class="stat-mini-val" style="color: var(--color-emerald)">88.7%</div>
+              </div>
+              <div>
+                <div class="stat-mini-label">Active Openings</div>
+                <div class="stat-mini-val">7,150</div>
+              </div>
+            </div>
+            <div class="district-tags">
+              <span class="district-tag-pill">Cloud Architecture</span>
+              <span class="district-tag-pill">Cyber Security & BFSI</span>
+              <span class="district-tag-pill">Full-Stack DevOps</span>
+            </div>
+            <div class="view-plan-cta">
+              <span>View Capacity Reallocation Plan</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 3: Nagpur -->
+          <div class="district-card reveal-on-scroll delay-3" data-district="nagpur">
+            <div class="district-header">
+              <div>
+                <h3 class="district-name">Nagpur</h3>
+                <span class="district-zone">Vidarbha Industrial & Logistics MIHAN</span>
+              </div>
+              <span class="district-deficit-pill deficit-high">58 Deficits</span>
+            </div>
+            <div class="district-stat-row">
+              <div>
+                <div class="stat-mini-label">Placement Rate</div>
+                <div class="stat-mini-val" style="color: var(--color-coral)">58.4%</div>
+              </div>
+              <div>
+                <div class="stat-mini-label">Active Openings</div>
+                <div class="stat-mini-val">2,340</div>
+              </div>
+            </div>
+            <div class="district-tags">
+              <span class="district-tag-pill">Supply Chain Automation</span>
+              <span class="district-tag-pill">Industrial Mechatronics</span>
+              <span class="district-tag-pill">Aviation MRO Tech</span>
+            </div>
+            <div class="view-plan-cta">
+              <span>View Capacity Reallocation Plan</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dynamic Action Plan Details View -->
+        <div class="action-plan-detail-card reveal-on-scroll" id="actionPlanDetailCard">
+          <div class="action-plan-header">
+            <div class="plan-title-block">
+              <h3 id="planTargetTitle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Pune District • Institutional Capacity Intervention
+              </h3>
+              <p id="planTargetDesc">Auto-generated roadmap based on 4,820 live employer vacancies and 14 high-severity course skill gaps.</p>
+            </div>
+            <div class="plan-actions-group">
+              <button class="btn-secondary" id="exportPlanCsvBtn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Export Plan (CSV)
+              </button>
+              <button class="btn-primary-action" id="approvePlanBtn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve Institutional Directive
+              </button>
+            </div>
+          </div>
+
+          <!-- Table of Program Recommendations -->
+          <div style="overflow-x: auto;">
+            <table class="upgrade-items-table" id="planItemsTable">
+              <thead>
+                <tr>
+                  <th>Course / Program</th>
+                  <th>Action Directive</th>
+                  <th>Trainer Delta</th>
+                  <th>Equipment & Facility Upgrades</th>
+                  <th>Placement Rate</th>
+                  <th>Matching Demand</th>
+                </tr>
+              </thead>
+              <tbody id="planTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       FOOTER
+       ======================================================================== -->
+  <footer class="dashboard-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>SkillSync Dashboard • SIH Problem Statement 26134</span>
+      </div>
+      <div class="footer-specs">
+        <span>PyTorch Backend: <strong style="color: #6EE7B7;">abhishekaj819-collab--skillsync-api-serve.modal.run</strong></span>
+        <span style="margin-left: 1.5rem;">Engine: all-MiniLM-L6-v2 Dense Vectors</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Element -->
+  <div class="toast-notification" id="toastNotification">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMessage">Notification message</span>
+  </div>
+
+  <!-- Main ES Module Script -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
