@@ -6,7 +6,6 @@
   <title>SkillSetu | SIH PS 26134 Executive Labour-Market & Curriculum Dashboard</title>
   <meta name="description" content="SkillSetu is a next-generation Gov-Tech labour market intelligence and automated curriculum alignment engine for the Government of Maharashtra (SIH Problem Statement 26134).">
 
-
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,10 +22,8 @@
        GOV-TECH DESIGN SYSTEM TOKENS & ADAPTIVE REM GRID
        ========================================================================== */
     :root {
-      /* Dynamic Rem-based scaling: scales seamlessly across viewports */
       font-size: clamp(14px, 0.85rem + 0.35vw, 17px);
 
-      /* Typography */
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
 
@@ -72,18 +69,15 @@
       --shadow-md: 0 8px 24px -4px rgba(11, 19, 43, 0.08);
       --shadow-lg: 0 20px 40px -8px rgba(11, 19, 43, 0.12);
       --shadow-glow: 0 0 25px var(--color-emerald-glow);
-      --shadow-glow-coral: 0 0 25px var(--color-coral-glow);
 
       --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-      /* Layout */
       --header-height: 4.5rem;
-      --max-width: 82rem;
+      --max-width: 84rem;
     }
 
-    /* Resets & Base Setup */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -91,7 +85,7 @@
     }
 
     html {
-      scroll-behavior: auto; /* Lenis handles smooth scrolling */
+      scroll-behavior: auto;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
       background-color: var(--color-surface);
@@ -105,7 +99,6 @@
       line-height: 1.6;
     }
 
-    /* Adaptive container grid */
     .container {
       width: 100%;
       max-width: var(--max-width);
@@ -116,7 +109,7 @@
     }
 
     /* ==========================================================================
-       1. FIXED HEADER & STAKEHOLDER SWITCHER
+       1. FIXED HEADER & 3-PILL STAKEHOLDER SWITCHER
        ========================================================================== */
     .app-header {
       position: fixed;
@@ -124,10 +117,10 @@
       left: 0;
       right: 0;
       height: var(--header-height);
-      background: rgba(11, 19, 43, 0.88);
+      background: rgba(11, 19, 43, 0.92);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -198,7 +191,7 @@
     .brand-subtitle {
       font-size: 0.72rem;
       font-weight: 500;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
       letter-spacing: -0.01em;
     }
 
@@ -206,8 +199,8 @@
     .role-switcher-container {
       display: flex;
       align-items: center;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       padding: 0.28rem;
       border-radius: 9999px;
       position: relative;
@@ -218,17 +211,17 @@
       z-index: 2;
       border: none;
       background: transparent;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
       font-family: var(--font-sans);
       font-size: 0.78rem;
       font-weight: 600;
-      padding: 0.45rem 0.95rem;
+      padding: 0.45rem 1rem;
       border-radius: 9999px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.45rem;
-      transition: color var(--transition-fast);
+      transition: color var(--transition-fast), opacity var(--transition-fast);
       white-space: nowrap;
     }
 
@@ -238,6 +231,7 @@
 
     .role-pill.active {
       color: var(--color-white);
+      font-weight: 700;
     }
 
     .role-pill-indicator {
@@ -247,13 +241,12 @@
       left: 0.28rem;
       border-radius: 9999px;
       background: linear-gradient(135deg, #1C2541, #253358);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
       transition: transform var(--transition-smooth), width var(--transition-smooth);
       z-index: 1;
     }
 
-    /* Header Status Indicator */
     .header-system-status {
       display: flex;
       align-items: center;
@@ -283,13 +276,13 @@
     }
 
     /* ==========================================================================
-       2. HERO METRICS PANEL (AUTOMATED DEMAND AGGREGATION)
+       2. HERO SECTION & LIVE MARKET TICKER
        ========================================================================== */
     .hero-section {
       background: radial-gradient(circle at 80% 20%, #15224A 0%, var(--color-navy) 60%, var(--color-navy-darkest) 100%);
       color: var(--color-white);
-      padding-top: calc(var(--header-height) + 1.5rem);
-      padding-bottom: 4.5rem;
+      padding-top: calc(var(--header-height) + 1.25rem);
+      padding-bottom: 3.5rem;
       position: relative;
       overflow: hidden;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -307,13 +300,12 @@
       mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, transparent 80%);
     }
 
-    /* Live Market Signals Ticker */
     .signals-ticker-wrapper {
-      margin-bottom: 2.2rem;
+      margin-bottom: 2rem;
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 0.75rem;
       padding: 0.45rem 0.9rem;
@@ -361,7 +353,7 @@
       gap: 0.5rem;
       font-size: 0.82rem;
       font-weight: 500;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
     }
 
     .signal-item strong {
@@ -374,23 +366,17 @@
       font-weight: 600;
     }
 
-    .signal-item .trend-down {
-      color: var(--color-coral);
-      font-weight: 600;
-    }
-
     @keyframes tickerAnimation {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
-    /* Hero Heading Area */
     .hero-header-area {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       gap: 2rem;
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
       flex-wrap: wrap;
     }
 
@@ -409,7 +395,7 @@
       border: 1px solid rgba(56, 189, 248, 0.25);
       padding: 0.3rem 0.85rem;
       border-radius: 9999px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -419,7 +405,7 @@
       font-weight: 800;
       line-height: 1.15;
       letter-spacing: -0.03em;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.8rem;
       background: linear-gradient(135deg, #FFFFFF 30%, #94A3B8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -427,9 +413,9 @@
 
     .hero-description {
       font-size: 1.05rem;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
       line-height: 1.6;
-      max-width: 42rem;
+      max-width: 44rem;
     }
 
     .portal-context-badge {
@@ -442,14 +428,13 @@
       border-radius: 1rem;
       padding: 0.85rem 1.4rem;
       backdrop-filter: blur(10px);
-      transition: opacity var(--transition-fast), transform var(--transition-fast);
     }
 
     .context-label {
       font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
       font-weight: 700;
     }
 
@@ -459,10 +444,9 @@
       color: var(--color-white);
     }
 
-    /* Massive Count-up Statistic Blocks */
     .hero-metrics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
       gap: 1.5rem;
     }
 
@@ -504,8 +488,7 @@
     .metric-label {
       font-size: 0.88rem;
       font-weight: 600;
-      color: var(--color-text-muted-dark);
-      letter-spacing: -0.01em;
+      color: #94A3B8;
     }
 
     .metric-pill {
@@ -528,6 +511,12 @@
       background: rgba(244, 63, 94, 0.18);
       color: #FB7185;
       border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+
+    .metric-pill.amber {
+      background: rgba(245, 158, 11, 0.18);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
     }
 
     .metric-pill.cyan {
@@ -555,28 +544,31 @@
     .metric-unit {
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
     }
 
     .metric-subtext {
       font-size: 0.82rem;
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
     /* ==========================================================================
-       3. THE CORE ENGINE (VECTOR EMBEDDING INTERFACE)
+       3. COMMON SECTION STYLING & TOGGLABLE DASHBOARDS
        ========================================================================== */
-    .engine-section {
-      padding: 5rem 0;
-      background: var(--color-surface);
-      position: relative;
+    .stakeholder-dashboard {
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    .stakeholder-dashboard.hidden-dashboard {
+      display: none !important;
     }
 
     .section-header {
-      margin-bottom: 2.75rem;
+      margin-bottom: 2.5rem;
       text-align: left;
     }
 
@@ -595,8 +587,18 @@
       margin-bottom: 0.85rem;
     }
 
+    .section-eyebrow.accent-emerald {
+      color: var(--color-emerald-dark);
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .section-eyebrow.accent-cyan {
+      color: #0284C7;
+      background: rgba(6, 182, 212, 0.12);
+    }
+
     .section-title {
-      font-size: clamp(1.8rem, 2.4vw + 0.8rem, 2.5rem);
+      font-size: clamp(1.8rem, 2.4vw + 0.8rem, 2.4rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--color-navy);
@@ -606,18 +608,764 @@
     .section-description {
       font-size: 1rem;
       color: var(--color-text-muted);
-      max-width: 44rem;
+      max-width: 46rem;
       line-height: 1.6;
     }
 
-    .engine-card {
+    /* Buttons */
+    .btn-secondary {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      color: var(--color-navy);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.55rem 1rem;
+      border-radius: 0.65rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-secondary:hover {
+      background: #F8FAFC;
+      border-color: #94A3B8;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary-action {
+      background: var(--color-emerald);
+      border: none;
+      color: #FFFFFF;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.6rem 1.25rem;
+      border-radius: 0.65rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 2px 10px var(--color-emerald-glow);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-primary-action:hover {
+      background: var(--color-emerald-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px var(--color-emerald-glow);
+    }
+
+    .btn-reallocate {
+      background: linear-gradient(135deg, #1C2541, #0B132B);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.45rem 0.9rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-reallocate:hover {
+      background: var(--color-emerald);
+      border-color: var(--color-emerald);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       4. GOVT / ADMIN DASHBOARD: FUND REALLOCATION & AGILITY INDEX
+       ========================================================================== */
+    .govt-banner-section {
+      padding: 4rem 0 2rem 0;
+      background: var(--color-surface);
+    }
+
+    .agility-master-card {
+      background: linear-gradient(135deg, #0B132B 0%, #15224A 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.5rem;
+      padding: 2.25rem;
+      color: #FFFFFF;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 3.5rem;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 992px) {
+      .agility-master-card {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+      }
+    }
+
+    .agility-main-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .agility-main-desc {
+      font-size: 0.92rem;
+      color: #94A3B8;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .agility-metric-strip {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .agility-metric-block {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.85rem;
+      padding: 0.85rem 1.25rem;
+    }
+
+    .agility-metric-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94A3B8;
+      font-weight: 600;
+    }
+
+    .agility-metric-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--color-emerald);
+    }
+
+    .agility-actions-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+    }
+
+    .compliance-heading {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .compliance-subtext {
+      font-size: 0.78rem;
+      color: #94A3B8;
+      line-height: 1.5;
+    }
+
+    .btn-generate-report {
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+      transition: all var(--transition-smooth);
+    }
+
+    .btn-generate-report:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Fund Reallocation Engine Cards */
+    .fund-reallocation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .fund-card {
       background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.25rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition-smooth);
+    }
+
+    .fund-card:hover {
+      transform: translateY(-4px);
+      border-color: #94A3B8;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .fund-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .fund-district-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--color-navy);
+    }
+
+    .fund-status-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .status-authorized {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-emerald-dark);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #B45309;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .fund-initiative-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .fund-initiative-desc {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      margin-bottom: 1.2rem;
+    }
+
+    .fund-metrics-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--color-surface);
+      padding: 0.65rem 0.9rem;
+      border-radius: 0.65rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .fund-amount {
+      font-size: 1.2rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--color-navy);
+    }
+
+    .fund-deficit-count {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-coral);
+    }
+
+    .fund-progress-container {
+      margin-bottom: 1.2rem;
+    }
+
+    .fund-progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .fund-progress-track {
+      height: 0.45rem;
+      background: #E2E8F0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .fund-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #10B981, #06B6D4);
+      border-radius: 9999px;
+    }
+
+    /* ==========================================================================
+       5. TRAINING INSTITUTE DASHBOARD: SYLLABUS DIRECTIVES & EQUIPMENT FORECAST
+       ========================================================================== */
+    .institute-section {
+      padding: 4rem 0 6rem 0;
+      background: var(--color-surface);
+    }
+
+    .institute-telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .institute-stat-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: 1.15rem;
+      padding: 1.35rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .inst-stat-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .inst-stat-val {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--color-navy);
+      line-height: 1.1;
+    }
+
+    .inst-stat-sub {
+      font-size: 0.75rem;
+      color: #64748B;
+      margin-top: 0.35rem;
+    }
+
+    /* Granular Syllabus Directives Grid */
+    .directives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .directive-card {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.35rem;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition-smooth);
+    }
+
+    .directive-card:hover {
+      transform: translateY(-4px);
+      border-color: #94A3B8;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .directive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .directive-priority-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    .priority-critical {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--color-coral-dark);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .priority-high {
+      background: rgba(245, 158, 11, 0.15);
+      color: #B45309;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .priority-medium {
+      background: rgba(59, 130, 246, 0.15);
+      color: #1D4ED8;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .diff-box {
+      background: var(--color-surface);
+      border-radius: 0.85rem;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .diff-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    .diff-badge-old {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--color-coral-dark);
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.3rem;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .diff-badge-new {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-emerald-dark);
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.3rem;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .diff-text-old {
+      color: #64748B;
+      text-decoration: line-through;
+    }
+
+    .diff-text-new {
+      color: var(--color-navy);
+      font-weight: 700;
+    }
+
+    .directive-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #64748B;
+      margin-bottom: 1.25rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    /* Lab Equipment Forecasting Grid */
+    .equipment-forecast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .equipment-card {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.25rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition-smooth);
+    }
+
+    .equipment-card:hover {
+      transform: translateY(-4px);
+      border-color: #94A3B8;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .equipment-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--color-navy);
+      margin-bottom: 0.4rem;
+    }
+
+    .equipment-target {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #0284C7;
+      margin-bottom: 0.85rem;
+    }
+
+    .equipment-specs-list {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 1.2rem;
+      list-style-type: none;
+    }
+
+    .equipment-specs-list li {
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* ==========================================================================
+       6. EMPLOYER / INDUSTRY DASHBOARD: TALENT RADAR & INTAKE FORM
+       ========================================================================== */
+    .employer-section {
+      padding: 4rem 0 6rem 0;
+      background: var(--color-surface);
+    }
+
+    /* Future Talent Radar Timeline */
+    .talent-radar-wrapper {
+      background: linear-gradient(135deg, #0B132B 0%, #15224A 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.5rem;
+      padding: 2.25rem;
+      color: #FFFFFF;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 4rem;
+    }
+
+    .radar-timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+      position: relative;
+    }
+
+    .radar-node {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.15rem;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .radar-node::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #10B981, #06B6D4);
+    }
+
+    .radar-quarter-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      background: rgba(56, 189, 248, 0.18);
+      color: #38BDF8;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.35rem;
+      display: inline-block;
+      margin-bottom: 0.75rem;
+    }
+
+    .radar-cohort-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 0.4rem;
+    }
+
+    .radar-cohort-size {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--color-emerald);
+      margin-bottom: 0.4rem;
+    }
+
+    .radar-cohort-centers {
+      font-size: 0.78rem;
+      color: #94A3B8;
+      line-height: 1.4;
+    }
+
+    /* Hyper-Local Deficit Reporting Intake Form */
+    .intake-form-container {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.5rem;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 4rem;
+    }
+
+    .intake-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .intake-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-navy);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 0.75rem;
+      background: #FAFCFE;
+      color: var(--color-navy);
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--color-blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      background: #FFFFFF;
+    }
+
+    /* Direct Placement Matching Pipeline */
+    .candidates-pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+      gap: 1.5rem;
+    }
+
+    .candidate-card {
+      background: var(--color-white);
+      border: 1.5px solid var(--color-border);
+      border-radius: 1.25rem;
+      padding: 1.6rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all var(--transition-smooth);
+    }
+
+    .candidate-card:hover {
+      transform: translateY(-4px);
+      border-color: #94A3B8;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .candidate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.85rem;
+    }
+
+    .candidate-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--color-navy);
+    }
+
+    .candidate-center {
+      font-size: 0.75rem;
+      color: #64748B;
+    }
+
+    .candidate-match-score {
+      font-size: 0.85rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-emerald-dark);
+      padding: 0.25rem 0.55rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .candidate-skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .cand-skill-pill {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #F1F5F9;
+      color: #334155;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.35rem;
+    }
+
+    /* ==========================================================================
+       7. THE PYTORCH VECTOR ENGINE & HEATMAP (SHARED/INTEGRATED)
+       ========================================================================== */
+    .engine-section {
+      padding: 4.5rem 0;
+      background: #FFFFFF;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .engine-card {
+      background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: 1.5rem;
       padding: clamp(1.5rem, 3vw, 2.5rem);
       box-shadow: var(--shadow-md);
-      position: relative;
-      overflow: hidden;
       display: grid;
       grid-template-columns: 1.25fr 1fr;
       gap: 2.5rem;
@@ -655,8 +1403,8 @@
     .model-spec-tag {
       font-family: var(--font-mono);
       font-size: 0.7rem;
-      background: #F1F5F9;
-      color: #475569;
+      background: #E2E8F0;
+      color: #334155;
       padding: 0.2rem 0.55rem;
       border-radius: 0.4rem;
       border: 1px solid #CBD5E1;
@@ -689,10 +1437,6 @@
       transform: translateY(-1px);
     }
 
-    .textarea-wrapper {
-      position: relative;
-    }
-
     .curriculum-textarea {
       width: 100%;
       min-height: 9.5rem;
@@ -701,7 +1445,7 @@
       font-size: 0.95rem;
       line-height: 1.6;
       color: var(--color-navy);
-      background: #FAFCFE;
+      background: #FFFFFF;
       border: 1.5px solid var(--color-border);
       border-radius: 1rem;
       resize: vertical;
@@ -712,7 +1456,6 @@
     .curriculum-textarea:focus {
       border-color: var(--color-blue);
       box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-      background: #FFFFFF;
     }
 
     .textarea-meta {
@@ -727,7 +1470,6 @@
       font-family: var(--font-mono);
     }
 
-    /* Action Button */
     .btn-extract {
       background: linear-gradient(135deg, var(--color-navy), #1C2541);
       color: var(--color-white);
@@ -744,8 +1486,6 @@
       gap: 0.75rem;
       box-shadow: 0 4px 18px rgba(11, 19, 43, 0.25);
       transition: all var(--transition-smooth);
-      position: relative;
-      overflow: hidden;
     }
 
     .btn-extract:hover {
@@ -754,19 +1494,6 @@
       box-shadow: 0 8px 24px rgba(11, 19, 43, 0.35);
     }
 
-    .btn-extract:active {
-      transform: translateY(0);
-    }
-
-    .btn-extract.loading .btn-icon {
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Results Column */
     .output-column {
       background: #0B132B;
       border-radius: 1.25rem;
@@ -828,12 +1555,6 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #E2E8F0;
-      animation: badgePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    @keyframes badgePop {
-      0% { transform: scale(0.85); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
     }
 
     .skill-tag.high-demand {
@@ -848,7 +1569,6 @@
       color: #FDA4AF;
     }
 
-    /* Vector Stream Terminal */
     .vector-terminal {
       background: rgba(0, 0, 0, 0.45);
       border-radius: 0.75rem;
@@ -874,13 +1594,10 @@
       line-height: 1.4;
     }
 
-    /* ==========================================================================
-       4. DYNAMIC CURRICULUM HEATMAP SECTION
-       ========================================================================== */
+    /* Heatmap Section */
     .heatmap-section {
-      padding: 5rem 0;
+      padding: 4.5rem 0;
       background: #FFFFFF;
-      border-top: 1px solid var(--color-border);
       border-bottom: 1px solid var(--color-border);
     }
 
@@ -918,9 +1635,9 @@
       border-radius: 0.25rem;
     }
 
-    .legend-dot.emerald { background: var(--color-emerald); box-shadow: 0 0 8px var(--color-emerald-glow); }
+    .legend-dot.emerald { background: var(--color-emerald); }
     .legend-dot.amber { background: var(--color-amber); }
-    .legend-dot.coral { background: var(--color-coral); box-shadow: 0 0 8px var(--color-coral-glow); }
+    .legend-dot.coral { background: var(--color-coral); }
 
     .heatmap-canvas-container {
       background: var(--color-surface);
@@ -940,17 +1657,15 @@
       max-height: 25rem;
     }
 
-    /* ==========================================================================
-       5. DISTRICT-LEVEL ACTION PLANS
-       ========================================================================== */
+    /* District Plans Grid */
     .districts-section {
-      padding: 5rem 0 6.5rem 0;
+      padding: 4.5rem 0 6rem 0;
       background: var(--color-surface);
     }
 
     .districts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
       gap: 1.75rem;
       margin-bottom: 2.5rem;
     }
@@ -976,7 +1691,6 @@
     .district-card.active-district {
       border-color: var(--color-navy);
       box-shadow: 0 0 0 2px var(--color-navy), var(--shadow-md);
-      background: #FFFFFF;
     }
 
     .district-header {
@@ -1006,9 +1720,6 @@
       font-weight: 700;
       padding: 0.25rem 0.65rem;
       border-radius: 9999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
     }
 
     .deficit-high {
@@ -1075,19 +1786,12 @@
       margin-top: 0.5rem;
     }
 
-    .district-card.active-district .view-plan-cta {
-      color: var(--color-emerald-dark);
-    }
-
-    /* Auto-Recommended Action Plan Modal / Drawer */
     .action-plan-detail-card {
       background: var(--color-white);
       border: 1.5px solid var(--color-border);
       border-radius: 1.5rem;
       padding: 2.25rem;
       box-shadow: var(--shadow-lg);
-      transition: all var(--transition-smooth);
-      position: relative;
     }
 
     .action-plan-header {
@@ -1118,50 +1822,6 @@
       gap: 0.75rem;
     }
 
-    .btn-secondary {
-      background: #FFFFFF;
-      border: 1px solid var(--color-border);
-      color: var(--color-navy);
-      font-family: var(--font-sans);
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 0.55rem 1rem;
-      border-radius: 0.65rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      transition: all var(--transition-fast);
-    }
-
-    .btn-secondary:hover {
-      background: #F8FAFC;
-      border-color: #94A3B8;
-    }
-
-    .btn-primary-action {
-      background: var(--color-emerald);
-      border: none;
-      color: #FFFFFF;
-      font-family: var(--font-sans);
-      font-size: 0.82rem;
-      font-weight: 700;
-      padding: 0.55rem 1.15rem;
-      border-radius: 0.65rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      box-shadow: 0 2px 10px var(--color-emerald-glow);
-      transition: all var(--transition-fast);
-    }
-
-    .btn-primary-action:hover {
-      background: var(--color-emerald-dark);
-      transform: translateY(-1px);
-    }
-
-    /* Training Upgrades Table / Cards */
     .upgrade-items-table {
       width: 100%;
       border-collapse: collapse;
@@ -1213,9 +1873,7 @@
       border: 1px solid rgba(245, 158, 11, 0.3);
     }
 
-    /* ==========================================================================
-       SCROLL-TRIGGERED TRANSITIONS & REVEALS
-       ========================================================================== */
+    /* Scroll Reveals */
     .reveal-on-scroll {
       opacity: 0;
       transform: translateY(2rem);
@@ -1228,13 +1886,11 @@
       transform: translateY(0);
     }
 
-    /* Staggered Delay Utilities */
     .delay-1 { transition-delay: 0.1s; }
     .delay-2 { transition-delay: 0.2s; }
     .delay-3 { transition-delay: 0.3s; }
     .delay-4 { transition-delay: 0.4s; }
 
-    /* Cross-fade Animation Container */
     .cross-fade-wrapper {
       transition: opacity 0.35s ease, transform 0.35s ease;
     }
@@ -1245,11 +1901,85 @@
     }
 
     /* ==========================================================================
-       FOOTER
+       8. AUDIT REPORT MODAL & TOAST
        ========================================================================== */
+    .audit-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 10, 22, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-smooth);
+    }
+
+    .audit-modal-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .audit-modal-box {
+      background: #FFFFFF;
+      border-radius: 1.5rem;
+      width: 100%;
+      max-width: 48rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: scale(0.95);
+      transition: transform var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .audit-modal-backdrop.show .audit-modal-box {
+      transform: scale(1);
+    }
+
+    .audit-modal-header {
+      background: linear-gradient(135deg, #0B132B, #1C2541);
+      color: #FFFFFF;
+      padding: 1.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .audit-modal-body {
+      padding: 2rem;
+      color: var(--color-navy);
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #FFFFFF;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: background var(--transition-fast);
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Footer */
     .dashboard-footer {
       background: var(--color-navy);
-      color: var(--color-text-muted-dark);
+      color: #94A3B8;
       padding: 3rem 0;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       font-size: 0.85rem;
@@ -1277,7 +2007,6 @@
       color: #64748B;
     }
 
-    /* Toast Notification */
     .toast-notification {
       position: fixed;
       bottom: 2rem;
@@ -1317,17 +2046,13 @@
         padding: 0.4rem 0.75rem;
         font-size: 0.74rem;
       }
-      .upgrade-items-table {
-        display: block;
-        overflow-x: auto;
-      }
     }
   </style>
 </head>
 <body>
 
   <!-- ========================================================================
-       1. FIXED TOP HEADER & STAKEHOLDER SWITCHER
+       1. FIXED TOP HEADER & 3-PILL STAKEHOLDER SWITCHER
        ======================================================================== -->
   <header class="app-header">
     <div class="container header-content">
@@ -1374,7 +2099,7 @@
   <main id="dashboardMain" class="cross-fade-wrapper">
 
     <!-- ======================================================================
-         2. HERO METRICS PANEL (AUTOMATED DEMAND AGGREGATION)
+         2. HERO SECTION & LIVE MARKET SIGNALS TICKER
          ====================================================================== -->
     <section class="hero-section" id="heroSection">
       <div class="container">
@@ -1393,7 +2118,7 @@
               <span class="signal-item">🧪 <strong>Thane Industrial Belt:</strong> Pharma QC HPLC & Full-Stack roles growing <span class="trend-up">+30%</span></span>
               <span class="signal-item">🚜 <strong>Nashik Agri-Tech:</strong> Automotive Welding Inspector & Precision Agri hiring up <span class="trend-up">+25%</span></span>
               <span class="signal-item">⚙️ <strong>Chhatrapati Sambhajinagar:</strong> CAD/CAM & CNC Precision Engineering vacancies up <span class="trend-up">+32%</span></span>
-              <!-- Repeated for infinite marquee loop -->
+              <!-- Loop copy -->
               <span class="signal-item">⚡ <strong>Pune MIDC:</strong> Automotive CNC & EV Battery Tech demand up <span class="trend-up">+42% YoY</span></span>
               <span class="signal-item">☁️ <strong>Navi Mumbai:</strong> Cloud Infrastructure and GenAI hiring up <span class="trend-up">+28%</span></span>
               <span class="signal-item">☀️ <strong>Nagpur ITI Zone:</strong> Solar Technician & PLC vacancies surging <span class="trend-up">+55%</span></span>
@@ -1426,7 +2151,6 @@
         <!-- Four Massive Count-up Statistic Blocks (SIH 26134 Deck KPIs) -->
         <div class="hero-metrics-grid">
           
-          <!-- Block 1: Curriculum Agility (80%+) -->
           <div class="metric-card reveal-on-scroll delay-1" style="--accent-color: var(--color-emerald)">
             <div class="metric-top">
               <span class="metric-label">Curriculum Agility</span>
@@ -1442,7 +2166,6 @@
             </div>
           </div>
 
-          <!-- Block 2: Placement Acceleration (35%+) -->
           <div class="metric-card reveal-on-scroll delay-2" style="--accent-color: var(--color-amber)">
             <div class="metric-top">
               <span class="metric-label">Placement Acceleration</span>
@@ -1458,7 +2181,6 @@
             </div>
           </div>
 
-          <!-- Block 3: Districts Alignment (36 Districts) -->
           <div class="metric-card reveal-on-scroll delay-3" style="--accent-color: var(--color-cyan)">
             <div class="metric-top">
               <span class="metric-label">Districts Alignment</span>
@@ -1474,7 +2196,6 @@
             </div>
           </div>
 
-          <!-- Block 4: Projected TCO Per Citizen (< ₹2) -->
           <div class="metric-card reveal-on-scroll delay-4" style="--accent-color: var(--color-emerald)">
             <div class="metric-top">
               <span class="metric-label">Projected TCO / Citizen</span>
@@ -1495,9 +2216,730 @@
       </div>
     </section>
 
+    <!-- ======================================================================
+         STAKEHOLDER DASHBOARD A: GOVT / ADMIN (MACRO POLICY & BUDGET)
+         ====================================================================== -->
+    <div id="govtDashboard" class="stakeholder-dashboard">
+      
+      <section class="govt-banner-section">
+        <div class="container">
+          
+          <!-- Statewide Agility Index Console & Audit Report Button -->
+          <div class="agility-master-card reveal-on-scroll">
+            <div>
+              <div class="section-eyebrow accent-emerald" style="color: #6EE7B7; background: rgba(16, 185, 129, 0.2);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Master Metric • Statewide Agility Index
+              </div>
+              <h2 class="agility-main-title">
+                99.4% Statewide Curriculum Agility
+              </h2>
+              <p class="agility-main-desc">
+                Real-time curriculum revision latency tracked across all 36 Maharashtra districts. Reduced syllabus overhaul cycles from <strong>730 days (2 years)</strong> down to <strong>4.2 days</strong> via automated PyTorch neural embeddings.
+              </p>
+              
+              <div class="agility-metric-strip">
+                <div class="agility-metric-block">
+                  <div class="agility-metric-label">Latency Reduction</div>
+                  <div class="agility-metric-val">4.2 Days</div>
+                </div>
+                <div class="agility-metric-block">
+                  <div class="agility-metric-label">Districts Synced</div>
+                  <div class="agility-metric-val">36 / 36</div>
+                </div>
+                <div class="agility-metric-block">
+                  <div class="agility-metric-label">AI Confidence</div>
+                  <div class="agility-metric-val">98.7%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Audit-Ready Compliance Action Box -->
+            <div class="agility-actions-side">
+              <div class="compliance-heading">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Audit-Ready Compliance
+              </div>
+              <p class="compliance-subtext">
+                Generate an official, tamper-evident Labour Market Intelligence Audit Report for the Directorate of Vocational Education & MSSDS.
+              </p>
+              <button class="btn-generate-report" id="generateAuditReportBtn" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Generate Labor-Market Intelligence Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Fund Reallocation Engine Section Header -->
+          <div class="section-header reveal-on-scroll">
+            <div class="section-eyebrow">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Fiscal Policy & Resource Allocation
+            </div>
+            <h2 class="section-title">Fund Reallocation Engine</h2>
+            <p class="section-description">
+              District-level skill deficits algorithmically tied to capital budget routing. Automatically recommends capital expenditure into advanced labs based on real-time employer scraping.
+            </p>
+          </div>
+
+          <!-- 4 Fund Reallocation Cards -->
+          <div class="fund-reallocation-grid">
+            
+            <!-- Card 1: Pune EV Lab -->
+            <div class="fund-card reveal-on-scroll delay-1">
+              <div>
+                <div class="fund-card-top">
+                  <div>
+                    <h3 class="fund-district-name">Pune District</h3>
+                    <span style="font-size: 0.72rem; color: #64748B; font-weight: 600;">Automotive & EV Cluster</span>
+                  </div>
+                  <span class="fund-status-badge status-authorized">Authorized</span>
+                </div>
+                <h4 class="fund-initiative-title">48V EV Battery & Powertrain Lab</h4>
+                <p class="fund-initiative-desc">
+                  Reallocating ₹4.80 Cr from legacy IC engine trades to high-voltage EV diagnostic rigs based on 4,820 live postings in Chakan & Talegaon.
+                </p>
+                <div class="fund-metrics-row">
+                  <div>
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Capital Routed</div>
+                    <div class="fund-amount">₹4.80 Cr</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Skill Deficit</div>
+                    <div class="fund-deficit-count">42 Critical Gaps</div>
+                  </div>
+                </div>
+                <div class="fund-progress-container">
+                  <div class="fund-progress-label-row">
+                    <span>Disbursement Progress</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700;">85%</span>
+                  </div>
+                  <div class="fund-progress-track">
+                    <div class="fund-progress-bar" style="width: 85%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-reallocate" onclick="simulateFundReallocation('Pune EV Lab', '4.80')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Authorize EV Lab Capital
+              </button>
+            </div>
+
+            <!-- Card 2: Chhatrapati Sambhajinagar CNC Center -->
+            <div class="fund-card reveal-on-scroll delay-2">
+              <div>
+                <div class="fund-card-top">
+                  <div>
+                    <h3 class="fund-district-name">Chh. Sambhajinagar</h3>
+                    <span style="font-size: 0.72rem; color: #64748B; font-weight: 600;">Precision Engineering DMIC</span>
+                  </div>
+                  <span class="fund-status-badge status-pending">In Review</span>
+                </div>
+                <h4 class="fund-initiative-title">5-Axis CNC Precision Tooling Center</h4>
+                <p class="fund-initiative-desc">
+                  Directing ₹3.20 Cr for 5-axis Siemens NX machining centers at ITI Waluj following sudden +32% surge in die/mold requisitions.
+                </p>
+                <div class="fund-metrics-row">
+                  <div>
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Capital Routed</div>
+                    <div class="fund-amount">₹3.20 Cr</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Skill Deficit</div>
+                    <div class="fund-deficit-count">51 Critical Gaps</div>
+                  </div>
+                </div>
+                <div class="fund-progress-container">
+                  <div class="fund-progress-label-row">
+                    <span>Disbursement Progress</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700;">60%</span>
+                  </div>
+                  <div class="fund-progress-track">
+                    <div class="fund-progress-bar" style="width: 60%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-reallocate" onclick="simulateFundReallocation('Chh. Sambhajinagar CNC Center', '3.20')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Authorize CNC Capital
+              </button>
+            </div>
+
+            <!-- Card 3: Nagpur MIHAN AGV Robotics -->
+            <div class="fund-card reveal-on-scroll delay-3">
+              <div>
+                <div class="fund-card-top">
+                  <div>
+                    <h3 class="fund-district-name">Nagpur MIHAN</h3>
+                    <span style="font-size: 0.72rem; color: #64748B; font-weight: 600;">Logistics & Mechatronics SEZ</span>
+                  </div>
+                  <span class="fund-status-badge status-authorized">Disbursed</span>
+                </div>
+                <h4 class="fund-initiative-title">Automated Guided Vehicle (AGV) Track</h4>
+                <p class="fund-initiative-desc">
+                  Allocating ₹2.75 Cr to build warehouse automation sorting track at MIHAN ITI responding to logistics demand in Vidarbha.
+                </p>
+                <div class="fund-metrics-row">
+                  <div>
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Capital Routed</div>
+                    <div class="fund-amount">₹2.75 Cr</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Skill Deficit</div>
+                    <div class="fund-deficit-count">58 Critical Gaps</div>
+                  </div>
+                </div>
+                <div class="fund-progress-container">
+                  <div class="fund-progress-label-row">
+                    <span>Disbursement Progress</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700;">100%</span>
+                  </div>
+                  <div class="fund-progress-track">
+                    <div class="fund-progress-bar" style="width: 100%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-reallocate" onclick="simulateFundReallocation('Nagpur AGV Track', '2.75')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                View Disbursed Capital
+              </button>
+            </div>
+
+            <!-- Card 4: Thane HPLC Pharma QC -->
+            <div class="fund-card reveal-on-scroll delay-4">
+              <div>
+                <div class="fund-card-top">
+                  <div>
+                    <h3 class="fund-district-name">Thane Belt</h3>
+                    <span style="font-size: 0.72rem; color: #64748B; font-weight: 600;">Specialty Pharma & IT</span>
+                  </div>
+                  <span class="fund-status-badge status-authorized">Authorized</span>
+                </div>
+                <h4 class="fund-initiative-title">Shimadzu HPLC Chromatography Lab</h4>
+                <p class="fund-initiative-desc">
+                  Routing ₹1.90 Cr to establish modern chromatography testing rigs at ITI Thane for Wagle Estate & Belapur pharmaceutical hubs.
+                </p>
+                <div class="fund-metrics-row">
+                  <div>
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Capital Routed</div>
+                    <div class="fund-amount">₹1.90 Cr</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 0.68rem; color: #64748B; text-transform: uppercase;">Skill Deficit</div>
+                    <div class="fund-deficit-count">31 Critical Gaps</div>
+                  </div>
+                </div>
+                <div class="fund-progress-container">
+                  <div class="fund-progress-label-row">
+                    <span>Disbursement Progress</span>
+                    <span style="font-family: var(--font-mono); font-weight: 700;">90%</span>
+                  </div>
+                  <div class="fund-progress-track">
+                    <div class="fund-progress-bar" style="width: 90%;"></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-reallocate" onclick="simulateFundReallocation('Thane HPLC Lab', '1.90')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Authorize HPLC Capital
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
 
     <!-- ======================================================================
-         3. THE CORE ENGINE (VECTOR EMBEDDING INTERFACE)
+         STAKEHOLDER DASHBOARD B: TRAINING INSTITUTE (EXECUTION & OPERATIONS)
+         ====================================================================== -->
+    <div id="instituteDashboard" class="stakeholder-dashboard" style="display: none;">
+      
+      <section class="institute-section">
+        <div class="container">
+          
+          <!-- Operations Telemetry Bar -->
+          <div class="institute-telemetry-grid reveal-on-scroll">
+            <div class="institute-stat-card">
+              <div class="inst-stat-label">Active Trade Syllabi</div>
+              <div class="inst-stat-val">42 Trades</div>
+              <div class="inst-stat-sub">Across 418 Govt ITIs in Maharashtra</div>
+            </div>
+            <div class="institute-stat-card">
+              <div class="inst-stat-label">AI Outdated Directives</div>
+              <div class="inst-stat-val" style="color: var(--color-coral);">18 Flagged</div>
+              <div class="inst-stat-sub">Immediate syllabus replacements required</div>
+            </div>
+            <div class="institute-stat-card">
+              <div class="inst-stat-label">NSQF Level Compliance</div>
+              <div class="inst-stat-val" style="color: var(--color-emerald);">94.6%</div>
+              <div class="inst-stat-sub">Aligned with NCVET standard 2026</div>
+            </div>
+            <div class="institute-stat-card">
+              <div class="inst-stat-label">Lab Machinery Requisitions</div>
+              <div class="inst-stat-val" style="color: #0284C7;">12 Pending</div>
+              <div class="inst-stat-sub">Physical tooling & simulator upgrades</div>
+            </div>
+          </div>
+
+          <!-- Section: Granular Syllabus Directives -->
+          <div class="section-header reveal-on-scroll">
+            <div class="section-eyebrow accent-emerald">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Instructional Operations
+            </div>
+            <h2 class="section-title">Granular Syllabus Directives</h2>
+            <p class="section-description">
+              AI-flagged alerts identifying outdated curriculum modules mapped to emerging local industrial needs. Principals can approve syllabus overhauls with one click.
+            </p>
+          </div>
+
+          <div class="directives-grid">
+            
+            <!-- Directive 1 -->
+            <div class="directive-card reveal-on-scroll delay-1">
+              <div>
+                <div class="directive-header">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #64748B;">TRADE: MECHANIC AUTO</span>
+                  <span class="directive-priority-badge priority-critical">Critical Surge</span>
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--color-navy); margin-bottom: 0.6rem;">Automotive EV Powertrain Upgrade</h3>
+                <div class="diff-box">
+                  <div class="diff-row">
+                    <span class="diff-badge-old">REPLACE</span>
+                    <span class="diff-text-old">Legacy Carburetor Tuning & 2-Stroke ICE Maintenance (Module 4)</span>
+                  </div>
+                  <div class="diff-row">
+                    <span class="diff-badge-new">NEW</span>
+                    <span class="diff-text-new">Electric Vehicle Powertrain, CAN-Bus Telemetry & BMS Diagnostics (NSQF-6)</span>
+                  </div>
+                </div>
+                <div class="directive-meta">
+                  <span>Target Centers: <strong>Pune & Nashik ITIs</strong></span>
+                  <span>Demand: <strong>1,570 Open Postings</strong></span>
+                </div>
+              </div>
+              <button class="btn-primary-action approve-directive-btn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve Institutional Directive
+              </button>
+            </div>
+
+            <!-- Directive 2 -->
+            <div class="directive-card reveal-on-scroll delay-2">
+              <div>
+                <div class="directive-header">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #64748B;">TRADE: DRAUGHTSMAN MECH</span>
+                  <span class="directive-priority-badge priority-high">High Priority</span>
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--color-navy); margin-bottom: 0.6rem;">3D CAD/CAM NX Digital Twin</h3>
+                <div class="diff-box">
+                  <div class="diff-row">
+                    <span class="diff-badge-old">REPLACE</span>
+                    <span class="diff-text-old">Manual 2D Drawing Board Drafting & Isometric Projections</span>
+                  </div>
+                  <div class="diff-row">
+                    <span class="diff-badge-new">NEW</span>
+                    <span class="diff-text-new">Siemens NX, CATIA V5 Parametric Design & CNC Toolpath Simulation</span>
+                  </div>
+                </div>
+                <div class="directive-meta">
+                  <span>Target Centers: <strong>Chh. Sambhajinagar ITIs</strong></span>
+                  <span>Demand: <strong>580 Open Postings</strong></span>
+                </div>
+              </div>
+              <button class="btn-primary-action approve-directive-btn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve Institutional Directive
+              </button>
+            </div>
+
+            <!-- Directive 3 -->
+            <div class="directive-card reveal-on-scroll delay-3">
+              <div>
+                <div class="directive-header">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #64748B;">TRADE: COPA (IT OPS)</span>
+                  <span class="directive-priority-badge priority-high">High Priority</span>
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--color-navy); margin-bottom: 0.6rem;">Full-Stack JS & Cloud DevOps</h3>
+                <div class="diff-box">
+                  <div class="diff-row">
+                    <span class="diff-badge-old">REPLACE</span>
+                    <span class="diff-text-old">Legacy Desktop Publishing, DTP & Office 2007 Macros</span>
+                  </div>
+                  <div class="diff-row">
+                    <span class="diff-badge-new">NEW</span>
+                    <span class="diff-text-new">Modern React, Node.js REST APIs, PostgreSQL & Docker Containerization</span>
+                  </div>
+                </div>
+                <div class="directive-meta">
+                  <span>Target Centers: <strong>Mumbai MMR & Thane ITIs</strong></span>
+                  <span>Demand: <strong>1,950 Open Postings</strong></span>
+                </div>
+              </div>
+              <button class="btn-primary-action approve-directive-btn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve Institutional Directive
+              </button>
+            </div>
+
+            <!-- Directive 4 -->
+            <div class="directive-card reveal-on-scroll delay-4">
+              <div>
+                <div class="directive-header">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #64748B;">TRADE: WELDER (FABRICATION)</span>
+                  <span class="directive-priority-badge priority-medium">Medium Priority</span>
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--color-navy); margin-bottom: 0.6rem;">Robotic Welding & AWS CWI Testing</h3>
+                <div class="diff-box">
+                  <div class="diff-row">
+                    <span class="diff-badge-old">REPLACE</span>
+                    <span class="diff-text-old">Manual SMAW Shielded Arc Welding & Basic Gas Torch Cutting</span>
+                  </div>
+                  <div class="diff-row">
+                    <span class="diff-badge-new">NEW</span>
+                    <span class="diff-text-new">6-Axis Robotic Welding Cells & Ultrasonic Non-Destructive Testing (NDT)</span>
+                  </div>
+                </div>
+                <div class="directive-meta">
+                  <span>Target Centers: <strong>Nashik & Pune ITIs</strong></span>
+                  <span>Demand: <strong>590 Open Postings</strong></span>
+                </div>
+              </div>
+              <button class="btn-primary-action approve-directive-btn" type="button">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve Institutional Directive
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Section: Lab Equipment Forecasting -->
+          <div class="section-header reveal-on-scroll">
+            <div class="section-eyebrow accent-cyan">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Infrastructure & Capital Planning
+            </div>
+            <h2 class="section-title">Lab Equipment Forecasting</h2>
+            <p class="section-description">
+              Automated physical machinery procurement recommendations matched to industrial hub demands. Direct tenders dispatched through the GeM portal.
+            </p>
+          </div>
+
+          <div class="equipment-forecast-grid">
+            
+            <div class="equipment-card reveal-on-scroll delay-1">
+              <div>
+                <h3 class="equipment-name">48V Modular EV Battery Test Bench</h3>
+                <div class="equipment-target">Target: ITI Aundh, Pune • ₹45 Lakhs Est.</div>
+                <ul class="equipment-specs-list">
+                  <li>✓ Active Cell Balancing Rig (Li-ion & LFP)</li>
+                  <li>✓ Dual CAN-bus diagnostic telemetry analyzer</li>
+                  <li>✓ Thermal runaway simulator & safety containment</li>
+                </ul>
+              </div>
+              <button class="btn-secondary" onclick="simulateProcurement('48V EV Test Bench', 'Pune')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Requisition via GeM Portal
+              </button>
+            </div>
+
+            <div class="equipment-card reveal-on-scroll delay-2">
+              <div>
+                <h3 class="equipment-name">5-Axis Siemens NX CNC Turning Center</h3>
+                <div class="equipment-target">Target: ITI Waluj, Chh. Sambhajinagar • ₹85 Lakhs Est.</div>
+                <ul class="equipment-specs-list">
+                  <li>✓ 12-tool live turret with Fanuc/Siemens controller</li>
+                  <li>✓ Real-time toolpath collision verification software</li>
+                  <li>✓ Renishaw workpiece inspection probe integration</li>
+                </ul>
+              </div>
+              <button class="btn-secondary" onclick="simulateProcurement('5-Axis CNC Center', 'Chh. Sambhajinagar')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Requisition via GeM Portal
+              </button>
+            </div>
+
+            <div class="equipment-card reveal-on-scroll delay-3">
+              <div>
+                <h3 class="equipment-name">Shimadzu HPLC Dual-Pump Skid</h3>
+                <div class="equipment-target">Target: ITI Thane • ₹32 Lakhs Est.</div>
+                <ul class="equipment-specs-list">
+                  <li>✓ UV-Vis photodiode array (PDA) detector</li>
+                  <li>✓ Empower chromatography data software suite</li>
+                  <li>✓ 21 CFR Part 11 electronic record compliance</li>
+                </ul>
+              </div>
+              <button class="btn-secondary" onclick="simulateProcurement('HPLC Skid', 'Thane')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Requisition via GeM Portal
+              </button>
+            </div>
+
+            <div class="equipment-card reveal-on-scroll delay-4">
+              <div>
+                <h3 class="equipment-name">Miniature Autonomous AGV Sorting Track</h3>
+                <div class="equipment-target">Target: ITI MIHAN, Nagpur • ₹28 Lakhs Est.</div>
+                <ul class="equipment-specs-list">
+                  <li>✓ Optical & LiDAR line-follower navigation</li>
+                  <li>✓ Industrial PLC supervisory wireless dispatch</li>
+                  <li>✓ Barcode sorting mechanism & pneumatic diverter</li>
+                </ul>
+              </div>
+              <button class="btn-secondary" onclick="simulateProcurement('AGV Sorting Track', 'Nagpur')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Requisition via GeM Portal
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================
+         STAKEHOLDER DASHBOARD C: EMPLOYER / INDUSTRY (DEMAND & PIPELINE)
+         ====================================================================== -->
+    <div id="employerDashboard" class="stakeholder-dashboard" style="display: none;">
+      
+      <section class="employer-section">
+        <div class="container">
+          
+          <!-- Future Talent Radar Timeline -->
+          <div class="talent-radar-wrapper reveal-on-scroll">
+            <div class="section-eyebrow accent-emerald" style="color: #6EE7B7; background: rgba(16, 185, 129, 0.2);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+              Predictive Cohort Telemetry
+            </div>
+            <h2 style="font-size: 1.65rem; font-weight: 800; letter-spacing: -0.02em; color: #FFFFFF; margin-bottom: 0.5rem;">
+              Future Talent Radar (2027 Cohorts)
+            </h2>
+            <p style="font-size: 0.92rem; color: #94A3B8; max-width: 44rem;">
+              Timeline showing when appropriately skilled, NSQF-certified ITI batches graduate across Maharashtra. Reserve hiring quotas up to 9 months in advance.
+            </p>
+
+            <div class="radar-timeline-grid">
+              
+              <div class="radar-node">
+                <span class="radar-quarter-badge">Q1 2027 GRADUATION</span>
+                <h4 class="radar-cohort-title">EV Diagnostics & BMS Techs</h4>
+                <div class="radar-cohort-size">1,420 Hires</div>
+                <div class="radar-cohort-centers">Pune Aundh, Nashik & Talegaon ITIs • Tata Motors & Bajaj Pipeline</div>
+              </div>
+
+              <div class="radar-node">
+                <span class="radar-quarter-badge">Q2 2027 GRADUATION</span>
+                <h4 class="radar-cohort-title">Cloud DevOps & Full-Stack</h4>
+                <div class="radar-cohort-size">2,150 Hires</div>
+                <div class="radar-cohort-centers">Mumbai Dadar, Thane & Navi Mumbai ITIs • TCS & Jio Enterprise Pipeline</div>
+              </div>
+
+              <div class="radar-node">
+                <span class="radar-quarter-badge">Q3 2027 GRADUATION</span>
+                <h4 class="radar-cohort-title">Robotics & Warehouse AGVs</h4>
+                <div class="radar-cohort-size">890 Hires</div>
+                <div class="radar-cohort-centers">Nagpur MIHAN & Butibori ITIs • Amazon Logistics & MIHAN SEZ Pipeline</div>
+              </div>
+
+              <div class="radar-node">
+                <span class="radar-quarter-badge">Q4 2027 GRADUATION</span>
+                <h4 class="radar-cohort-title">5-Axis CNC Precision Tooling</h4>
+                <div class="radar-cohort-size">740 Hires</div>
+                <div class="radar-cohort-centers">Chh. Sambhajinagar Waluj & Pune ITIs • Bharat Forge & Siemens Pipeline</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Hyper-Local Deficit Reporting Intake Form -->
+          <div class="intake-form-container reveal-on-scroll">
+            <div class="section-eyebrow">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              Direct Vector Engine Signal Intake
+            </div>
+            <h2 class="section-title">Hyper-Local Deficit Reporting</h2>
+            <p class="section-description">
+              Employers can flag missing hyper-specific skills directly to the state AI vector engine. New skill signals trigger instant curriculum recalculations.
+            </p>
+
+            <form id="deficitIntakeForm" onsubmit="handleDeficitSubmit(event)">
+              <div class="intake-form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="intakeDistrict">Industrial District / Region</label>
+                  <select id="intakeDistrict" class="form-select" required>
+                    <option value="Pune">Pune MIDC & Tech Hub</option>
+                    <option value="Mumbai">Mumbai Metropolitan Region (MMR)</option>
+                    <option value="Thane">Thane Industrial Belt & Belapur</option>
+                    <option value="Nagpur">Nagpur MIHAN Logistics SEZ</option>
+                    <option value="Nashik">Nashik Agri-Tech & Manufacturing</option>
+                    <option value="Chhatrapati Sambhajinagar">Chhatrapati Sambhajinagar DMIC</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="intakeSector">Industry Sector</label>
+                  <select id="intakeSector" class="form-select" required>
+                    <option value="Automotive & EV">Automotive, Battery & EV Mobility</option>
+                    <option value="Cloud & GenAI">Cloud DevOps, IT & Generative AI</option>
+                    <option value="Precision Engineering">5-Axis CNC & Precision Tooling</option>
+                    <option value="Pharma & Biotech">Specialty Pharmaceuticals & HPLC QC</option>
+                    <option value="Logistics & Robotics">Warehouse Automation & AGV Robotics</option>
+                    <option value="Clean-Tech & Solar">Solar Photovoltaic & BESS Storage</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="intakeSkill">Missing Technical Skill / Tool / Machinery</label>
+                  <input type="text" id="intakeSkill" class="form-input" placeholder="e.g. Transcritical CO2 Refrigeration, PyTorch TensorRT, Fanuc CNC" required />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="intakeVacancies">Estimated Immediate Hiring Demand (Openings)</label>
+                  <input type="number" id="intakeVacancies" class="form-input" min="5" max="5000" placeholder="e.g. 150" required />
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label" for="intakeCompany">Company / Consortium Name</label>
+                  <input type="text" id="intakeCompany" class="form-input" placeholder="e.g. Tata Motors EV Powertrain Division, Cipla Biotech, Bharat Forge" required />
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn-primary-action" id="submitSignalBtn" style="padding: 0.85rem 1.6rem; font-size: 0.9rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                  Submit Skill Signal to PyTorch Vector Engine
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Direct Placement Matching Pipeline -->
+          <div class="section-header reveal-on-scroll">
+            <div class="section-eyebrow accent-emerald">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+              Verified Candidate Sourcing
+            </div>
+            <h2 class="section-title">Direct Placement Matching</h2>
+            <p class="section-description">
+              Fast-track hiring pipeline connecting certified Maharashtra ITI & polytechnic graduates directly to regional employers with verified NSQF credentials.
+            </p>
+          </div>
+
+          <div class="candidates-pipeline-grid">
+            
+            <div class="candidate-card reveal-on-scroll delay-1">
+              <div>
+                <div class="candidate-header">
+                  <div>
+                    <h3 class="candidate-name">Rohan Deshmukh</h3>
+                    <div class="candidate-center">ITI Aundh, Pune • NSQF Level 6</div>
+                  </div>
+                  <span class="candidate-match-score">96% Match</span>
+                </div>
+                <div class="candidate-skills-row">
+                  <span class="cand-skill-pill">48V Battery BMS</span>
+                  <span class="cand-skill-pill">CAN-Bus Analyzer</span>
+                  <span class="cand-skill-pill">PyTorch Telemetry</span>
+                  <span class="cand-skill-pill">High Voltage Safety</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748B; margin-bottom: 1rem;">
+                  Specialized in EV battery pack diagnostics with 240 lab hours on modular diagnostic benches.
+                </p>
+              </div>
+              <button class="btn-primary-action" onclick="scheduleInterview('Rohan Deshmukh', 'Tata Motors EV')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                Fast-Track Interview
+              </button>
+            </div>
+
+            <div class="candidate-card reveal-on-scroll delay-2">
+              <div>
+                <div class="candidate-header">
+                  <div>
+                    <h3 class="candidate-name">Ananya Kulkarni</h3>
+                    <div class="candidate-center">ITI Dadar, Mumbai • NSQF Level 6</div>
+                  </div>
+                  <span class="candidate-match-score">94% Match</span>
+                </div>
+                <div class="candidate-skills-row">
+                  <span class="cand-skill-pill">React 18</span>
+                  <span class="cand-skill-pill">Node.js REST APIs</span>
+                  <span class="cand-skill-pill">Docker Containers</span>
+                  <span class="cand-skill-pill">PostgreSQL</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748B; margin-bottom: 1rem;">
+                  Full-stack developer certified in microservices deployment with production Git workflow.
+                </p>
+              </div>
+              <button class="btn-primary-action" onclick="scheduleInterview('Ananya Kulkarni', 'TCS Cloud')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                Fast-Track Interview
+              </button>
+            </div>
+
+            <div class="candidate-card reveal-on-scroll delay-3">
+              <div>
+                <div class="candidate-header">
+                  <div>
+                    <h3 class="candidate-name">Siddharth Shinde</h3>
+                    <div class="candidate-center">ITI Waluj, Sambhajinagar • NSQF Level 5</div>
+                  </div>
+                  <span class="candidate-match-score">95% Match</span>
+                </div>
+                <div class="candidate-skills-row">
+                  <span class="cand-skill-pill">5-Axis Siemens NX</span>
+                  <span class="cand-skill-pill">Fanuc CNC Turning</span>
+                  <span class="cand-skill-pill">GD&T Standards</span>
+                  <span class="cand-skill-pill">CMM Metrology</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748B; margin-bottom: 1rem;">
+                  Precision machinist experienced in multi-axis CAD/CAM toolpaths and die/mold tolerances.
+                </p>
+              </div>
+              <button class="btn-primary-action" onclick="scheduleInterview('Siddharth Shinde', 'Bharat Forge')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                Fast-Track Interview
+              </button>
+            </div>
+
+            <div class="candidate-card reveal-on-scroll delay-4">
+              <div>
+                <div class="candidate-header">
+                  <div>
+                    <h3 class="candidate-name">Pooja Patil</h3>
+                    <div class="candidate-center">ITI Thane • NSQF Level 5</div>
+                  </div>
+                  <span class="candidate-match-score">91% Match</span>
+                </div>
+                <div class="candidate-skills-row">
+                  <span class="cand-skill-pill">HPLC Chromatography</span>
+                  <span class="cand-skill-pill">Pharma QC / QA</span>
+                  <span class="cand-skill-pill">Empower Software</span>
+                  <span class="cand-skill-pill">cGMP Protocols</span>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748B; margin-bottom: 1rem;">
+                  Analytical chemistry technician with hands-on chromatography skid experience.
+                </p>
+              </div>
+              <button class="btn-primary-action" onclick="scheduleInterview('Pooja Patil', 'Cipla Biotech')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                Fast-Track Interview
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================
+         CORE PYTORCH VECTOR ENGINE & HEATMAP (SHARED/INTEGRATED)
          ====================================================================== -->
     <section class="engine-section" id="engineSection">
       <div class="container">
@@ -1515,7 +2957,6 @@
 
         <div class="engine-card reveal-on-scroll">
           
-          <!-- Input Column -->
           <div class="input-column">
             <div class="input-label-row">
               <label for="curriculumInput" class="input-label">
@@ -1525,7 +2966,6 @@
               <span class="model-spec-tag">MiniLM-L6-v2 • 384-dim</span>
             </div>
 
-            <!-- Preset Chips -->
             <div class="quick-preset-chips">
               <span class="preset-chip" data-text="Basic Data Structures, Arrays, Linked Lists, Trees, Graph Traversal, Time Complexity analysis, Memory Allocation in C++">
                 Basic Data Structures
@@ -1536,33 +2976,30 @@
               <span class="preset-chip" data-text="Industrial Automation, PLC Programming, SCADA Systems, Sensor Interfacing, Modbus Protocol, Pneumatic Circuits">
                 Industrial IoT & PLC
               </span>
-              <span class="preset-chip" data-text="Full-Stack Web Development, Modern JavaScript, React Component Architecture, Node.js REST APIs, PostgreSQL Relational Database Design">
-                Full-Stack Web Engineering
+              <span class="preset-chip" data-text="Electric Vehicle Powertrain, 48V Modular Battery Pack Diagnostics, CAN-Bus Telemetry Protocol, High-Voltage Safety Standards">
+                Electric Vehicle Diagnostics
               </span>
             </div>
 
-            <!-- Textarea -->
             <div class="textarea-wrapper">
               <textarea 
                 id="curriculumInput" 
                 class="curriculum-textarea" 
-                placeholder="Type or paste syllabus topics (e.g. Basic Data Structures, Binary Search Trees, Dynamic Programming, Stack and Queue implementations...)"
-              >Basic Data Structures: Linear Arrays, Singly and Doubly Linked Lists, Binary Search Trees, Graph Traversal Algorithms (BFS/DFS), Time & Space Complexity Big-O Analysis, Memory Management in C++.</textarea>
+                placeholder="Type or paste syllabus topics..."
+              >Electric Vehicle Powertrain, 48V Modular Battery Pack Diagnostics, CAN-Bus Telemetry Protocol, High-Voltage DC Arc Flash Safety Standards.</textarea>
               
               <div class="textarea-meta">
-                <span>Input character count: <strong id="charCountDisplay" class="char-count">196</strong> chars</span>
+                <span>Input character count: <strong id="charCountDisplay" class="char-count">134</strong> chars</span>
                 <span>Language: English (Technical NSQF)</span>
               </div>
             </div>
 
-            <!-- Extraction Trigger Button -->
             <button id="runNlpBtn" class="btn-extract" type="button">
               <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
               <span>Run NLP Skill Extraction</span>
             </button>
           </div>
 
-          <!-- Output / Vector Display Column -->
           <div class="output-column">
             <div class="output-header">
               <span class="output-title">
@@ -1573,24 +3010,21 @@
             </div>
 
             <div class="skills-badges-container" id="extractedSkillsContainer">
-              <!-- Dynamically populated or default skills -->
-              <span class="skill-tag high-demand">Data Structures (NSQF-6)</span>
-              <span class="skill-tag high-demand">Algorithmic Efficiency</span>
-              <span class="skill-tag high-demand">Binary Search Trees</span>
-              <span class="skill-tag">Graph Traversal (BFS/DFS)</span>
-              <span class="skill-tag high-demand">Memory Management</span>
-              <span class="skill-tag gap">⚠️ Cloud Architecture (Missing)</span>
-              <span class="skill-tag gap">⚠️ Async Systems (Missing)</span>
+              <span class="skill-tag high-demand">Electric Vehicle Diagnostics (NSQF-6)</span>
+              <span class="skill-tag high-demand">CAN-bus Telemetry Protocol</span>
+              <span class="skill-tag high-demand">BESS Battery Energy Storage</span>
+              <span class="skill-tag">High-Voltage Safety Protocols</span>
+              <span class="skill-tag gap">⚠️ Thermal Runaway Mitigation (Gap)</span>
+              <span class="skill-tag gap">⚠️ Cloud Inverter SCADA (Gap)</span>
             </div>
 
-            <!-- Vector Embedding Preview Terminal -->
             <div class="vector-terminal">
               <div class="vector-label">
                 <span>DENSE VECTOR EMBEDDING (384 DIMENSIONS)</span>
-                <span id="vectorCosineSim">Cosine Sim: 0.884</span>
+                <span id="vectorCosineSim">Cosine Sim: 0.912</span>
               </div>
               <div class="vector-data" id="vectorDataSnippet">
-                [-0.0418, 0.0823, -0.1942, 0.3120, -0.0049, 0.1582, -0.2410, 0.0911, 0.2033, -0.1147, 0.4019, 0.0125, -0.0784, 0.1982, -0.0543, 0.1190, -0.3201, 0.2845, -0.1402, 0.0917 ... +364 dims]
+                [-0.0381, 0.1245, -0.2104, 0.3892, -0.0123, 0.1742, -0.1983, 0.0841, 0.2312, -0.0984, 0.4120, 0.0215 ... +368 dims]
               </div>
             </div>
           </div>
@@ -1599,9 +3033,7 @@
       </div>
     </section>
 
-    <!-- ======================================================================
-         4. DYNAMIC CURRICULUM HEATMAP SECTION
-         ====================================================================== -->
+    <!-- Dynamic Curriculum Heatmap Section -->
     <section class="heatmap-section" id="heatmapSection">
       <div class="container">
         
@@ -1617,7 +3049,6 @@
             </p>
           </div>
 
-          <!-- Color Matrix Legend -->
           <div class="heatmap-legend">
             <div class="legend-item">
               <span class="legend-dot emerald"></span>
@@ -1625,11 +3056,11 @@
             </div>
             <div class="legend-item">
               <span class="legend-dot amber"></span>
-              <span>Moderate (50-79%)</span>
+              <span>Moderate (55-79%)</span>
             </div>
             <div class="legend-item">
               <span class="legend-dot coral"></span>
-              <span>Critical Deficit (&lt;50%)</span>
+              <span>Critical Deficit (&lt;55%)</span>
             </div>
           </div>
         </div>
@@ -1641,9 +3072,7 @@
       </div>
     </section>
 
-    <!-- ======================================================================
-         5. DISTRICT-LEVEL ACTION PLANS
-         ====================================================================== -->
+    <!-- District Action Plans Section -->
     <section class="districts-section" id="districtsSection">
       <div class="container">
         
@@ -1658,8 +3087,6 @@
           </p>
         </div>
 
-        <!-- 6 District Cards: Pune, Mumbai, Thane, Nagpur, Nashik, Chhatrapati Sambhajinagar -->
-        <!-- District Search Filter -->
         <div style="margin-bottom: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
           <input type="text" id="districtSearchInput" placeholder="Search district or sector..."
             style="flex: 1; min-width: 14rem; padding: 0.6rem 1rem; font-family: var(--font-sans); font-size: 0.88rem;
@@ -1673,6 +3100,7 @@
             Download District Action Report (CSV/PDF)
           </button>
         </div>
+
         <div class="districts-grid" id="districtsGrid">
           
           <!-- Card 1: Pune -->
@@ -1699,7 +3127,7 @@
               <span class="district-tag-pill">EV Powertrain</span>
               <span class="district-tag-pill">Industrial IoT</span>
             </div>
-            <div class="view-plan-cta">
+            <div class="view-plan-cta view-plan-btn">
               <span>View Capacity Reallocation Plan</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -1729,7 +3157,7 @@
               <span class="district-tag-pill">Cyber Security & BFSI</span>
               <span class="district-tag-pill">GenAI & LLMs</span>
             </div>
-            <div class="view-plan-cta">
+            <div class="view-plan-cta view-plan-btn">
               <span>View Capacity Reallocation Plan</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -1759,7 +3187,7 @@
               <span class="district-tag-pill">Full-Stack Web</span>
               <span class="district-tag-pill">Logistics & SAP SCM</span>
             </div>
-            <div class="view-plan-cta">
+            <div class="view-plan-cta view-plan-btn">
               <span>View Capacity Reallocation Plan</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -1789,7 +3217,7 @@
               <span class="district-tag-pill">Warehouse AGV Robotics</span>
               <span class="district-tag-pill">Solar PV & BESS</span>
             </div>
-            <div class="view-plan-cta">
+            <div class="view-plan-cta view-plan-btn">
               <span>View Capacity Reallocation Plan</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -1819,7 +3247,7 @@
               <span class="district-tag-pill">Precision Agri & Drone</span>
               <span class="district-tag-pill">Food Processing HACCP</span>
             </div>
-            <div class="view-plan-cta">
+            <div class="view-plan-cta view-plan-btn">
               <span>View Capacity Reallocation Plan</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -1849,7 +3277,7 @@
               <span class="district-tag-pill">CNC Machining & Tooling</span>
               <span class="district-tag-pill">Industrial Refrigeration</span>
             </div>
-            <div class="view-plan-cta">
+            <div class="view-plan-cta view-plan-btn">
               <span>View Capacity Reallocation Plan</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -1857,7 +3285,7 @@
 
         </div>
 
-        <!-- Dynamic Action Plan Details View -->
+        <!-- Dynamic Action Plan Details Card -->
         <div class="action-plan-detail-card reveal-on-scroll" id="actionPlanDetailCard">
           <div class="action-plan-header">
             <div class="plan-title-block">
@@ -1872,14 +3300,13 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 Export Plan (CSV)
               </button>
-              <button class="btn-primary-action" id="approvePlanBtn" type="button">
+              <button class="btn-primary-action approve-directive-btn" id="approvePlanBtn" type="button">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
                 Approve Institutional Directive
               </button>
             </div>
           </div>
 
-          <!-- Table of Program Recommendations -->
           <div style="overflow-x: auto;">
             <table class="upgrade-items-table" id="planItemsTable">
               <thead>
@@ -1893,7 +3320,7 @@
                 </tr>
               </thead>
               <tbody id="planTableBody">
-                <!-- Dynamically populated -->
+                <!-- Dynamically populated by JS -->
               </tbody>
             </table>
           </div>
@@ -1903,6 +3330,61 @@
     </section>
 
   </main>
+
+  <!-- ========================================================================
+       AUDIT REPORT MODAL (SIH PS 26134 COMPLIANCE DOSSIER)
+       ======================================================================== -->
+  <div class="audit-modal-backdrop" id="auditModalBackdrop">
+    <div class="audit-modal-box">
+      <div class="audit-modal-header">
+        <div>
+          <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #34D399; font-weight: 700;">
+            OFFICIAL GOV-TECH INTELLIGENCE AUDIT
+          </div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: #FFFFFF;">
+            Maharashtra Labour-Market & Curriculum Intelligence Report
+          </h3>
+          <div style="font-size: 0.78rem; color: #94A3B8;">Document Ref: MSSDS/SIH-26134/2026-Q3 • Directorate of Vocational Education</div>
+        </div>
+        <button class="modal-close-btn" id="closeAuditModalBtn" type="button">&times;</button>
+      </div>
+      
+      <div class="audit-modal-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; background: #F8FAFC; padding: 1.25rem; border-radius: 0.85rem; border: 1px solid var(--color-border);">
+          <div>
+            <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; font-weight: 700;">Executive Metric</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--color-navy);">99.4% Agility Index</div>
+            <div style="font-size: 0.75rem; color: var(--color-emerald-dark); font-weight: 600;">✓ Latency reduced to 4.2 days</div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; color: #64748B; text-transform: uppercase; font-weight: 700;">Verified Coverage</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--color-navy);">36 Districts Synced</div>
+            <div style="font-size: 0.75rem; color: #0284C7; font-weight: 600;">✓ 100% MSSDS / ITI Network</div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 0.6rem; color: var(--color-navy);">Statewide Capital Reallocation Summary (Q3 2026)</h4>
+        <p style="font-size: 0.84rem; color: #475569; line-height: 1.6; margin-bottom: 1rem;">
+          Based on PyTorch dense vector embeddings across 25+ verified Maharashtra industrial requisitions, the following capital transfers are authorized under SIH PS 26134:
+        </p>
+
+        <ul style="font-size: 0.82rem; color: #334155; line-height: 1.6; margin-bottom: 1.5rem; padding-left: 1.2rem;">
+          <li><strong>Pune District (₹4.80 Cr):</strong> 48V EV Battery Test Benches authorized for ITI Aundh (42 deficit skills).</li>
+          <li><strong>Chhatrapati Sambhajinagar (₹3.20 Cr):</strong> 5-Axis Siemens NX CNC Machining Center authorized for ITI Waluj.</li>
+          <li><strong>Nagpur MIHAN (₹2.75 Cr):</strong> Automated Guided Vehicle (AGV) logistics sorting track for MIHAN SEZ cluster.</li>
+          <li><strong>Thane Industrial Belt (₹1.90 Cr):</strong> Shimadzu HPLC chromatography quality skids for Wagle Estate pharma corridor.</li>
+        </ul>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid var(--color-border); padding-top: 1.25rem;">
+          <button class="btn-secondary" id="modalCloseActionBtn" type="button">Close</button>
+          <button class="btn-primary-action" id="downloadOfficialPdfBtn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download Official Signed Report (PDF)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================================
        FOOTER
