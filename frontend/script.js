@@ -525,7 +525,7 @@ export function enforceRoleSecurity() {
 function initExtractionEngine() {
   const textarea = document.getElementById('curriculumInput');
   const charDisplay = document.getElementById('charCountDisplay');
-  const extractBtn = document.getElementById('runNlpBtn');
+  const extractBtn = document.getElementById('btn-vectorize') || document.getElementById('runNlpBtn') || document.querySelector('.btn-extract');
   const presetChips = document.querySelectorAll('.preset-chip');
 
   if (textarea && charDisplay) {
@@ -556,7 +556,7 @@ async function triggerSkillExtraction() {
   if (state.isExtracting) return;
   state.isExtracting = true;
 
-  const btn = document.getElementById('runNlpBtn');
+  const btn = document.getElementById('btn-vectorize') || document.getElementById('runNlpBtn') || document.querySelector('.btn-extract');
   const textarea = document.getElementById('curriculumInput');
   const statusPill = document.getElementById('extractionPill');
   const skillsContainer = document.getElementById('extractedSkillsContainer');
@@ -565,7 +565,7 @@ async function triggerSkillExtraction() {
 
   const text = textarea ? textarea.value.trim() : '';
   if (!text) {
-    showToast('Please enter a curriculum module to extract skills.');
+    showToast('Please enter a curriculum module or skill description to extract.');
     state.isExtracting = false;
     return;
   }
@@ -625,81 +625,190 @@ async function triggerSkillExtraction() {
     if (state.activeRole === 'gov') {
       renderDynamicHeatmap(extractedData.scoreBias);
     }
-    showToast('Semantic Vectorization & NSQF Matching Complete!');
-  }, 400);
+    showToast(`SkillSetu Vector Engine: ${extractedData.statusDetail}`);
+  }, 350);
 }
 
 function generateExtractionResult(inputText, apiResult) {
-  const lower = inputText.toLowerCase();
+  const lower = (inputText || '').toLowerCase();
 
   let skills = [];
+  let cosineSimilarity = 0.74;
+  let statusDetail = 'Vector matching complete';
   let scoreBias = 0;
 
-  if (lower.includes('deep learning') || lower.includes('neural') || lower.includes('genai') || lower.includes('ai')) {
+  // Rule 1: Software / Programming terms ("java", "dsa", "python", "web", "cloud", "javascript", "react", "c++", "data structure", "sql", "backend", "frontend", "api")
+  if (
+    lower.includes('java') || 
+    lower.includes('dsa') || 
+    lower.includes('python') || 
+    lower.includes('web') || 
+    lower.includes('cloud') ||
+    lower.includes('data structure') ||
+    lower.includes('software') ||
+    lower.includes('algorithm') ||
+    lower.includes('react') ||
+    lower.includes('javascript') ||
+    lower.includes('sql') ||
+    lower.includes('backend') ||
+    lower.includes('frontend') ||
+    lower.includes('api') ||
+    lower.includes('programming')
+  ) {
     skills = [
-      { name: 'PyTorch Tensor Mathematics (NSQF-7)', type: 'high-demand' },
-      { name: 'Neural Network Gradient Descent', type: 'high-demand' },
-      { name: 'Convolutional & Transformer Layers', type: 'high-demand' },
-      { name: 'Model Quantization & ONNX Export', type: 'high-demand' },
-      { name: 'Generative AI & LLM RAG Pipelines', type: 'high-demand' },
-      { name: '⚠️ Kubernetes MLOps Pipelines (Gap)', type: 'gap' }
+      { name: 'Core Java & OOP Concepts', type: 'high-demand' },
+      { name: 'Data Structures & Algorithms', type: 'high-demand' },
+      { name: 'Algorithm Complexity & Problem Solving', type: 'high-demand' },
+      { name: '⚠️ Spring Boot Framework (Gap)', type: 'gap' },
+      { name: '⚠️ RESTful API Integration (Gap)', type: 'gap' }
     ];
-    scoreBias = 24;
-  } else if (lower.includes('plc') || lower.includes('automation') || lower.includes('scada')) {
+    cosineSimilarity = 0.74;
+    statusDetail = 'Flags update needed for COPA curriculum (74.0% Alignment)';
+    scoreBias = 15;
+  }
+  // Rule 2: Electrical / Auto / Motor terms ("ev", "battery", "motor", "plc", "electric", "automotive", "solar", "inverter")
+  else if (
+    lower.includes('ev') || 
+    lower.includes('battery') || 
+    lower.includes('motor') || 
+    lower.includes('plc') ||
+    lower.includes('electric') ||
+    lower.includes('automotive') ||
+    lower.includes('powertrain') ||
+    lower.includes('bms') ||
+    lower.includes('solar') ||
+    lower.includes('inverter') ||
+    lower.includes('controller')
+  ) {
     skills = [
-      { name: 'Programmable Logic Controllers (PLC)', type: 'high-demand' },
-      { name: 'SCADA Supervisory Control Systems', type: 'high-demand' },
-      { name: 'Industrial Modbus & Profinet Protocols', type: 'high-demand' },
-      { name: 'Ladder Logic Programming (IEC 61131-3)', type: '' },
-      { name: '⚠️ Edge IoT Cybersecurity (Gap)', type: 'gap' }
+      { name: 'Battery Management Systems (BMS)', type: 'high-demand' },
+      { name: 'Motor Controller Diagnostics', type: 'high-demand' },
+      { name: 'High-Voltage Safety Protocols', type: 'high-demand' },
+      { name: '⚠️ CAN-Bus Diagnostics (Gap)', type: 'gap' }
     ];
-    scoreBias = 16;
-  } else if (lower.includes('solar') || lower.includes('ev') || lower.includes('battery')) {
+    cosineSimilarity = 0.62;
+    statusDetail = 'Critical Deficit (62.0% Alignment - Below 75% Threshold)';
+    scoreBias = -12;
+  }
+  // Rule 3: Precision Manufacturing & CNC terms ("cnc", "machining", "nx", "cad", "cam", "lathe", "tooling", "vmc")
+  else if (
+    lower.includes('cnc') ||
+    lower.includes('machining') ||
+    lower.includes('nx') ||
+    lower.includes('cad') ||
+    lower.includes('cam') ||
+    lower.includes('lathe') ||
+    lower.includes('turning') ||
+    lower.includes('tooling') ||
+    lower.includes('vmc')
+  ) {
     skills = [
-      { name: 'Electric Vehicle Diagnostics (NSQF-6)', type: 'high-demand' },
-      { name: 'CAN-bus Telemetry Protocol Analysis', type: 'high-demand' },
-      { name: '48V Battery Management Systems (BMS)', type: 'high-demand' },
-      { name: 'Solar PV Grid Inverter Commissioning', type: 'high-demand' },
-      { name: '⚠️ High-Voltage DC Safety (Gap)', type: 'gap' }
-    ];
-    scoreBias = 20;
-  } else if (lower.includes('chromatography') || lower.includes('hplc') || lower.includes('pharma')) {
-    skills = [
-      { name: 'HPLC Chromatography (NSQF-5)', type: 'high-demand' },
-      { name: '21 CFR Part 11 Electronic Compliance', type: 'high-demand' },
-      { name: 'UV-Vis Spectrophotometry', type: 'high-demand' },
-      { name: 'cGMP Documentation & Titration', type: '' },
-      { name: '⚠️ Automated Dissolution Testing (Gap)', type: 'gap' }
-    ];
-    scoreBias = 18;
-  } else {
-    skills = [
-      { name: '5-Axis VMC Machining (Fanuc/Mazak)', type: 'high-demand' },
+      { name: '5-Axis VMC Machining (Fanuc/Siemens)', type: 'high-demand' },
       { name: 'CAD/CAM Multi-Axis Toolpath Generation', type: 'high-demand' },
       { name: 'GD&T Engineering Drawing Standards', type: 'high-demand' },
       { name: 'CMM Coordinate Metrology Inspection', type: 'high-demand' },
       { name: '⚠️ High-Speed Die Cavity Milling (Gap)', type: 'gap' }
     ];
-    scoreBias = 14;
+    cosineSimilarity = 0.88;
+    statusDetail = 'Aligned with Advanced Manufacturing (88.0% Alignment)';
+    scoreBias = 20;
+  }
+  // Rule 4: Pharma / Chemical terms ("hplc", "pharma", "chromatography", "chemical", "chemistry", "titration")
+  else if (
+    lower.includes('hplc') ||
+    lower.includes('pharma') ||
+    lower.includes('chromatography') ||
+    lower.includes('chemical') ||
+    lower.includes('chemistry')
+  ) {
+    skills = [
+      { name: 'HPLC Chromatography (NSQF-5)', type: 'high-demand' },
+      { name: '21 CFR Part 11 Electronic Compliance', type: 'high-demand' },
+      { name: 'UV-Vis Spectrophotometry', type: 'high-demand' },
+      { name: '⚠️ Automated Dissolution Testing (Gap)', type: 'gap' }
+    ];
+    cosineSimilarity = 0.79;
+    statusDetail = 'Aligned with Specialty Pharma (79.0% Alignment)';
+    scoreBias = 10;
+  }
+  // Rule 5: Fallback Dynamic Tokenization Matching Typed Input Text
+  else {
+    const rawTokens = inputText
+      .replace(/[^\w\s,\-]/g, '')
+      .split(/[,;\n\.\-]+/)
+      .map(w => w.trim())
+      .filter(w => w.length > 2);
+
+    const tokenizedSkills = rawTokens.slice(0, 3).map(w => {
+      const formatted = w.charAt(0).toUpperCase() + w.slice(1);
+      return { name: `${formatted} (NSQF Standard)`, type: 'high-demand' };
+    });
+
+    if (tokenizedSkills.length === 0) {
+      tokenizedSkills.push({ name: 'Applied Vocational Technical Competency', type: 'high-demand' });
+    }
+
+    const primaryTerm = rawTokens[0] ? (rawTokens[0].charAt(0).toUpperCase() + rawTokens[0].slice(1)) : 'Industrial Tech';
+    tokenizedSkills.push({ name: `⚠️ ${primaryTerm} Advanced System Integration (Gap)`, type: 'gap' });
+
+    skills = tokenizedSkills;
+    cosineSimilarity = 0.71;
+    statusDetail = `Dynamic Extraction: ${skills.length} skills tokenized (71.0% Baseline Alignment)`;
+    scoreBias = 5;
   }
 
-  // Generate random vector array snippet
+  // Generate 384-dimensional dense vector sample
   const vectorFloats = Array.from({ length: 10 }, () => (Math.random() * 0.3 - 0.15).toFixed(4));
   const vectorSample = `[${vectorFloats.join(', ')}, ... 374 dense dimensions]`;
-  const cosSimVal = (0.84 + Math.random() * 0.12).toFixed(3);
 
   return {
     skills,
     vectorSample,
-    cosineSimilarity: cosSimVal,
+    cosineSimilarity: cosineSimilarity.toFixed(3),
+    statusDetail,
     scoreBias
   };
 }
 
 
 // ============================================================================
-// 5. CHART.JS DYNAMIC HEATMAP MATRIX (FORMAL LIGHT THEME)
+// 5. SIMPLIFIED 3-COLOR DYNAMIC HEATMAP MATRIX (FORMAL GOV-TECH STANDARD)
 // ============================================================================
+function getAlignmentStatus(score) {
+  // 3-Color Policy Alignment Standard:
+  // - Green (>75%): Aligned
+  // - Amber (60%–75%): Moderate Gap (Needs Module Additions)
+  // - Red (<60%): Critical Deficit (Requires Immediate Syllabus Revision)
+  if (score > 75) {
+    return {
+      status: 'Aligned',
+      color: '#059669',
+      bgColor: '#ECFDF5',
+      borderColor: '#A7F3D0',
+      chipClass: 'chip-aligned',
+      label: `Aligned (${score}%)`
+    };
+  } else if (score >= 60) {
+    return {
+      status: 'Moderate Gap',
+      color: '#D97706',
+      bgColor: '#FFFBEB',
+      borderColor: '#FDE68A',
+      chipClass: 'chip-moderate',
+      label: `Moderate Gap (${score}%)`
+    };
+  } else {
+    return {
+      status: 'Critical Deficit',
+      color: '#DC2626',
+      bgColor: '#FEF2F2',
+      borderColor: '#FECACA',
+      chipClass: 'chip-critical',
+      label: `Critical Deficit (${score}%)`
+    };
+  }
+}
+
 function renderDynamicHeatmap(bias = 0) {
   const canvas = document.getElementById('alignmentHeatmap');
   if (!canvas || typeof window.Chart === 'undefined') return;
@@ -720,18 +829,33 @@ function renderDynamicHeatmap(bias = 0) {
     [50, 45, 74, 42, 58, 89]
   ];
 
+  // Populate Clean 3-Color Policy Alignment Matrix Table
+  const matrixTableBody = document.getElementById('alignmentMatrixTableBody');
+  if (matrixTableBody) {
+    matrixTableBody.innerHTML = '';
+    trades.forEach((tradeName, tIdx) => {
+      const tr = document.createElement('tr');
+      let cellsHtml = `<td><strong>${tradeName}</strong></td>`;
+      sectors.forEach((secName, sIdx) => {
+        const rawScore = baseMatrix[tIdx][sIdx];
+        const score = Math.min(100, Math.max(20, rawScore + (bias !== 0 ? (bias > 0 ? 6 : -8) : 0)));
+        const info = getAlignmentStatus(score);
+        cellsHtml += `<td><span class="status-chip ${info.chipClass}">${info.label}</span></td>`;
+      });
+      tr.innerHTML = cellsHtml;
+      matrixTableBody.appendChild(tr);
+    });
+  }
+
+  // Configure Clean 3-Color Datasets for Chart.js
   const datasets = trades.map((tradeName, tIdx) => {
+    const scores = baseMatrix[tIdx].map(val => Math.min(100, Math.max(20, val + (bias !== 0 ? (bias > 0 ? 6 : -8) : 0))));
     return {
       label: tradeName,
-      data: baseMatrix[tIdx].map(val => Math.min(100, Math.max(20, val + (bias > 0 ? (bias % 8) - 4 : 0)))),
-      backgroundColor: [
-        '#0F4C81',
-        '#0284C7',
-        '#059669',
-        '#7C3AED',
-        '#D97706',
-        '#DC2626'
-      ][tIdx],
+      data: scores,
+      backgroundColor: scores.map(score => getAlignmentStatus(score).color),
+      borderColor: '#FFFFFF',
+      borderWidth: 1.5,
       borderRadius: 4,
       barPercentage: 0.75,
     };
@@ -754,7 +878,7 @@ function renderDynamicHeatmap(bias = 0) {
             font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' },
             color: '#1F2937',
             usePointStyle: true,
-            padding: 18
+            padding: 16
           }
         },
         tooltip: {
@@ -764,7 +888,9 @@ function renderDynamicHeatmap(bias = 0) {
           padding: 12,
           callbacks: {
             label: function(context) {
-              return ` ${context.dataset.label}: ${context.raw}% Alignment Score`;
+              const score = context.raw;
+              const statusInfo = getAlignmentStatus(score);
+              return ` ${context.dataset.label}: ${score}% — ${statusInfo.status}`;
             }
           }
         }
@@ -788,7 +914,7 @@ function renderDynamicHeatmap(bias = 0) {
     }
   });
 
-  canvas.style.height = '340px';
+  canvas.style.height = '320px';
 }
 
 
@@ -1050,6 +1176,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // Directive Approval & Plan Action Event Listener
 document.addEventListener('click', function(e) {
   const text = e.target.innerText || '';
+
+  // Execute Semantic Vectorization
+  if (e.target.id === 'btn-vectorize' || e.target.id === 'runNlpBtn' || e.target.closest('#btn-vectorize') || e.target.closest('#runNlpBtn') || text.includes('Execute Semantic Vectorization')) {
+    e.preventDefault();
+    triggerSkillExtraction();
+    return;
+  }
 
   // Approve Institutional Directive
   if (text.includes('Approve Institutional Directive') || text.includes('Approve Plan') || e.target.classList.contains('approve-directive-btn')) {

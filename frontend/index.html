@@ -1486,6 +1486,105 @@
       box-shadow: var(--shadow-card);
     }
 
+    /* 3-Color Alignment Indicator Legend & Clean Matrix */
+    .heatmap-legend-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      background: #F8FAFC;
+      border: 1px solid var(--color-border);
+      padding: 0.85rem 1.25rem;
+      border-radius: 0.65rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.aligned {
+      background-color: var(--color-emerald);
+      box-shadow: 0 0 0 2px var(--color-emerald-border);
+    }
+
+    .legend-dot.moderate {
+      background-color: var(--color-amber);
+      box-shadow: 0 0 0 2px var(--color-amber-border);
+    }
+
+    .legend-dot.critical {
+      background-color: var(--color-coral);
+      box-shadow: 0 0 0 2px var(--color-coral-border);
+    }
+
+    .alignment-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.75rem;
+      font-size: 0.82rem;
+    }
+
+    .alignment-matrix-table th {
+      background: #F8FAFC;
+      color: var(--color-text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      padding: 0.75rem 0.85rem;
+      text-align: left;
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .alignment-matrix-table td {
+      padding: 0.75rem 0.85rem;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-main);
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .status-chip.chip-aligned {
+      background: var(--color-emerald-bg);
+      color: var(--color-emerald);
+      border: 1px solid var(--color-emerald-border);
+    }
+
+    .status-chip.chip-moderate {
+      background: var(--color-amber-bg);
+      color: var(--color-amber);
+      border: 1px solid var(--color-amber-border);
+    }
+
+    .status-chip.chip-critical {
+      background: var(--color-coral-bg);
+      color: var(--color-coral);
+      border: 1px solid var(--color-coral-border);
+    }
+
     .districts-section {
       padding: 3rem 0;
       background: #F8FAFC;
@@ -1846,9 +1945,9 @@
         </div>
         <div class="brand-meta">
           <div class="brand-title">
-            SKILLSETU <span class="sih-tag">SIH PS 26134</span>
+            SKILLSETU <span style="font-weight: 400; color: #94A3B8; margin: 0 0.35rem;">|</span> <span style="font-size: 0.88rem; font-weight: 700; color: #1F2937;">Directorate of Vocational Education &amp; Training (DVET) • Govt. of Maharashtra</span>
           </div>
-          <div class="brand-subtitle">Directorate of Vocational Education & Training (DVET) • Govt. of Maharashtra</div>
+          <div class="brand-subtitle">State Vocational Policy &amp; Real-Time Labour-Market Intelligence Gateway</div>
         </div>
       </a>
 
@@ -2701,32 +2800,32 @@
           <div>
             <label class="form-label" style="margin-bottom: 0.5rem;">Sample Vocational Syllabi Presets</label>
             <div class="preset-chips-group">
-              <span class="preset-chip" data-text="Electric Vehicle Powertrain, 48V Lithium-Ion Battery Management Systems, CAN-Bus Diagnostic Telemetry, High Voltage Safety Standards">
-                EV Diagnostics & BMS
+              <span class="preset-chip" data-text="Core Java, Object-Oriented Programming, Data Structures & Algorithms, Problem Solving, Web Applications">
+                Core Java &amp; DSA (Software)
               </span>
-              <span class="preset-chip" data-text="Deep Learning Fundamentals, Dense Tensor Operations, Neural Network Training, Convolutional Networks, Model Deployment with FastAPI">
-                Deep Learning & AI
+              <span class="preset-chip" data-text="Electric Vehicle Powertrain, 48V Lithium-Ion Battery Management Systems (BMS), Motor Controller Diagnostics, High-Voltage Safety Protocols">
+                EV Diagnostics &amp; Battery (Auto)
               </span>
               <span class="preset-chip" data-text="Siemens S7-1200 PLC Programming, SCADA Supervisory Systems, Modbus TCP Communication, Industrial Pneumatic Troubleshooting">
-                PLC Industrial Automation
+                PLC Automation &amp; Motors
               </span>
-              <span class="preset-chip" data-text="High Performance Liquid Chromatography HPLC, Gas Chromatography GC-MS, US FDA 21 CFR Part 11 Electronic Records, cGMP Titration">
-                Pharma Chromatography
+              <span class="preset-chip" data-text="5-Axis CNC Machining, Siemens NX CAD/CAM Multi-Axis Toolpath Generation, GD&T Engineering Standards, CMM Metrology">
+                5-Axis CNC Precision Tooling
               </span>
             </div>
 
             <textarea 
               id="curriculumInput" 
               class="curriculum-textarea" 
-              placeholder="Type or paste any vocational syllabus text or industrial job requisition..."
-            >Electric Vehicle Powertrain, 48V Lithium-Ion Battery Management Systems, CAN-Bus Diagnostic Telemetry, High Voltage Safety Standards</textarea>
+              placeholder="Type or paste any vocational syllabus text, programming topics, or industrial job requisition..."
+            >Core Java, Object-Oriented Programming, Data Structures & Algorithms, Problem Solving, Web Applications</textarea>
             
             <div class="textarea-footer">
-              <span>Input character count: <strong id="charCountDisplay">128</strong> chars</span>
+              <span>Input character count: <strong id="charCountDisplay">101</strong> chars</span>
               <span>Model: all-MiniLM-L6-v2 (384-dim)</span>
             </div>
 
-            <button id="runNlpBtn" class="btn-extract" type="button">
+            <button id="btn-vectorize" class="btn-extract" type="button">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               <span>Execute Semantic Vectorization</span>
             </button>
@@ -2740,21 +2839,21 @@
                 <span class="api-status-pill" id="extractionPill">Semantic Inference: Ready</span>
               </div>
               <div class="skills-badges-container" id="extractedSkillsContainer">
-                <span class="skill-tag high-demand">Electric Vehicle Diagnostics (NSQF-6)</span>
-                <span class="skill-tag high-demand">CAN-bus Telemetry Protocol Analysis</span>
-                <span class="skill-tag high-demand">48V Battery Management Systems</span>
-                <span class="skill-tag">High-Voltage DC Safety</span>
-                <span class="skill-tag gap">⚠️ Modular Battery Balancer (Gap)</span>
+                <span class="skill-tag high-demand">Core Java &amp; OOP Concepts</span>
+                <span class="skill-tag high-demand">Data Structures &amp; Algorithms</span>
+                <span class="skill-tag high-demand">Algorithm Complexity &amp; Problem Solving</span>
+                <span class="skill-tag gap">⚠️ Spring Boot Framework (Gap)</span>
+                <span class="skill-tag gap">⚠️ RESTful API Integration (Gap)</span>
               </div>
             </div>
 
             <div class="vector-readout-box">
               <div class="vector-readout-top">
                 <span>Dense 384-Dim PyTorch Vector</span>
-                <span id="vectorCosineSim">Cosine Sim: 0.912</span>
+                <span id="vectorCosineSim">Cosine Sim: 0.740</span>
               </div>
               <div class="vector-data" id="vectorDataSnippet">
-                [0.0421, -0.0189, 0.0892, -0.0514, 0.1287, -0.0934, 0.0341, 0.0762, -0.0118, 0.0459, ... 374 more dimensions]
+                [0.0521, -0.0142, 0.0934, -0.0618, 0.1145, -0.0823, 0.0412, 0.0694, -0.0215, 0.0512, ... 374 more dimensions]
               </div>
             </div>
           </div>
@@ -2777,12 +2876,53 @@
           </div>
           <h2 class="section-title">Dynamic Trade Alignment Heatmap</h2>
           <p class="section-description">
-            Heatmap comparing live employer skill requisitions across 6 Maharashtra industrial hubs against current ITI trade syllabi.
+            Heatmap comparing live employer skill requisitions across 6 Maharashtra industrial hubs against current ITI trade syllabi using the 3-color policy alignment standard.
           </p>
         </div>
 
         <div class="heatmap-container-card">
+          
+          <!-- Clean 3-Color Alignment Indicator Legend -->
+          <div class="heatmap-legend-bar">
+            <span style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--color-primary); letter-spacing: 0.05em; margin-right: 0.5rem;">
+              Policy Alignment Status:
+            </span>
+            <div class="legend-item">
+              <span class="legend-dot aligned"></span>
+              <span><strong>Green (&gt;75%):</strong> Aligned</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot moderate"></span>
+              <span><strong>Amber (60%–75%):</strong> Moderate Gap (Needs Module Additions)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot critical"></span>
+              <span><strong>Red (&lt;60%):</strong> Critical Deficit (Requires Immediate Syllabus Revision)</span>
+            </div>
+          </div>
+
           <canvas id="alignmentHeatmap" aria-label="Dynamic Curriculum Heatmap Matrix" role="img"></canvas>
+
+          <!-- 3-Color Policy Alignment Matrix Table -->
+          <div style="overflow-x: auto;">
+            <table class="alignment-matrix-table" id="alignmentMatrixTable">
+              <thead>
+                <tr>
+                  <th>Trade / Course</th>
+                  <th>Automotive &amp; EV</th>
+                  <th>Cloud &amp; FinTech</th>
+                  <th>Precision CNC</th>
+                  <th>Pharma &amp; Biotech</th>
+                  <th>Logistics &amp; AGV</th>
+                  <th>Agri-Tech &amp; Drones</th>
+                </tr>
+              </thead>
+              <tbody id="alignmentMatrixTableBody">
+                <!-- Dynamically populated by script.js -->
+              </tbody>
+            </table>
+          </div>
+
         </div>
 
       </div>
