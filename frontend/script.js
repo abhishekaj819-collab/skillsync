@@ -623,7 +623,7 @@ async function triggerSkillExtraction() {
     state.isExtracting = false;
 
     if (state.activeRole === 'gov') {
-      renderDynamicHeatmap(extractedData.scoreBias);
+      renderDynamicHeatmap(extractedData.chartLabels, extractedData.chartData, extractedData.chartColors);
     }
     showToast(`SkillSetu Vector Engine: ${extractedData.statusDetail}`);
   }, 350);
@@ -635,7 +635,9 @@ function generateExtractionResult(inputText, apiResult) {
   let skills = [];
   let cosineSimilarity = 0.74;
   let statusDetail = 'Vector matching complete';
-  let scoreBias = 0;
+  let chartLabels = ['ITI COPA', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+  let chartData = [71, 58, 49, 86];
+  let chartColors = ['#D97706', '#DC2626', '#DC2626', '#059669'];
 
   // Rule 1: Software / Programming terms ("java", "dsa", "python", "web", "cloud", "javascript", "react", "c++", "data structure", "sql", "backend", "frontend", "api")
   if (
@@ -664,7 +666,9 @@ function generateExtractionResult(inputText, apiResult) {
     ];
     cosineSimilarity = 0.74;
     statusDetail = 'Flags update needed for COPA curriculum (74.0% Alignment)';
-    scoreBias = 15;
+    chartLabels = ['ITI COPA (Java/DSA)', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+    chartData = [74, 58, 49, 86];
+    chartColors = ['#D97706', '#DC2626', '#DC2626', '#059669'];
   }
   // Rule 2: Electrical / Auto / Motor terms ("ev", "battery", "motor", "plc", "electric", "automotive", "solar", "inverter")
   else if (
@@ -688,7 +692,9 @@ function generateExtractionResult(inputText, apiResult) {
     ];
     cosineSimilarity = 0.62;
     statusDetail = 'Critical Deficit (62.0% Alignment - Below 75% Threshold)';
-    scoreBias = -12;
+    chartLabels = ['Mechanic Auto (EV)', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+    chartData = [62, 78, 52, 86];
+    chartColors = ['#DC2626', '#059669', '#DC2626', '#059669'];
   }
   // Rule 3: Precision Manufacturing & CNC terms ("cnc", "machining", "nx", "cad", "cam", "lathe", "tooling", "vmc")
   else if (
@@ -711,7 +717,9 @@ function generateExtractionResult(inputText, apiResult) {
     ];
     cosineSimilarity = 0.88;
     statusDetail = 'Aligned with Advanced Manufacturing (88.0% Alignment)';
-    scoreBias = 20;
+    chartLabels = ['5-Axis CNC & NX', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+    chartData = [88, 58, 85, 86];
+    chartColors = ['#059669', '#DC2626', '#059669', '#059669'];
   }
   // Rule 4: Pharma / Chemical terms ("hplc", "pharma", "chromatography", "chemical", "chemistry", "titration")
   else if (
@@ -729,7 +737,9 @@ function generateExtractionResult(inputText, apiResult) {
     ];
     cosineSimilarity = 0.79;
     statusDetail = 'Aligned with Specialty Pharma (79.0% Alignment)';
-    scoreBias = 10;
+    chartLabels = ['Pharma HPLC Tech', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+    chartData = [79, 58, 49, 86];
+    chartColors = ['#059669', '#DC2626', '#DC2626', '#059669'];
   }
   // Rule 5: Fallback Dynamic Tokenization Matching Typed Input Text
   else {
@@ -754,7 +764,9 @@ function generateExtractionResult(inputText, apiResult) {
     skills = tokenizedSkills;
     cosineSimilarity = 0.71;
     statusDetail = `Dynamic Extraction: ${skills.length} skills tokenized (71.0% Baseline Alignment)`;
-    scoreBias = 5;
+    chartLabels = ['ITI COPA', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+    chartData = [71, 58, 49, 86];
+    chartColors = ['#D97706', '#DC2626', '#DC2626', '#059669'];
   }
 
   // Generate 384-dimensional dense vector sample
@@ -766,7 +778,9 @@ function generateExtractionResult(inputText, apiResult) {
     vectorSample,
     cosineSimilarity: cosineSimilarity.toFixed(3),
     statusDetail,
-    scoreBias
+    chartLabels,
+    chartData,
+    chartColors
   };
 }
 
@@ -809,113 +823,87 @@ function getAlignmentStatus(score) {
   }
 }
 
-function renderDynamicHeatmap(bias = 0) {
-  const canvas = document.getElementById('alignmentHeatmap');
-  if (!canvas || typeof window.Chart === 'undefined') return;
+// Global variable to track the active chart and prevent memory leaks
+let alignmentChartInstance = null;
 
-  if (state.heatmapChart) {
-    state.heatmapChart.destroy();
-  }
-
-  const sectors = ['Automotive & EV', 'Cloud & FinTech', 'Precision CNC', 'Pharma & Biotech', 'Logistics & AGV', 'Agri-Tech & Drones'];
-  const trades = ['Mechanic Auto', 'COPA (IT Ops)', 'Draughtsman Mech', 'Chemical Plant', 'Electrician', 'Welder (Robotic)'];
-
-  const baseMatrix = [
-    [88, 42, 65, 30, 72, 55],
-    [35, 94, 48, 50, 68, 40],
-    [70, 52, 92, 45, 60, 78],
-    [25, 48, 40, 91, 35, 45],
-    [60, 75, 55, 38, 86, 62],
-    [50, 45, 74, 42, 58, 89]
-  ];
-
-  // Populate Clean 3-Color Policy Alignment Matrix Table
-  const matrixTableBody = document.getElementById('alignmentMatrixTableBody');
-  if (matrixTableBody) {
-    matrixTableBody.innerHTML = '';
-    trades.forEach((tradeName, tIdx) => {
-      const tr = document.createElement('tr');
-      let cellsHtml = `<td><strong>${tradeName}</strong></td>`;
-      sectors.forEach((secName, sIdx) => {
-        const rawScore = baseMatrix[tIdx][sIdx];
-        const score = Math.min(100, Math.max(20, rawScore + (bias !== 0 ? (bias > 0 ? 6 : -8) : 0)));
-        const info = getAlignmentStatus(score);
-        cellsHtml += `<td><span class="status-chip ${info.chipClass}">${info.label}</span></td>`;
-      });
-      tr.innerHTML = cellsHtml;
-      matrixTableBody.appendChild(tr);
-    });
-  }
-
-  // Configure Clean 3-Color Datasets for Chart.js
-  const datasets = trades.map((tradeName, tIdx) => {
-    const scores = baseMatrix[tIdx].map(val => Math.min(100, Math.max(20, val + (bias !== 0 ? (bias > 0 ? 6 : -8) : 0))));
-    return {
-      label: tradeName,
-      data: scores,
-      backgroundColor: scores.map(score => getAlignmentStatus(score).color),
-      borderColor: '#FFFFFF',
-      borderWidth: 1.5,
-      borderRadius: 4,
-      barPercentage: 0.75,
-    };
-  });
-
-  const ctx = canvas.getContext('2d');
-  state.heatmapChart = new window.Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: sectors,
-      datasets: datasets
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'top',
-          labels: {
-            font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' },
-            color: '#1F2937',
-            usePointStyle: true,
-            padding: 16
-          }
-        },
-        tooltip: {
-          backgroundColor: '#0F4C81',
-          titleFont: { family: 'Plus Jakarta Sans', size: 13, weight: '700' },
-          bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
-          padding: 12,
-          callbacks: {
-            label: function(context) {
-              const score = context.raw;
-              const statusInfo = getAlignmentStatus(score);
-              return ` ${context.dataset.label}: ${score}% — ${statusInfo.status}`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { color: '#E2E8F0', drawTicks: false },
-          ticks: { font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' }, color: '#64748B' }
-        },
-        y: {
-          min: 0,
-          max: 100,
-          grid: { color: '#E2E8F0', drawTicks: false },
-          ticks: {
-            callback: value => `${value}%`,
-            font: { family: 'Plus Jakarta Sans', size: 11 },
-            color: '#64748B'
-          }
-        }
-      }
+function renderDynamicHeatmap(labels, dataScores, bgColors) {
+    const canvas = document.getElementById('heatmapChart');
+    if (!canvas) {
+        console.error("Heatmap canvas not found in the DOM.");
+        return;
     }
-  });
 
-  canvas.style.height = '320px';
+    // CRITICAL FIX: Destroy existing chart instance before drawing a new one
+    if (alignmentChartInstance !== null) {
+        alignmentChartInstance.destroy();
+    }
+
+    // Default fallback data if none provided
+    const chartLabels = labels || ['ITI COPA', 'Electrician', 'Fitter & CNC', 'Solar Tech'];
+    const chartData = dataScores || [71, 58, 49, 86];
+    const chartColors = bgColors || ['#D97706', '#DC2626', '#DC2626', '#059669'];
+
+    alignmentChartInstance = new Chart(canvas, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Curriculum Alignment Score (%)',
+                data: chartData,
+                backgroundColor: chartColors,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 0 // Instantly draw the chart to prevent UI freezing
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: { display: true, text: 'Alignment Score (%)' }
+                }
+            }
+        }
+    });
+
+    // Populate Clean 3-Color Policy Alignment Matrix Table if present
+    const matrixTableBody = document.getElementById('alignmentMatrixTableBody');
+    if (matrixTableBody) {
+        const sectors = ['Automotive & EV', 'Cloud & FinTech', 'Precision CNC', 'Pharma & Biotech', 'Logistics & AGV', 'Agri-Tech & Drones'];
+        const trades = ['Mechanic Auto', 'COPA (IT Ops)', 'Draughtsman Mech', 'Chemical Plant', 'Electrician', 'Welder (Robotic)'];
+        const baseMatrix = [
+            [88, 42, 65, 30, 72, 55],
+            [35, 94, 48, 50, 68, 40],
+            [70, 52, 92, 45, 60, 78],
+            [25, 48, 40, 91, 35, 45],
+            [60, 75, 55, 38, 86, 62],
+            [50, 45, 74, 42, 58, 89]
+        ];
+        matrixTableBody.innerHTML = '';
+        trades.forEach((tradeName, tIdx) => {
+            const tr = document.createElement('tr');
+            let cellsHtml = `<td><strong>${tradeName}</strong></td>`;
+            sectors.forEach((secName, sIdx) => {
+                const score = baseMatrix[tIdx][sIdx];
+                const info = getAlignmentStatus(score);
+                cellsHtml += `<td><span class="status-chip ${info.chipClass}">${info.label}</span></td>`;
+            });
+            tr.innerHTML = cellsHtml;
+            matrixTableBody.appendChild(tr);
+        });
+    }
 }
+
+// Auto-initialize when the page loads
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        renderDynamicHeatmap();
+    }, 500); // Slight delay ensures the DOM is fully painted before rendering
+});
 
 
 // ============================================================================

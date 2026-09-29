@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Studio Freight / Lenis CDN for Smooth Scrolling -->
   <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
@@ -2901,7 +2901,10 @@
             </div>
           </div>
 
-          <canvas id="alignmentHeatmap" aria-label="Dynamic Curriculum Heatmap Matrix" role="img"></canvas>
+          <!-- Replace your existing heatmap container with this strictly constrained block -->
+          <div class="heatmap-container" style="position: relative; height: 350px; width: 100%; overflow: hidden; background: #ffffff; border-radius: 8px; padding: 10px;">
+              <canvas id="heatmapChart"></canvas>
+          </div>
 
           <!-- 3-Color Policy Alignment Matrix Table -->
           <div style="overflow-x: auto;">
