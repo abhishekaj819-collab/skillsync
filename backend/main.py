@@ -504,6 +504,131 @@ def v1_gap_analysis_endpoint(
         raise HTTPException(status_code=500, detail=f"Gap analysis failed: {str(e)}")
 
 
+# ============================================================================
+# Autonomous Multi-Agent System Endpoints (Auth, Scraper, Vector, Policy)
+# ============================================================================
+
+class LoginRequest(BaseModel):
+    identifier: str = Field(..., example="director@mah.gov.in", description="Gov-Tech credential (email or ITI code)")
+    password: Optional[str] = Field(None, example="GovTech@2026", description="Optional secure password string")
+
+
+@app.post("/api/v1/auth/login", tags=["Agent 1: Auth & Security Supervisor"])
+def auth_login_endpoint(payload: LoginRequest):
+    """
+    Validates Gov-Tech credentials via regex rules and issues a cryptographic JWT token:
+    - Govt: director@mah.gov.in (Role: 'gov', Clearance: 3)
+    - ITI: ITI-PUN-2045 (Role: 'iti', Clearance: 2)
+    - Employer: hr@industry.com (Role: 'emp', Clearance: 1)
+    """
+    try:
+        from agents.auth_agent import get_auth_agent
+        agent = get_auth_agent()
+        return agent.validate_and_authenticate(identifier=payload.identifier, password=payload.password)
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Auth Supervisor failed: {str(e)}")
+
+
+@app.get("/api/v1/auth/audit-logs", tags=["Agent 1: Auth & Security Supervisor"])
+def get_audit_logs_endpoint(
+    limit: int = Query(50, ge=1, le=200),
+    role: Optional[str] = Query(None)
+):
+    """Retrieves SQLite audit trail of all logins and district data access."""
+    try:
+        from agents.auth_agent import get_auth_agent
+        agent = get_auth_agent()
+        return agent.get_audit_trail(limit=limit, role_filter=role)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Audit retrieval failed: {str(e)}")
+
+
+@app.post("/api/v1/agents/scraper/run", tags=["Agent 2: LMI Scraper Agent"])
+def run_lmi_scraper_endpoint(db: Session = Depends(get_db)):
+    """Runs the 12-hour LMI Scraper pipeline, stripping PII and normalizing live feeds."""
+    try:
+        from agents.scraper_agent import LMIScraperAgent
+        agent = LMIScraperAgent()
+        records = agent.scrape_and_process_feeds()
+        updated_count = agent.sync_to_database(db)
+        return {
+            "status": "SUCCESS",
+            "agent": agent.agent_name,
+            "feeds_processed": len(records),
+            "skills_extracted_count": agent.total_signals_ingested,
+            "db_records_synced": updated_count,
+            "sample_dossiers": records[:2]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Scraper Agent failed: {str(e)}")
+
+
+@app.post("/api/v1/agents/vector/analyze", tags=["Agent 3: Vector Gap-Analysis Agent"])
+def run_vector_gap_analysis_endpoint():
+    """
+    Computes PyTorch 384-dimensional cosine similarity mismatch between live industry demand
+    and static ITI trade curricula. Flags all modules below 75% similarity.
+    """
+    try:
+        from agents.scraper_agent import LMIScraperAgent
+        from agents.vector_agent import VectorGapAnalysisAgent
+
+        scraper = LMIScraperAgent()
+        feeds = scraper.scrape_and_process_feeds()
+
+        vector_agent = VectorGapAnalysisAgent()
+        dossiers = vector_agent.analyze_curriculum_gaps(feeds)
+
+        return {
+            "status": "SUCCESS",
+            "agent": vector_agent.agent_name,
+            "threshold_applied": "75.0%",
+            "total_modules_evaluated": len(dossiers),
+            "critical_deficits_count": sum(1 for d in dossiers if d["is_deficit"]),
+            "gap_dossiers": dossiers
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Vector Gap Analysis failed: {str(e)}")
+
+
+@app.get("/api/v1/agents/policy/directives", tags=["Agent 4: Policy Routing & Notification Agent"])
+def get_policy_directives_endpoint(
+    role: str = Query("gov", description="Role: 'gov' (capital budget) or 'iti' (syllabus diffs)"),
+    district: Optional[str] = Query(None, description="Optional district filter for ITI Principal")
+):
+    """
+    Translates vector deficits into human-actionable Gov-Tech directives
+    and routes them strictly to the designated stakeholder dashboard.
+    """
+    try:
+        from agents.scraper_agent import LMIScraperAgent
+        from agents.vector_agent import VectorGapAnalysisAgent
+        from agents.policy_agent import get_policy_agent
+
+        scraper = LMIScraperAgent()
+        feeds = scraper.scrape_and_process_feeds()
+
+        vector_agent = VectorGapAnalysisAgent()
+        dossiers = vector_agent.analyze_curriculum_gaps(feeds)
+
+        policy_agent = get_policy_agent()
+        policy_agent.generate_directives_from_gaps(dossiers)
+
+        directives = policy_agent.get_directives_for_role(role=role, district_filter=district)
+        return {
+            "status": "SUCCESS",
+            "stakeholder_role": role,
+            "district_scope": district or "All Designated",
+            "total_directives": len(directives),
+            "directives": directives
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Policy Agent failed: {str(e)}")
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+

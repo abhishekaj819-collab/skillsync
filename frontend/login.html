@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillSetu | State Vocational Policy & Labour-Market Portal Login</title>
+  <meta name="description" content="Directorate of Vocational Education and Training (DVET) Government of Maharashtra SkillSetu Portal Authentication Gateway. SIH PS 26134.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Official Gov-Tech Light Theme Palette */
+      --color-bg: #F8FAFC;
+      --color-card: #FFFFFF;
+      --color-primary: #0F4C81;          /* Government Navy Blue */
+      --color-primary-hover: #0A355C;
+      --color-primary-light: #EBF3FA;
+      --color-secondary: #1E40AF;
+      --color-text-main: #1F2937;
+      --color-text-muted: #64748B;
+      --color-text-light: #94A3B8;
+      --color-border: #E2E8F0;
+      --color-border-focus: #0F4C81;
+
+      --color-emerald: #059669;
+      --color-emerald-bg: #ECFDF5;
+      --color-amber: #D97706;
+      --color-amber-bg: #FFFBEB;
+      --color-coral: #DC2626;
+      --color-coral-bg: #FEF2F2;
+
+      --shadow-sm: 0 1px 3px rgba(15, 76, 129, 0.05);
+      --shadow-card: 0 10px 25px -5px rgba(15, 76, 129, 0.08), 0 8px 10px -6px rgba(15, 76, 129, 0.04);
+      --shadow-glow: 0 0 0 3px rgba(15, 76, 129, 0.15);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--color-bg);
+      color: var(--color-text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Tricolor Bar */
+    .gov-top-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #128807 66.6%, #128807 100%);
+      width: 100%;
+    }
+
+    /* Official Government Header */
+    .official-header {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .gov-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .emblem-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--color-primary-light);
+      border: 1px solid rgba(15, 76, 129, 0.2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+    }
+
+    .gov-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gov-dept {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-primary);
+    }
+
+    .gov-state {
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+
+    .portal-sih-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+      border: 1px solid rgba(15, 76, 129, 0.25);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      position: relative;
+    }
+
+    .main-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(15, 76, 129, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 76, 129, 0.03) 1px, transparent 1px);
+      background-size: 2.5rem 2.5rem;
+      pointer-events: none;
+    }
+
+    /* Centered Login Card */
+    .login-container {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 2rem 2rem 1.25rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+      background: #FAFCFE;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    /* Alert Banner */
+    .alert-banner {
+      display: none;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+      border: 1px solid transparent;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .alert-banner.error {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: var(--color-coral-bg);
+      border-color: rgba(220, 38, 38, 0.3);
+      color: #991B1B;
+    }
+
+    .alert-banner.success {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: var(--color-emerald-bg);
+      border-color: rgba(5, 150, 105, 0.3);
+      color: #065F46;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1.35rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+      margin-bottom: 0.45rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 0.9rem;
+      width: 18px;
+      height: 18px;
+      color: var(--color-text-light);
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 0.9rem 0.75rem 2.4rem;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      color: var(--color-text-main);
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--color-border-focus);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 0.75rem;
+      background: transparent;
+      border: none;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-password-btn:hover {
+      color: var(--color-primary);
+    }
+
+    .role-detection-badge {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      width: fit-content;
+    }
+
+    .role-badge-gov {
+      display: inline-flex;
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+
+    .role-badge-iti {
+      display: inline-flex;
+      background: #F0FDF4;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+    }
+
+    .role-badge-emp {
+      display: inline-flex;
+      background: #FAF5FF;
+      color: #6B21A8;
+      border: 1px solid #E9D5FF;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    /* Evaluator Quick-Fill Panel */
+    .evaluator-panel {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: #F8FAFC;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+    }
+
+    .eval-header {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-primary);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .eval-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+
+    .eval-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .eval-btn:hover {
+      border-color: var(--color-primary);
+      background: #FAFCFE;
+      transform: translateX(2px);
+    }
+
+    .eval-role-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--color-text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .eval-role-cred {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--color-text-muted);
+    }
+
+    .eval-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+
+    /* Card Footer */
+    .card-footer {
+      padding: 1rem 2rem;
+      background: #FAFCFE;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.72rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Official Footer */
+    .page-footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--color-border);
+      padding: 1.25rem 2rem;
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      .official-header {
+        padding: 0.75rem 1rem;
+      }
+      .page-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      .card-body {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Tricolor Ribbon -->
+  <div class="gov-top-bar"></div>
+
+  <!-- Official Government Header -->
+  <header class="official-header">
+    <div class="gov-brand">
+      <div class="emblem-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="gov-titles">
+        <span class="gov-dept">Directorate of Vocational Education & Training (DVET)</span>
+        <span class="gov-state">Government of Maharashtra • SkillSetu Platform</span>
+      </div>
+    </div>
+    <div class="portal-sih-badge">
+      SIH PS 26134
+    </div>
+  </header>
+
+  <!-- Main Login Section -->
+  <main class="main-wrapper">
+    <div class="login-container">
+      
+      <div class="login-card">
+        <div class="card-header">
+          <h1 class="card-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            SkillSetu Portal Access
+          </h1>
+          <p class="card-subtitle">
+            Authenticated Government Gateway for Labour-Market Intelligence & Curriculum Alignment.
+          </p>
+        </div>
+
+        <div class="card-body">
+
+          <!-- Dynamic Alert Banner -->
+          <div class="alert-banner" id="alertBanner">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink: 0;">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span id="alertText">Notification message</span>
+          </div>
+
+          <!-- Strict Authentication Form -->
+          <form id="loginForm" onsubmit="handlePortalLogin(event)" novalidate>
+            
+            <!-- Credential Input -->
+            <div class="form-group">
+              <label class="form-label" for="identifierInput">
+                Official Credential / Institutional ID
+              </label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <input 
+                  type="text" 
+                  id="identifierInput" 
+                  class="form-input" 
+                  placeholder="e.g. director@mah.gov.in, ITI-PUN-2045, hr@industry.com" 
+                  required 
+                  autocomplete="username"
+                  oninput="handleCredentialInput(this.value)"
+                />
+              </div>
+              <div id="roleBadge" class="role-detection-badge"></div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="form-group">
+              <label class="form-label" for="passwordInput">
+                Security Passcode
+              </label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input 
+                  type="password" 
+                  id="passwordInput" 
+                  class="form-input" 
+                  placeholder="Enter authorized password" 
+                  value="GovTech@2026"
+                  required 
+                  autocomplete="current-password"
+                />
+                <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()" title="Toggle visibility">
+                  <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <span>Authenticate & Enter Portal</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Evaluator Quick-Access Panel -->
+          <div class="evaluator-panel">
+            <div class="eval-header">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              Evaluation Credentials (1-Click Test)
+            </div>
+            
+            <div class="eval-buttons-grid">
+              <!-- Govt Admin -->
+              <button type="button" class="eval-btn" onclick="quickFillAndLogin('director@mah.gov.in', 'gov')">
+                <div>
+                  <div class="eval-role-name">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F4C81" stroke-width="2.2"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2L2 7h20L12 2z"/></svg>
+                    Govt Admin (Macro Policy & Budget)
+                  </div>
+                  <div class="eval-role-cred">director@mah.gov.in</div>
+                </div>
+                <span class="eval-tag">?role=gov</span>
+              </button>
+
+              <!-- ITI Institute -->
+              <button type="button" class="eval-btn" onclick="quickFillAndLogin('ITI-PUN-2045', 'iti')">
+                <div>
+                  <div class="eval-role-name">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    ITI Institute (Syllabus & Lab Directives)
+                  </div>
+                  <div class="eval-role-cred">ITI-PUN-2045</div>
+                </div>
+                <span class="eval-tag">?role=iti</span>
+              </button>
+
+              <!-- Employer -->
+              <button type="button" class="eval-btn" onclick="quickFillAndLogin('hr@industry.com', 'emp')">
+                <div>
+                  <div class="eval-role-name">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                    Employer (Demand Signals & Radar)
+                  </div>
+                  <div class="eval-role-cred">hr@industry.com</div>
+                </div>
+                <span class="eval-tag">?role=emp</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-footer">
+          Official Government Gateway. Unauthorized access is prohibited under the Information Technology Act 2000.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Official Footer -->
+  <footer class="page-footer">
+    <div class="footer-left">
+      <span>© 2026 Government of Maharashtra • Directorate of Vocational Education & Training (DVET)</span>
+    </div>
+    <div>
+      <span>SkillSetu Platform • SIH Problem Statement 26134</span>
+    </div>
+  </footer>
+
+  <script>
+    // Strict Mock Authentication Handler
+    function handlePortalLogin(e) {
+      if (e) e.preventDefault();
+      const idInput = document.getElementById('identifierInput');
+      const val = (idInput ? idInput.value : '').trim();
+
+      const alertBanner = document.getElementById('alertBanner');
+      const alertText = document.getElementById('alertText');
+
+      // Rule 1: Govt Admin: director@mah.gov.in (or ends with @mah.gov.in / @gov.in / @nic.in)
+      if (val.toLowerCase() === 'director@mah.gov.in' || /^[a-zA-Z0-9._%+-]+@(mah\.gov\.in|gov\.in|nic\.in)$/i.test(val)) {
+        showSuccessAndRedirect('gov', 'Govt Admin Security Clearance Verified. Routing to Executive Portal...');
+        return;
+      }
+
+      // Rule 2: ITI Institute: ITI-PUN-2045 (or starts with ITI-)
+      if (val.toUpperCase() === 'ITI-PUN-2045' || /^ITI-[A-Z0-9]{3,4}-\d{4}$/i.test(val) || /^ITI-/i.test(val)) {
+        showSuccessAndRedirect('iti', 'ITI Institutional Clearance Verified. Routing to Principal Operations Portal...');
+        return;
+      }
+
+      // Rule 3: Employer: hr@industry.com (or valid corporate email)
+      if (val.toLowerCase() === 'hr@industry.com' || /^[a-zA-Z0-9._%+-]+@(?!mah\.gov\.in|gov\.in)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(val)) {
+        showSuccessAndRedirect('emp', 'Industry Partner Clearance Verified. Routing to Employer Demand Portal...');
+        return;
+      }
+
+      // Invalid Credentials
+      if (alertBanner && alertText) {
+        alertBanner.className = 'alert-banner error';
+        alertText.textContent = 'Access Denied: Unrecognized credentials. Please use an authorized Govt (director@mah.gov.in), ITI (ITI-PUN-2045), or Employer (hr@industry.com) credential.';
+      }
+    }
+
+    function showSuccessAndRedirect(role, message) {
+      const alertBanner = document.getElementById('alertBanner');
+      const alertText = document.getElementById('alertText');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (alertBanner && alertText) {
+        alertBanner.className = 'alert-banner success';
+        alertText.textContent = message;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Verifying Security Clearance...</span>';
+      }
+
+      // Persist in session storage for state retention
+      sessionStorage.setItem('skillsetu_role', role);
+      sessionStorage.setItem('skillsetu_user', document.getElementById('identifierInput').value.trim());
+
+      setTimeout(() => {
+        window.location.href = `index.html?role=${role}`;
+      }, 500);
+    }
+
+    function quickFillAndLogin(credential, role) {
+      const input = document.getElementById('identifierInput');
+      if (input) {
+        input.value = credential;
+        handleCredentialInput(credential);
+      }
+      showSuccessAndRedirect(role, `Evaluation Profile '${credential}' loaded. Redirecting with ?role=${role}...`);
+    }
+
+    function handleCredentialInput(value) {
+      const val = value.trim();
+      const badge = document.getElementById('roleBadge');
+      if (!badge) return;
+
+      if (/^[a-zA-Z0-9._%+-]+@(mah\.gov\.in|gov\.in|nic\.in)$/i.test(val) || val.toLowerCase() === 'director@mah.gov.in') {
+        badge.className = 'role-detection-badge role-badge-gov';
+        badge.innerHTML = '✓ Role: Govt State Executive (Clearance Level 3)';
+      } else if (/^ITI-/i.test(val)) {
+        badge.className = 'role-detection-badge role-badge-iti';
+        badge.innerHTML = '✓ Role: ITI Institute Principal (Clearance Level 2)';
+      } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(val)) {
+        badge.className = 'role-detection-badge role-badge-emp';
+        badge.innerHTML = '✓ Role: Industry Employer (Clearance Level 1)';
+      } else {
+        badge.style.display = 'none';
+        badge.innerHTML = '';
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById('passwordInput');
+      const icon = document.getElementById('eyeIcon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+      } else {
+        pwd.type = 'password';
+        icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+      }
+    }
+  </script>
+</body>
+</html>

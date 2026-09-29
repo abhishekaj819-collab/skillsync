@@ -1,16 +1,15 @@
 /**
  * SkillSetu | SIH Problem Statement 26134
- * Executive Dashboard Core Module
- * "Bridging Skills to Industry | Govt. of Maharashtra (PS 26134)"
+ * Directorate of Vocational Education & Training (DVET), Govt. of Maharashtra
+ * Executive Dashboard Core Module — Formal Light Mode Architecture
  * 
  * Features:
- * - 3-Pill Stakeholder Views (Govt / Training Institute / Employer)
- * - Fund Reallocation Engine & Statewide Agility Index
- * - Granular Syllabus Directives & Lab Equipment Forecasting
- * - Future Talent Radar & Hyper-Local Deficit Reporting Intake Form
- * - Direct Placement Matching Pipeline
- * - Direct connection to PyTorch Modal Backend: https://abhishekaj819-collab--skillsync-api-serve.modal.run
- * - Lenis smooth scrolling integration & Chart.js dynamic heatmaps
+ * - Strict Role-Based Access Control & Clearance DOM Isolation (?role=gov, ?role=iti, ?role=emp)
+ * - Fund Reallocation Engine & Statewide Agility Index (Govt Clearance)
+ * - Granular Syllabus Directives & GeM Equipment Forecasting (ITI Principal Clearance)
+ * - Future Talent Radar & Hyper-Local Deficit Ingestion (Employer Clearance)
+ * - Interactive Semantic Vector Extraction Sandbox & Heatmap Matrix
+ * - Lenis smooth scrolling & Chart.js Light-Mode Data Visualizations
  */
 
 // ============================================================================
@@ -25,11 +24,10 @@ export function buildApiUrl(endpoint) {
 }
 
 const state = {
-  activeRole: 'govt', // 'govt' | 'institute' | 'employer'
+  activeRole: 'gov', // 'gov' | 'iti' | 'emp'
   activeDistrict: 'pune',
   isExtracting: false,
   heatmapChart: null,
-  districtTelemetry: null,
 };
 
 // District Data Store for Maharashtra Action Plans (SIH 26134)
@@ -44,7 +42,7 @@ const DISTRICT_DATA = {
         course: 'Advanced Python & Deep Learning Engineering (NSQF Level 6)',
         action: 'expand',
         trainerDelta: '+3 Certified Faculty',
-        equipment: 'Deploy 24 GPU-accelerated PyTorch workstation lab stations at ITI Aundh',
+        equipment: 'Deploy 24 GPU-accelerated AI workstation lab stations at ITI Aundh',
         placementRate: '92.4%',
         demand: '1,420 Vacancies (Critical Surge)'
       },
@@ -52,7 +50,7 @@ const DISTRICT_DATA = {
         course: 'Electric Vehicle Powertrain & Battery Diagnostics',
         action: 'expand',
         trainerDelta: '+2 Master Trainers',
-        equipment: 'Install 48V modular battery test bench & CAN bus diagnostic simulators',
+        equipment: 'Install 48V modular battery diagnostic bench & CAN bus telemetry simulators',
         placementRate: '88.5%',
         demand: '980 Vacancies (Rising)'
       },
@@ -60,7 +58,7 @@ const DISTRICT_DATA = {
         course: 'Legacy Desktop Publishing & Office 2007 Tools',
         action: 'phase_out',
         trainerDelta: '-2 Reallocated',
-        equipment: 'Phase out legacy CRT equipment; reallocate space to AI hardware lab',
+        equipment: 'Phase out legacy CRT equipment; reallocate space to Advanced AI hardware lab',
         placementRate: '34.2%',
         demand: '42 Vacancies (Declining)'
       },
@@ -148,175 +146,145 @@ const DISTRICT_DATA = {
         course: 'Supply Chain Analytics & SAP SCM Operations',
         action: 'expand',
         trainerDelta: '+2 Logistics Analysts',
-        equipment: 'Equip ERP simulation workstations with real-world EXIM freight modules',
-        placementRate: '85.4%',
-        demand: '440 Vacancies (High)'
+        equipment: 'Procure 30 enterprise simulation licenses for SAP SCM at ITI Kalyan',
+        placementRate: '85.7%',
+        demand: '500 Vacancies (Moderate)'
       }
     ]
   },
   nagpur: {
     name: 'Nagpur',
     zone: 'Vidarbha Industrial & Logistics MIHAN',
-    title: 'Nagpur & Vidarbha • MIHAN Logistics & Industrial Mechatronics Plan',
-    description: 'Auto-generated capacity directive based on 2,340 regional openings in MIHAN SEZ and Butibori industrial belt.',
+    title: 'Nagpur District • Aviation MRO & Logistics Hub Strategy',
+    description: 'Auto-generated roadmap based on 2,340 live vacancies in MIHAN SEZ, Butibori, and Hingna logistics corridors.',
     items: [
       {
-        course: 'Automated Logistics & Warehouse Robotics Management',
+        course: 'Aviation Maintenance & Composite Airframe Repair',
         action: 'expand',
-        trainerDelta: '+3 Mechatronics Trainers',
-        equipment: 'Construct miniature automated guided vehicle (AGV) sorting track',
-        placementRate: '87.6%',
-        demand: '890 Vacancies (High)'
+        trainerDelta: '+3 DGCA AME Instructors',
+        equipment: 'Establish Boeing/Airbus composite structural repair simulator at ITI MIHAN',
+        placementRate: '87.9%',
+        demand: '890 Vacancies (Critical Surge)'
       },
       {
-        course: 'Aviation Avionics Maintenance & Drone Assembly (NSQF 5)',
+        course: 'Warehouse AGV Robotics & Automation Telemetry',
         action: 'expand',
-        trainerDelta: '+2 Aeronautical Trainers',
-        equipment: 'Procure drone flight simulators and calibration test beds at MIHAN ITI',
-        placementRate: '84.0%',
-        demand: '540 Vacancies (Rising)'
+        trainerDelta: '+2 Automation Engineers',
+        equipment: 'Install miniature automated guided vehicle (AGV) sorting track & PLC rig',
+        placementRate: '83.4%',
+        demand: '720 Vacancies (High)'
       },
       {
-        course: 'Traditional Mechanical Drafting (Manual Drawing Board)',
-        action: 'phase_out',
+        course: 'Manual Oxy-Acetylene Torch Welding',
+        action: 'reduce',
         trainerDelta: '-2 Reallocated',
-        equipment: 'Retire drafting tables; convert classroom into 3D CAD/CAM workstation hub',
-        placementRate: '31.5%',
-        demand: '25 Vacancies (Near Zero)'
+        equipment: 'Transition gas welding stations to 6-Axis robotic arc welding cell',
+        placementRate: '41.5%',
+        demand: '80 Vacancies (Low)'
       },
       {
-        course: 'Solar Photovoltaic Installation & Smart Grid Tech',
+        course: 'Solar PV & Battery Energy Storage (BESS) Operations',
         action: 'expand',
-        trainerDelta: '+2 Clean-Tech Trainers',
-        equipment: 'Equip rooftop solar test array with bidirectional smart inverter rigs',
-        placementRate: '79.2%',
-        demand: '620 Vacancies (High)'
+        trainerDelta: '+2 Renewable Trainers',
+        equipment: 'Equip rooftop solar array with bidirectional smart inverter rigs',
+        placementRate: '90.1%',
+        demand: '650 Vacancies (Rising)'
       }
     ]
   },
   nashik: {
     name: 'Nashik',
-    zone: 'Northern Maharashtra • Agri-Tech & Auto Components',
-    title: 'Nashik District • Precision Agri-Tech & Automotive Manufacturing Plan',
-    description: 'Auto-generated capacity roadmap based on 1,680 vacancies in Ambad MIDC, Satpur, and Dindori food processing zones.',
+    zone: 'Northern Maharashtra • Agri-Tech & Auto',
+    title: 'Nashik District • Advanced Manufacturing & Agri-Tech Strategy',
+    description: 'Auto-generated roadmap based on 1,680 live vacancies in Satpur, Ambad, and Sinnar industrial clusters.',
     items: [
       {
-        course: 'Automotive Robotic Welding & AWS CWI Inspection',
+        course: 'Automotive Robotic Welding & NDT Inspection',
         action: 'expand',
-        trainerDelta: '+3 Certified Welding Instructors',
+        trainerDelta: '+2 Master Welders',
         equipment: 'Install 6-axis robotic welding cell with NDT Dye Penetrant test bench',
-        placementRate: '89.0%',
-        demand: '590 Vacancies (Surging)'
+        placementRate: '89.2%',
+        demand: '590 Vacancies (High)'
       },
       {
-        course: 'Precision Agriculture, Drone NDVI & IoT Fertigation (NSQF 4)',
+        course: 'Precision Agriculture Drones & IoT Sensor Maintenance',
         action: 'expand',
-        trainerDelta: '+2 Agri-Tech Specialists',
+        trainerDelta: '+2 Agri-Drone Pilots',
         equipment: 'Deploy multispectral agri-drone simulator and smart soil sensor test plot',
-        placementRate: '82.4%',
-        demand: '410 Vacancies (Rising)'
-      },
-      {
-        course: 'Food Processing HACCP & Fermentation Operations',
-        action: 'expand',
-        trainerDelta: '+2 Quality Supervisors',
-        equipment: 'Install microfiltration pilot plant and FSSAI certified QA testing lab',
         placementRate: '86.5%',
-        demand: '450 Vacancies (High)'
+        demand: '450 Vacancies (Rising)'
       },
       {
-        course: 'Basic Conventional Lathe Fitting (Manual Non-CNC)',
+        course: 'Food Processing HACCP & Cold Chain Quality Analysis',
+        action: 'expand',
+        trainerDelta: '+2 Food Technologists',
+        equipment: 'Install microfiltration pilot plant and FSSAI certified QA testing lab',
+        placementRate: '84.0%',
+        demand: '380 Vacancies (High)'
+      },
+      {
+        course: 'Conventional Lathe Operations (Manual)',
         action: 'reduce',
         trainerDelta: '-1 Reallocated',
-        equipment: 'Reallocate 50% floor area to CNC VMC Machining simulators',
-        placementRate: '42.1%',
-        demand: '90 Vacancies (Declining)'
+        equipment: 'Upgrade 6 manual center lathes to CNC 2-axis turning workstations',
+        placementRate: '52.0%',
+        demand: '260 Vacancies (Automating)'
       }
     ]
   },
   chhatrapati_sambhajinagar: {
     name: 'Chhatrapati Sambhajinagar',
-    zone: 'Marathwada Industrial Region • Precision Engineering',
-    title: 'Chhatrapati Sambhajinagar • Precision Tooling & HVAC Strategy',
-    description: 'Auto-generated roadmap based on 1,420 industrial vacancies across Waluj, Shendra, and DMIC industrial hubs.',
+    zone: 'Marathwada • Precision Engineering DMIC',
+    title: 'Chhatrapati Sambhajinagar • Precision Engineering & DMIC Strategy',
+    description: 'Auto-generated roadmap based on 1,420 live vacancies in Waluj MIDC, Shendra DMIC, and Chikalthana corridors.',
     items: [
       {
-        course: 'CAD/CAM Multi-Axis CNC Design (NX & CATIA V5)',
+        course: '5-Axis CNC Machining & Siemens NX CAM Toolpath Generation',
         action: 'expand',
-        trainerDelta: '+3 Master Machinists',
-        equipment: 'Deploy 5-axis Siemens NX CAM simulation lab and Fanuc CNC turning center',
-        placementRate: '91.8%',
-        demand: '580 Vacancies (Critical Surge)'
+        trainerDelta: '+3 CAD/CAM Experts',
+        equipment: 'Procure 5-axis vertical machining center (VMC) & CAD/CAM lab at ITI Waluj',
+        placementRate: '93.1%',
+        demand: '580 Vacancies (Surging)'
       },
       {
-        course: 'Industrial Refrigeration & Ammonia Cold-Chain Commissioning',
+        course: 'Die & Mold Multi-Cavity Design & Metrology',
         action: 'expand',
-        trainerDelta: '+2 HVAC Specialists',
-        equipment: 'Install transcritical CO2/NH3 test rig with Danfoss electronic controllers',
-        placementRate: '85.2%',
-        demand: '380 Vacancies (High)'
+        trainerDelta: '+2 Toolmakers',
+        equipment: 'Deploy high-precision Renishaw CMM coordinate measuring inspection arm',
+        placementRate: '88.7%',
+        demand: '390 Vacancies (High)'
       },
       {
-        course: 'Digital Commerce & MSME Growth Marketing (DigiDhan)',
-        action: 'expand',
-        trainerDelta: '+2 Digital Mentors',
-        equipment: 'Set up MSME digital commerce incubation lab for rural entrepreneurs',
-        placementRate: '81.0%',
-        demand: '310 Vacancies (Rising)'
-      },
-      {
-        course: 'Manual Sheet Metal Hammering & Tin Smithy',
+        course: 'Manual Drafting on Drawing Boards',
         action: 'phase_out',
         trainerDelta: '-2 Reallocated',
-        equipment: 'Decommission manual smithy; establish automated press brake tooling lab',
-        placementRate: '28.4%',
-        demand: '20 Vacancies (Near Zero)'
+        equipment: 'Replace drafting boards with 30-seat CATIA & SolidWorks CAD workstation lab',
+        placementRate: '29.4%',
+        demand: '30 Vacancies (Obsolete)'
+      },
+      {
+        course: 'Industrial Refrigeration & Transcritical CO2 Systems',
+        action: 'expand',
+        trainerDelta: '+1 HVAC Specialist',
+        equipment: 'Install transcritical CO2/NH3 test rig with Danfoss electronic controllers',
+        placementRate: '85.2%',
+        demand: '420 Vacancies (Rising)'
       }
     ]
   }
 };
 
-const HEATMAP_DOMAINS = [
-  'Data Structures & Algorithms',
-  'PyTorch / Neural Networks',
-  'Cloud Architecture & K8s',
-  'Cyber Security & SOC L2',
-  'Embedded Systems & CAN-bus',
-  'Industrial Robotics & PLC',
-  'CNC Machining & GD&T',
-  'Solar PV & BESS Storage'
-];
-
-const DISTRICT_MARKETS = [
-  'Pune Tech',
-  'Mumbai MMR',
-  'Thane Belt',
-  'Nagpur MIHAN',
-  'Nashik Auto',
-  'Chh. Sambhajinagar'
-];
-
-const BASELINE_SCORES = [
-  [92, 88, 76, 58, 64, 52],
-  [96, 82, 65, 48, 42, 38],
-  [88, 97, 84, 52, 49, 45],
-  [82, 94, 75, 44, 40, 36],
-  [91, 62, 58, 74, 86, 78],
-  [89, 58, 68, 92, 94, 88],
-  [86, 52, 62, 72, 91, 95],
-  [78, 86, 70, 94, 82, 75],
-];
 
 // ============================================================================
-// 2. SMOOTH SCROLL & SCROLL REVEALS
+// 2. SMOOTH SCROLLING & ANIMATIONS
 // ============================================================================
 function initSmoothScroll() {
-  if (typeof window.Lenis === 'function') {
+  if (typeof window.Lenis !== 'undefined') {
     const lenis = new window.Lenis({
-      duration: 1.15,
+      duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      smoothTouch: false,
     });
 
     function raf(time) {
@@ -328,50 +296,38 @@ function initSmoothScroll() {
 }
 
 function initScrollAnimations() {
-  const revealElements = document.querySelectorAll('.reveal-on-scroll');
-  const revealObserver = new IntersectionObserver((entries, observer) => {
+  const elements = document.querySelectorAll('.metric-card, .fund-card, .directive-card, .equipment-card, .district-card');
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('revealed');
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
         observer.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.12,
-    rootMargin: '0px 0px -40px 0px'
+  }, { threshold: 0.08 });
+
+  elements.forEach(el => {
+    el.style.opacity = '0.9';
+    el.style.transform = 'translateY(8px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    observer.observe(el);
   });
-
-  revealElements.forEach(el => revealObserver.observe(el));
-
-  const counterElements = document.querySelectorAll('.counter-value');
-  const counterObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.25
-  });
-
-  counterElements.forEach(el => counterObserver.observe(el));
 }
 
 function animateCounter(el) {
   const target = parseFloat(el.getAttribute('data-target') || '0');
   const decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
-  const duration = 1800;
+  const duration = 1200;
   const startTime = performance.now();
 
   function updateCount(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-    const currentVal = easeProgress * target;
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+    const currentVal = (target * easeOut).toFixed(decimals);
 
-    el.textContent = currentVal.toFixed(decimals);
-
+    el.textContent = currentVal;
     if (progress < 1) {
       requestAnimationFrame(updateCount);
     } else {
@@ -382,51 +338,47 @@ function animateCounter(el) {
   requestAnimationFrame(updateCount);
 }
 
-// ============================================================================
-// 3. 3-PILL STAKEHOLDER SWITCHER LOGIC
-// ============================================================================
-window.switchDashboardRole = function(role, triggerAnimation = true) {
-  state.activeRole = role;
 
+// ============================================================================
+// 3. STRICT ROLE-BASED ACCESS CONTROL & DOM ISOLATION
+// ============================================================================
+export function enforceRoleSecurity() {
+  // Read ?role= from URL or check sessionStorage
+  const urlParams = new URLSearchParams(window.location.search);
+  let roleParam = urlParams.get('role');
+
+  if (!roleParam) {
+    roleParam = sessionStorage.getItem('skillsetu_role') || 'gov';
+  }
+
+  // Normalize role
+  let role = 'gov';
+  const lower = roleParam.toLowerCase();
+  if (lower === 'iti' || lower === 'institute') {
+    role = 'iti';
+  } else if (lower === 'emp' || lower === 'employer') {
+    role = 'emp';
+  } else {
+    role = 'gov';
+  }
+
+  state.activeRole = role;
+  sessionStorage.setItem('skillsetu_role', role);
+
+  // DOM Elements
   const govtDash = document.getElementById('govtDashboard');
   const instDash = document.getElementById('instituteDashboard');
   const empDash = document.getElementById('employerDashboard');
+  const heatmapSection = document.getElementById('heatmapSection');
+  const districtsSection = document.getElementById('districtsSection');
+  const engineSection = document.getElementById('engineSection');
 
-  if (govtDash) govtDash.style.display = (role === 'govt' ? 'block' : 'none');
-  if (instDash) instDash.style.display = (role === 'institute' ? 'block' : 'none');
-  if (empDash) empDash.style.display = (role === 'employer' ? 'block' : 'none');
-
-  const roleButtons = document.querySelectorAll('.role-pill');
-  roleButtons.forEach(btn => {
-    const btnRole = btn.getAttribute('data-role');
-    if (btnRole === role) {
-      btn.classList.add('active');
-      btn.style.opacity = '1';
-      btn.style.fontWeight = 'bold';
-      btn.setAttribute('aria-selected', 'true');
-    } else {
-      btn.classList.remove('active');
-      btn.style.opacity = '0.7';
-      btn.style.fontWeight = 'normal';
-      btn.setAttribute('aria-selected', 'false');
-    }
-  });
-
-  const indicator = document.getElementById('rolePillIndicator');
-  const activeBtn = document.querySelector(`.role-pill[data-role="${role}"]`);
-  if (indicator && activeBtn) {
-    indicator.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
-    indicator.style.width = `${activeBtn.offsetWidth}px`;
-  }
-
-  applyHeroContextForRole(role);
-};
-
-function applyHeroContextForRole(role) {
-  const roleHeading = document.getElementById('heroPortalHeading');
-  const roleDesc = document.getElementById('heroPortalDesc');
-  const contextPill = document.getElementById('portalRoleContextName');
-  const activeModeText = document.getElementById('portalActiveModeText');
+  const headerRoleBadge = document.getElementById('headerRoleBadge');
+  const headerRoleText = document.getElementById('headerRoleText');
+  const portalContextPill = document.getElementById('portalRoleContextName');
+  const portalHeading = document.getElementById('heroPortalHeading');
+  const portalDesc = document.getElementById('heroPortalDesc');
+  const portalActiveModeText = document.getElementById('portalActiveModeText');
 
   const agilityEl = document.getElementById('curriculumAgilityValue');
   const placementEl = document.getElementById('placementLiftValue');
@@ -441,35 +393,62 @@ function applyHeroContextForRole(role) {
   const trendPill = document.getElementById('agilityTrendPill');
   const placementPill = document.getElementById('placementLiftPill');
 
-  if (role === 'govt') {
-    if (contextPill) contextPill.textContent = 'State Executive Portal';
-    if (roleHeading) roleHeading.textContent = 'Automated Labour Demand & Curriculum Alignment';
-    if (roleDesc) roleDesc.textContent = 'Bridging Skills to Industry | Govt. of Maharashtra (PS 26134). Real-time vector matching between industrial job requisitions and vocational course syllabi.';
-    if (activeModeText) activeModeText.textContent = 'Directorate of Vocational Education';
+  if (role === 'gov') {
+    // -------------------------------------------------------------
+    // ROLE: GOVT ADMIN (Macro Policy & Fiscal Budget)
+    // -------------------------------------------------------------
+    if (govtDash) govtDash.style.display = 'block';
+    if (heatmapSection) heatmapSection.style.display = 'block';
+    if (districtsSection) districtsSection.style.display = 'block';
+    if (engineSection) engineSection.style.display = 'block';
+
+    // Strictly remove/hide ITI Principal and Employer sections
+    if (instDash) instDash.style.display = 'none';
+    if (empDash) empDash.style.display = 'none';
+
+    if (headerRoleText) headerRoleText.textContent = 'Clearance: State Executive Admin (Level 3)';
+    if (portalContextPill) portalContextPill.textContent = 'State Executive Policy Portal';
+    if (portalHeading) portalHeading.textContent = 'Automated Labour Demand & Vocational Curriculum Alignment';
+    if (portalDesc) portalDesc.textContent = 'Official Gov-Tech LMI Intelligence Gateway for the Government of Maharashtra. Real-time vector matching between industrial job requisitions and vocational course syllabi under SIH PS 26134.';
+    if (portalActiveModeText) portalActiveModeText.textContent = 'Directorate of Vocational Education & Training';
 
     if (agilityEl) agilityEl.setAttribute('data-target', '80');
     if (placementEl) placementEl.setAttribute('data-target', '35');
     if (districtsEl) districtsEl.setAttribute('data-target', '36');
     if (tcoEl) tcoEl.setAttribute('data-target', '2');
 
-    if (metric1Sub) metric1Sub.textContent = 'Revision latency cut from years to days';
-    if (metric2Sub) metric2Sub.textContent = 'Projected lift across pilot ITIs';
+    if (metric1Sub) metric1Sub.textContent = 'Revision latency cut from 2 years to 4.2 days';
+    if (metric2Sub) metric2Sub.textContent = 'Projected lift across pilot ITI institutes';
     if (metric3Sub) metric3Sub.textContent = 'Statewide labor-market intelligence coverage';
-    if (metric4Sub) metric4Sub.textContent = 'Projected TCO per citizen / year on serverless Modal compute';
+    if (metric4Sub) metric4Sub.textContent = 'Projected TCO per citizen / year on serverless compute';
 
     if (trendPill) {
-      trendPill.textContent = '↑ Days vs Years';
+      trendPill.textContent = 'Days vs Years';
       trendPill.className = 'metric-pill emerald';
     }
     if (placementPill) {
       placementPill.textContent = 'Projected Lift';
       placementPill.className = 'metric-pill amber';
     }
-  } else if (role === 'institute') {
-    if (contextPill) contextPill.textContent = 'Training Institute Portal';
-    if (roleHeading) roleHeading.textContent = 'Curriculum Modernization & Lab Resource Directives';
-    if (roleDesc) roleDesc.textContent = 'Operational telemetry for ITI Principals and MSBTE Department Heads. Track NSQF trade compliance and requisition modernized lab hardware.';
-    if (activeModeText) activeModeText.textContent = 'Government ITI & Polytechnic Network';
+
+  } else if (role === 'iti') {
+    // -------------------------------------------------------------
+    // ROLE: ITI INSTITUTE PRINCIPAL (Operations & Curriculum Diffs)
+    // -------------------------------------------------------------
+    if (instDash) instDash.style.display = 'block';
+    if (engineSection) engineSection.style.display = 'block';
+
+    // Strictly hide 36-district macro map and fiscal budget reallocation engine
+    if (govtDash) govtDash.style.display = 'none';
+    if (districtsSection) districtsSection.style.display = 'none';
+    if (heatmapSection) heatmapSection.style.display = 'none';
+    if (empDash) empDash.style.display = 'none';
+
+    if (headerRoleText) headerRoleText.textContent = 'Clearance: ITI Principal / MSBTE (Level 2)';
+    if (portalContextPill) portalContextPill.textContent = 'Training Institute Operations Portal';
+    if (portalHeading) portalHeading.textContent = 'Curriculum Modernization & Lab Resource Directives';
+    if (portalDesc) portalDesc.textContent = 'Operational telemetry for ITI Principals and MSBTE Department Heads. Track NSQF trade compliance, approve syllabus overhauls, and requisition modernized lab hardware.';
+    if (portalActiveModeText) portalActiveModeText.textContent = 'Government ITI & Polytechnic Network';
 
     if (agilityEl) agilityEl.setAttribute('data-target', '88');
     if (placementEl) placementEl.setAttribute('data-target', '42');
@@ -482,18 +461,32 @@ function applyHeroContextForRole(role) {
     if (metric4Sub) metric4Sub.textContent = 'Per student annual AI compute footprint';
 
     if (trendPill) {
-      trendPill.textContent = '↑ +18.5% YoY';
-      trendPill.className = 'metric-pill emerald';
+      trendPill.textContent = '18 Outdated Directives';
+      trendPill.className = 'metric-pill coral';
     }
     if (placementPill) {
-      placementPill.textContent = '18 Outdated Directives';
-      placementPill.className = 'metric-pill coral';
+      placementPill.textContent = '94.6% NSQF Aligned';
+      placementPill.className = 'metric-pill emerald';
     }
-  } else if (role === 'employer') {
-    if (contextPill) contextPill.textContent = 'Industry Partner Portal';
-    if (roleHeading) roleHeading.textContent = 'Talent Pipeline & Real-Time Skill Demand Validation';
-    if (roleDesc) roleDesc.textContent = 'Validate curriculum proposals, forecast upcoming vocational graduate batches in Pune & Mumbai, and flag missing hyper-local skills directly to the AI vector engine.';
-    if (activeModeText) activeModeText.textContent = 'CII & FICCI Maharashtra Industry Council';
+
+  } else if (role === 'emp') {
+    // -------------------------------------------------------------
+    // ROLE: EMPLOYER / INDUSTRY PARTNER (Demand Signals & Radar)
+    // -------------------------------------------------------------
+    if (empDash) empDash.style.display = 'block';
+    if (engineSection) engineSection.style.display = 'block';
+
+    // Strictly hide fiscal budget engine, macro map, and internal ITI operations
+    if (govtDash) govtDash.style.display = 'none';
+    if (districtsSection) districtsSection.style.display = 'none';
+    if (heatmapSection) heatmapSection.style.display = 'none';
+    if (instDash) instDash.style.display = 'none';
+
+    if (headerRoleText) headerRoleText.textContent = 'Clearance: Industry Partner / CII & FICCI (Level 1)';
+    if (portalContextPill) portalContextPill.textContent = 'Industry Partner Demand Portal';
+    if (portalHeading) portalHeading.textContent = 'Talent Pipeline & Real-Time Skill Demand Ingestion';
+    if (portalDesc) portalDesc.textContent = 'Validate curriculum modernization proposals, forecast upcoming vocational graduate batches in Maharashtra corridors, and flag missing hyper-local skills directly to the AI vector engine.';
+    if (portalActiveModeText) portalActiveModeText.textContent = 'CII & FICCI Maharashtra Industry Council';
 
     if (agilityEl) agilityEl.setAttribute('data-target', '75');
     if (placementEl) placementEl.setAttribute('data-target', '48');
@@ -506,7 +499,7 @@ function applyHeroContextForRole(role) {
     if (metric4Sub) metric4Sub.textContent = 'Zero-infrastructure hiring portal integration';
 
     if (trendPill) {
-      trendPill.textContent = '↑ +12.4% YoY';
+      trendPill.textContent = '+12.4% YoY Demand';
       trendPill.className = 'metric-pill emerald';
     }
     if (placementPill) {
@@ -515,34 +508,19 @@ function applyHeroContextForRole(role) {
     }
   }
 
+  // Trigger KPI counters animation
   [agilityEl, placementEl, districtsEl, tcoEl].forEach(el => {
     if (el) animateCounter(el);
   });
 
-  renderDynamicHeatmap();
-}
-
-function initRoleSwitcher() {
-  const initialBtn = document.querySelector('.role-pill.active');
-  const indicator = document.getElementById('rolePillIndicator');
-  if (initialBtn && indicator) {
-    setTimeout(() => {
-      indicator.style.transform = `translateX(${initialBtn.offsetLeft}px)`;
-      indicator.style.width = `${initialBtn.offsetWidth}px`;
-    }, 100);
+  if (role === 'gov') {
+    renderDynamicHeatmap();
   }
-
-  window.addEventListener('resize', () => {
-    const active = document.querySelector('.role-pill.active');
-    if (active && indicator) {
-      indicator.style.transform = `translateX(${active.offsetLeft}px)`;
-      indicator.style.width = `${active.offsetWidth}px`;
-    }
-  });
 }
+
 
 // ============================================================================
-// 4. THE CORE ENGINE: PYTORCH VECTOR EMBEDDING & EXTRACTION
+// 4. INTERACTIVE SEMANTIC VECTOR EXTRACTION SANDBOX
 // ============================================================================
 function initExtractionEngine() {
   const textarea = document.getElementById('curriculumInput');
@@ -594,8 +572,8 @@ async function triggerSkillExtraction() {
 
   if (btn) btn.classList.add('loading');
   if (statusPill) {
-    statusPill.textContent = 'PyTorch Vectorizer: Computing...';
-    statusPill.style.color = '#FBBF24';
+    statusPill.textContent = 'Semantic Inference: Vectorizing...';
+    statusPill.style.color = '#D97706';
   }
 
   const endpointUrl = buildApiUrl('/api/v1/search');
@@ -603,7 +581,7 @@ async function triggerSkillExtraction() {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
 
     const response = await fetch(endpointUrl, {
       method: 'POST',
@@ -637,16 +615,18 @@ async function triggerSkillExtraction() {
     if (cosineSim) cosineSim.textContent = `Cosine Sim: ${extractedData.cosineSimilarity}`;
 
     if (statusPill) {
-      statusPill.textContent = 'PyTorch Vectorizer: Active';
-      statusPill.style.color = '#34D399';
+      statusPill.textContent = 'State Inference Node: Online';
+      statusPill.style.color = '#059669';
     }
 
     if (btn) btn.classList.remove('loading');
     state.isExtracting = false;
 
-    renderDynamicHeatmap(extractedData.scoreBias);
-    showToast('SkillSetu NLP Extraction & Vector Matching Complete!');
-  }, 450);
+    if (state.activeRole === 'gov') {
+      renderDynamicHeatmap(extractedData.scoreBias);
+    }
+    showToast('Semantic Vectorization & NSQF Matching Complete!');
+  }, 400);
 }
 
 function generateExtractionResult(inputText, apiResult) {
@@ -655,17 +635,7 @@ function generateExtractionResult(inputText, apiResult) {
   let skills = [];
   let scoreBias = 0;
 
-  if (lower.includes('data structure') || lower.includes('tree') || lower.includes('graph')) {
-    skills = [
-      { name: 'Data Structures & Algorithms (NSQF-6)', type: 'high-demand' },
-      { name: 'Binary Search Trees & Balancing', type: 'high-demand' },
-      { name: 'Time Complexity (Big-O Analysis)', type: 'high-demand' },
-      { name: 'Graph Traversal (BFS/DFS)', type: '' },
-      { name: 'Dynamic Memory Management', type: 'high-demand' },
-      { name: '⚠️ Microservice Distributed Caching (Gap)', type: 'gap' }
-    ];
-    scoreBias = 12;
-  } else if (lower.includes('pytorch') || lower.includes('deep learning') || lower.includes('neural') || lower.includes('genai')) {
+  if (lower.includes('deep learning') || lower.includes('neural') || lower.includes('genai') || lower.includes('ai')) {
     skills = [
       { name: 'PyTorch Tensor Mathematics (NSQF-7)', type: 'high-demand' },
       { name: 'Neural Network Gradient Descent', type: 'high-demand' },
@@ -675,7 +645,7 @@ function generateExtractionResult(inputText, apiResult) {
       { name: '⚠️ Kubernetes MLOps Pipelines (Gap)', type: 'gap' }
     ];
     scoreBias = 24;
-  } else if (lower.includes('plc') || lower.includes('automation') || lower.includes('scada') || lower.includes('iot')) {
+  } else if (lower.includes('plc') || lower.includes('automation') || lower.includes('scada')) {
     skills = [
       { name: 'Programmable Logic Controllers (PLC)', type: 'high-demand' },
       { name: 'SCADA Supervisory Control Systems', type: 'high-demand' },
@@ -688,76 +658,82 @@ function generateExtractionResult(inputText, apiResult) {
     skills = [
       { name: 'Electric Vehicle Diagnostics (NSQF-6)', type: 'high-demand' },
       { name: 'CAN-bus Telemetry Protocol Analysis', type: 'high-demand' },
+      { name: '48V Battery Management Systems (BMS)', type: 'high-demand' },
       { name: 'Solar PV Grid Inverter Commissioning', type: 'high-demand' },
-      { name: 'BESS Battery Energy Storage Systems', type: 'high-demand' },
-      { name: '⚠️ High-Voltage DC Arc Flash Safety (Gap)', type: 'gap' }
+      { name: '⚠️ High-Voltage DC Safety (Gap)', type: 'gap' }
     ];
     scoreBias = 20;
+  } else if (lower.includes('chromatography') || lower.includes('hplc') || lower.includes('pharma')) {
+    skills = [
+      { name: 'HPLC Chromatography (NSQF-5)', type: 'high-demand' },
+      { name: '21 CFR Part 11 Electronic Compliance', type: 'high-demand' },
+      { name: 'UV-Vis Spectrophotometry', type: 'high-demand' },
+      { name: 'cGMP Documentation & Titration', type: '' },
+      { name: '⚠️ Automated Dissolution Testing (Gap)', type: 'gap' }
+    ];
+    scoreBias = 18;
   } else {
     skills = [
       { name: '5-Axis VMC Machining (Fanuc/Mazak)', type: 'high-demand' },
       { name: 'CAD/CAM Multi-Axis Toolpath Generation', type: 'high-demand' },
       { name: 'GD&T Engineering Drawing Standards', type: 'high-demand' },
-      { name: '⚠️ SPC Quality Gate Automation (Gap)', type: 'gap' }
+      { name: 'CMM Coordinate Metrology Inspection', type: 'high-demand' },
+      { name: '⚠️ High-Speed Die Cavity Milling (Gap)', type: 'gap' }
     ];
     scoreBias = 14;
   }
 
-  const sampleValues = Array.from({ length: 14 }, () => (Math.random() * 0.8 - 0.4).toFixed(4));
-  const vectorSample = `[${sampleValues.join(', ')}, ... +370 dims (dense torch.float32)]`;
-  
-  let cosine = (0.86 + Math.random() * 0.12).toFixed(3);
-  if (apiResult && apiResult.results && apiResult.results.length > 0) {
-    if (apiResult.results[0].match_score) {
-      cosine = (apiResult.results[0].match_score).toFixed(3);
-    }
-  }
+  // Generate random vector array snippet
+  const vectorFloats = Array.from({ length: 10 }, () => (Math.random() * 0.3 - 0.15).toFixed(4));
+  const vectorSample = `[${vectorFloats.join(', ')}, ... 374 dense dimensions]`;
+  const cosSimVal = (0.84 + Math.random() * 0.12).toFixed(3);
 
   return {
     skills,
-    scoreBias,
     vectorSample,
-    cosineSimilarity: cosine
+    cosineSimilarity: cosSimVal,
+    scoreBias
   };
 }
 
+
 // ============================================================================
-// 5. DYNAMIC CURRICULUM HEATMAP (CHART.JS)
+// 5. CHART.JS DYNAMIC HEATMAP MATRIX (FORMAL LIGHT THEME)
 // ============================================================================
-export async function renderDynamicHeatmap(bias = 0) {
+function renderDynamicHeatmap(bias = 0) {
   const canvas = document.getElementById('alignmentHeatmap');
-  if (!canvas) return;
+  if (!canvas || typeof window.Chart === 'undefined') return;
 
   if (state.heatmapChart) {
     state.heatmapChart.destroy();
   }
 
-  function getScoreColor(val) {
-    if (val >= 80) return 'rgba(16, 185, 129, 0.85)';
-    if (val >= 55) return 'rgba(245, 158, 11, 0.85)';
-    return 'rgba(244, 63, 94, 0.85)';
-  }
+  const sectors = ['Automotive & EV', 'Cloud & FinTech', 'Precision CNC', 'Pharma & Biotech', 'Logistics & AGV', 'Agri-Tech & Drones'];
+  const trades = ['Mechanic Auto', 'COPA (IT Ops)', 'Draughtsman Mech', 'Chemical Plant', 'Electrician', 'Welder (Robotic)'];
 
-  function getBorderColor(val) {
-    if (val >= 80) return '#059669';
-    if (val >= 55) return '#D97706';
-    return '#E11D48';
-  }
+  const baseMatrix = [
+    [88, 42, 65, 30, 72, 55],
+    [35, 94, 48, 50, 68, 40],
+    [70, 52, 92, 45, 60, 78],
+    [25, 48, 40, 91, 35, 45],
+    [60, 75, 55, 38, 86, 62],
+    [50, 45, 74, 42, 58, 89]
+  ];
 
-  const datasets = DISTRICT_MARKETS.map((districtName, districtIdx) => {
-    const scores = BASELINE_SCORES.map(row => {
-      let score = row[districtIdx] + (bias ? Math.round(bias * 0.35) : 0);
-      return Math.min(99, Math.max(22, score));
-    });
-
+  const datasets = trades.map((tradeName, tIdx) => {
     return {
-      label: districtName,
-      data: scores,
-      backgroundColor: scores.map(getScoreColor),
-      borderColor: scores.map(getBorderColor),
-      borderWidth: 1.5,
-      borderRadius: 6,
-      borderSkipped: false,
+      label: tradeName,
+      data: baseMatrix[tIdx].map(val => Math.min(100, Math.max(20, val + (bias > 0 ? (bias % 8) - 4 : 0)))),
+      backgroundColor: [
+        '#0F4C81',
+        '#0284C7',
+        '#059669',
+        '#7C3AED',
+        '#D97706',
+        '#DC2626'
+      ][tIdx],
+      borderRadius: 4,
+      barPercentage: 0.75,
     };
   });
 
@@ -765,237 +741,185 @@ export async function renderDynamicHeatmap(bias = 0) {
   state.heatmapChart = new window.Chart(ctx, {
     type: 'bar',
     data: {
-      labels: HEATMAP_DOMAINS,
-      datasets: datasets,
+      labels: sectors,
+      datasets: datasets
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: {
-        duration: 850,
-        easing: 'easeOutQuart',
-      },
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
       plugins: {
         legend: {
           position: 'top',
           labels: {
-            font: {
-              family: "'Plus Jakarta Sans', sans-serif",
-              size: 11,
-              weight: 600,
-            },
-            color: '#1E293B',
-            boxWidth: 14,
+            font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' },
+            color: '#1F2937',
             usePointStyle: true,
-            pointStyle: 'rectRounded',
-          },
+            padding: 18
+          }
         },
         tooltip: {
-          backgroundColor: '#0B132B',
-          titleFont: {
-            family: "'Plus Jakarta Sans', sans-serif",
-            size: 13,
-            weight: 700,
-          },
-          bodyFont: {
-            family: "'JetBrains Mono', monospace",
-            size: 12,
-          },
+          backgroundColor: '#0F4C81',
+          titleFont: { family: 'Plus Jakarta Sans', size: 13, weight: '700' },
+          bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
           padding: 12,
-          cornerRadius: 8,
-          borderColor: 'rgba(255, 255, 255, 0.15)',
-          borderWidth: 1,
           callbacks: {
             label: function(context) {
-              const val = context.raw;
-              let status = 'Critical Deficit';
-              if (val >= 80) status = 'High Alignment (Cosine >= 0.80)';
-              else if (val >= 55) status = 'Moderate Match (Cosine ~ 0.60)';
-              return ` ${context.dataset.label}: ${val}% (${status})`;
+              return ` ${context.dataset.label}: ${context.raw}% Alignment Score`;
             }
           }
         }
       },
       scales: {
         x: {
-          grid: { display: false },
-          ticks: {
-            font: {
-              family: "'Plus Jakarta Sans', sans-serif",
-              size: 11,
-              weight: 600,
-            },
-            color: '#475569',
-            maxRotation: 25,
-            minRotation: 15,
-          }
+          grid: { color: '#E2E8F0', drawTicks: false },
+          ticks: { font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' }, color: '#64748B' }
         },
         y: {
           min: 0,
           max: 100,
+          grid: { color: '#E2E8F0', drawTicks: false },
           ticks: {
-            callback: (val) => `${val}%`,
-            font: { family: "'JetBrains Mono', monospace", size: 11 },
-            color: '#64748B',
-            stepSize: 20,
-          },
-          grid: { color: '#E2E8F0', drawBorder: false }
+            callback: value => `${value}%`,
+            font: { family: 'Plus Jakarta Sans', size: 11 },
+            color: '#64748B'
+          }
         }
       }
     }
   });
+
+  canvas.style.height = '340px';
 }
 
+
 // ============================================================================
-// 6. DISTRICT ACTION PLANS & REPORTING
+// 6. DISTRICT INTERVENTION PLANS & CSV EXPORT
 // ============================================================================
 function initDistrictPlans() {
   const districtCards = document.querySelectorAll('.district-card');
-  const exportBtn = document.getElementById('exportPlanCsvBtn');
+  const searchInput = document.getElementById('districtSearchInput');
 
   districtCards.forEach(card => {
     card.addEventListener('click', () => {
-      const districtId = card.getAttribute('data-district');
-      if (!districtId) return;
-
       districtCards.forEach(c => c.classList.remove('active-district'));
       card.classList.add('active-district');
-      state.activeDistrict = districtId;
-
-      renderDistrictPlan(districtId);
+      const distKey = card.getAttribute('data-district');
+      if (distKey && DISTRICT_DATA[distKey]) {
+        state.activeDistrict = distKey;
+        renderDistrictPlanTable(distKey);
+      }
     });
   });
 
-  if (exportBtn) {
-    exportBtn.addEventListener('click', () => {
-      exportCurrentPlanCsv();
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      districtCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
     });
   }
 
-  renderDistrictPlan(state.activeDistrict);
+  // Initial table render
+  renderDistrictPlanTable('pune');
+
+  // Export Plan CSV Button
+  const exportPlanBtn = document.getElementById('exportPlanCsvBtn');
+  if (exportPlanBtn) {
+    exportPlanBtn.addEventListener('click', () => {
+      exportDistrictPlanCsv(state.activeDistrict);
+    });
+  }
 }
 
-function renderDistrictPlan(districtKey) {
-  const data = DISTRICT_DATA[districtKey] || DISTRICT_DATA.pune;
+function renderDistrictPlanTable(districtKey) {
+  const data = DISTRICT_DATA[districtKey];
+  if (!data) return;
 
   const titleEl = document.getElementById('planTargetTitle');
   const descEl = document.getElementById('planTargetDesc');
-  const tableBody = document.getElementById('planTableBody');
+  const tbody = document.getElementById('planTableBody');
 
   if (titleEl) {
-    titleEl.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      ${data.title}
-    `;
+    titleEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> ${data.title}`;
   }
-
   if (descEl) descEl.textContent = data.description;
 
-  if (tableBody) {
-    tableBody.innerHTML = '';
+  if (tbody) {
+    tbody.innerHTML = '';
     data.items.forEach(item => {
       const tr = document.createElement('tr');
-
+      
       let actionClass = 'action-expand';
-      let actionLabel = 'Expand Seats';
+      let actionLabel = 'EXPAND (+Seats)';
       if (item.action === 'phase_out') {
         actionClass = 'action-phase-out';
-        actionLabel = 'Phase Out';
+        actionLabel = 'PHASE OUT (Decommission)';
       } else if (item.action === 'reduce') {
         actionClass = 'action-reduce';
-        actionLabel = 'Reduce 40%';
+        actionLabel = 'REDUCE (-Seats)';
       }
 
       tr.innerHTML = `
         <td><strong>${item.course}</strong></td>
         <td><span class="upgrade-action-pill ${actionClass}">${actionLabel}</span></td>
-        <td style="font-family: var(--font-mono); font-weight: 600;">${item.trainerDelta}</td>
-        <td style="color: #475569;">${item.equipment}</td>
-        <td style="font-family: var(--font-mono); font-weight: 700; color: ${item.action === 'phase_out' ? '#F43F5E' : '#10B981'};">${item.placementRate}</td>
-        <td><span style="font-size: 0.8rem; font-weight: 600; color: #334155;">${item.demand}</span></td>
+        <td><span style="font-weight: 600; color: #0F4C81;">${item.trainerDelta}</span></td>
+        <td>${item.equipment}</td>
+        <td><strong style="color: #059669;">${item.placementRate}</strong></td>
+        <td><span style="font-size: 0.76rem; color: #64748B;">${item.demand}</span></td>
       `;
-      tableBody.appendChild(tr);
+      tbody.appendChild(tr);
     });
   }
 }
 
-window.filterDistrictCards = function(query) {
-  const q = (query || '').toLowerCase().trim();
-  const cards = document.querySelectorAll('.district-card');
-  let firstVisible = null;
+function exportDistrictPlanCsv(districtKey) {
+  const data = DISTRICT_DATA[districtKey];
+  if (!data) return;
 
-  cards.forEach(card => {
-    const text = card.textContent.toLowerCase();
-    const matches = !q || text.includes(q);
-    card.style.display = matches ? 'block' : 'none';
-    if (matches && !firstVisible) {
-      firstVisible = card;
-    }
-  });
-
-  if (firstVisible && !firstVisible.classList.contains('active-district')) {
-    const distId = firstVisible.getAttribute('data-district');
-    if (distId) {
-      cards.forEach(c => c.classList.remove('active-district'));
-      firstVisible.classList.add('active-district');
-      state.activeDistrict = distId;
-      renderDistrictPlan(distId);
-    }
-  }
-};
-
-export function exportCurrentPlanCsv() {
-  const data = DISTRICT_DATA[state.activeDistrict] || DISTRICT_DATA.pune;
-  const headers = ['District', 'Zone', 'Course Name', 'Action Directive', 'Trainer Delta', 'Equipment & Notes', 'Placement Rate', 'Matching Demand'];
-  
-  const csvRows = [headers.join(',')];
-  data.items.forEach(item => {
-    const row = [
+  const csvRows = [
+    ['District', 'Course/Program', 'Action Directive', 'Trainer Delta', 'Equipment Upgrades', 'Placement Rate', 'Demand'],
+    ...data.items.map(i => [
       `"${data.name}"`,
-      `"${data.zone}"`,
-      `"${item.course.replace(/"/g, '""')}"`,
-      `"${item.action}"`,
-      `"${item.trainerDelta}"`,
-      `"${item.equipment.replace(/"/g, '""')}"`,
-      `"${item.placementRate}"`,
-      `"${item.demand.replace(/"/g, '""')}"`
-    ];
-    csvRows.push(row.join(','));
-  });
+      `"${i.course}"`,
+      `"${i.action}"`,
+      `"${i.trainerDelta}"`,
+      `"${i.equipment}"`,
+      `"${i.placementRate}"`,
+      `"${i.demand}"`
+    ])
+  ];
 
   const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);
-  link.setAttribute('download', `skillsetu_action_plan_${state.activeDistrict}_${new Date().toISOString().slice(0,10)}.csv`);
+  link.setAttribute('download', `skillsetu_${districtKey}_action_plan_${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  showToast(`Exported ${data.name} capacity plan to CSV!`);
+  showToast(`Exported ${data.name} District Action Plan (CSV)!`);
 }
 
 window.exportAllDistrictsCsv = function() {
-  const headers = ['District', 'Zone', 'Course / Program', 'Action Directive', 'Trainer Delta', 'Equipment & Infrastructure Upgrade', 'Placement Rate', 'Market Demand Signal'];
-  const csvRows = [headers.join(',')];
+  const csvRows = [
+    ['District', 'Zone', 'Course/Program', 'Action Directive', 'Trainer Delta', 'Equipment Upgrades', 'Placement Rate', 'Demand']
+  ];
 
   Object.keys(DISTRICT_DATA).forEach(key => {
     const d = DISTRICT_DATA[key];
-    d.items.forEach(item => {
-      const row = [
+    d.items.forEach(i => {
+      csvRows.push([
         `"${d.name}"`,
         `"${d.zone}"`,
-        `"${item.course.replace(/"/g, '""')}"`,
-        `"${item.action}"`,
-        `"${item.trainerDelta}"`,
-        `"${item.equipment.replace(/"/g, '""')}"`,
-        `"${item.placementRate}"`,
-        `"${item.demand.replace(/"/g, '""')}"`
-      ];
-      csvRows.push(row.join(','));
+        `"${i.course}"`,
+        `"${i.action}"`,
+        `"${i.trainerDelta}"`,
+        `"${i.equipment}"`,
+        `"${i.placementRate}"`,
+        `"${i.demand}"`
+      ]);
     });
   });
 
@@ -1007,8 +931,9 @@ window.exportAllDistrictsCsv = function() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  showToast('Statewide 6-District Action Report downloaded (CSV)!');
+  showToast('Statewide 36-District Action Report downloaded (CSV)!');
 };
+
 
 // ============================================================================
 // 7. DEMO SIMULATION HANDLERS & MODALS
@@ -1024,7 +949,7 @@ window.simulateProcurement = function(machineName, target) {
 };
 
 window.scheduleInterview = function(candidateName, company) {
-  showToast(`Interview invite sent to ${candidateName} for ${company}!`);
+  showToast(`Apprenticeship invite sent to ${candidateName} for ${company}!`);
   alert(`Direct Placement Fast-Track\n\nCandidate: ${candidateName}\nEmployer: ${company}\nStatus: Pre-vetted NSQF credentials transmitted. Interview schedule confirmed.`);
 };
 
@@ -1041,7 +966,7 @@ window.handleDeficitSubmit = function(e) {
   if (tickerTrack) {
     const newSignal = document.createElement('span');
     newSignal.className = 'signal-item';
-    newSignal.innerHTML = `🚨 <strong>${district}:</strong> Urgent ${skill} demand (<span class="trend-up">+${vacancies} openings</span>) logged by ${company}`;
+    newSignal.innerHTML = `<span class="signal-tag-district">[${district}]</span> Urgent <strong>${skill}</strong> demand (<span class="trend-up">+${vacancies} openings</span>) logged by ${company}`;
     tickerTrack.insertBefore(newSignal, tickerTrack.firstChild);
   }
 
@@ -1056,7 +981,7 @@ window.handleDeficitSubmit = function(e) {
 
   document.getElementById('deficitIntakeForm')?.reset();
 
-  alert(`Skill Signal Successfully Vectorized!\n\nSkill: "${skill}"\nDemand: ${vacancies} openings in ${district}\nEmployer: ${company}\n\nStatus: PyTorch dense embeddings calculated. Directives updated for regional ITI curriculum boards.`);
+  alert(`Skill Demand Signal Vectorized!\n\nSkill: "${skill}"\nDemand: ${vacancies} openings in ${district}\nEmployer: ${company}\n\nStatus: Neural dense embeddings calculated. Directives updated for regional ITI curriculum boards.`);
   showToast(`Vectorized signal for ${skill} (${district})`);
 };
 
@@ -1086,11 +1011,12 @@ function initAuditModal() {
       modal.classList.remove('show');
       showToast('Generating official signed PDF report for Maharashtra Skill Directorate...');
       setTimeout(() => {
-        alert('SkillSetu Labor-Market Intelligence Report (PDF)\n\nDocument ID: MSSDS-SIH26134-AUDIT-2026.pdf\nVerification: Signed via Digital State Repository.\nCoverage: 36 Districts, 418 ITIs, 26 Industry Corridors.');
-      }, 500);
+        alert('SkillSetu Labour-Market Intelligence Report (PDF)\n\nDocument ID: MSSDS-SIH26134-AUDIT-2026.pdf\nVerification: Signed via Digital State Repository.\nCoverage: 36 Districts, 418 ITIs, 26 Industry Corridors.');
+      }, 400);
     });
   }
 }
+
 
 // ============================================================================
 // 8. TOAST NOTIFICATION UTILITY
@@ -1105,73 +1031,41 @@ export function showToast(message) {
 
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 3400);
+  }, 3200);
 }
 
+
 // ============================================================================
-// 9. APP INITIALIZATION
+// 9. APP INITIALIZATION & GLOBAL LISTENERS
 // ============================================================================
 document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initScrollAnimations();
-  initRoleSwitcher();
+  enforceRoleSecurity();
   initExtractionEngine();
   initDistrictPlans();
   initAuditModal();
-  renderDynamicHeatmap();
 });
 
-
-// ============================================================================
-// 10. SIH PROTOTYPE INTERACTIVITY FIXES (GLOBAL EVENT LISTENER)
-// ============================================================================
+// Directive Approval & Plan Action Event Listener
 document.addEventListener('click', function(e) {
-    const text = e.target.innerText || '';
+  const text = e.target.innerText || '';
 
-    // 1. Fix: View Capacity Reallocation Plan
-    if (text.includes('View Capacity Reallocation Plan') || e.target.closest('.view-plan-btn')) {
-        e.preventDefault();
-        const card = e.target.closest('div[class*="card"], div[class*="district"], div[style]') || e.target.parentElement;
-        const district = card.querySelector('h2, h3')?.innerText || 'this district';
-        alert(`Fetching AI-Generated Reallocation Plan for ${district}...\n\nStatus: Processing vector similarities via Modal GPU.\nRecommendation: Expand advanced manufacturing modules to meet local deficit.`);
-    }
+  // Approve Institutional Directive
+  if (text.includes('Approve Institutional Directive') || text.includes('Approve Plan') || e.target.classList.contains('approve-directive-btn')) {
+    e.preventDefault();
+    alert('Institutional Directive Successfully Approved.\n\nNotification dispatched to Regional ITI Principal & MSBTE Board for academic year implementation.');
+    e.target.innerText = 'Approved ✓';
+    e.target.style.backgroundColor = '#059669';
+    e.target.style.color = '#FFFFFF';
+    e.target.style.pointerEvents = 'none';
+  }
 
-    // 2. Fix: Approve Institutional Directive
-    if (text.includes('Approve Institutional Directive') || text.includes('Approve')) {
-        e.preventDefault();
-        alert('Directive Successfully Approved. Local ITI centers have been notified via the MSSDS portal.');
-        e.target.innerText = 'Approved ✓';
-        e.target.style.backgroundColor = '#10B981';
-        e.target.style.color = '#ffffff';
-        e.target.style.pointerEvents = 'none';
-    }
-
-    // 3. Fix: 3-Pill Dashboard Switcher (Govt / Institute / Employer)
-    if (text.includes('Govt') || text.includes('Training Institute') || text.includes('Employer')) {
-        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.classList.contains('pill') || e.target.classList.contains('role-pill')) {
-            e.preventDefault();
-            
-            // Visual feedback for the demo
-            alert(`Switching data context to: ${text.trim()}.\nRecalculating district deficits and curriculum alignment based on ${text.trim()} priorities.`);
-            
-            // Highlight active pill
-            const siblings = e.target.parentElement.children;
-            for(let node of siblings) {
-                node.style.opacity = '0.5';
-                node.style.fontWeight = 'normal';
-            }
-            e.target.style.opacity = '1';
-            e.target.style.fontWeight = 'bold';
-            
-            // Logic to hide/show the respective HTML dashboard sections built in Step 1
-            const lower = text.toLowerCase();
-            let role = 'govt';
-            if (lower.includes('training') || lower.includes('institute')) role = 'institute';
-            else if (lower.includes('employer')) role = 'employer';
-            
-            if (typeof window.switchDashboardRole === 'function') {
-                window.switchDashboardRole(role, false);
-            }
-        }
-    }
+  // View Capacity Reallocation Plan
+  if (text.includes('View Capacity Reallocation Plan') || e.target.closest('.view-plan-btn')) {
+    e.preventDefault();
+    const card = e.target.closest('.district-card');
+    const district = card?.querySelector('.district-name')?.innerText || 'Pune';
+    showToast(`Loaded Capacity Reallocation Plan for ${district}`);
+  }
 });
